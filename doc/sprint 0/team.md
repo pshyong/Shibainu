@@ -23,6 +23,12 @@
     Email: jace.chan@mail.utoronto.ca
     Phone: (647) 745-6828
     Discord: j9t11#9204
+    
+    Name: Patrick James Hogeveen
+    UtorID: hogevee7
+    Email: patrick.hogeveen@mail.utoronto.ca
+    Phone: (416) 662-7940
+    Discord: PancakeLlama#2456
 
 ### Guidelines: 
 
