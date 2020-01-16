@@ -18,6 +18,11 @@ Team Members:
 	Phone: (604) 306-2162
 	Discord: Pat#5115
     
+    Name: Jason Yiu-Sum Chan
+    UtorID: chanja60
+    email: jace.chan@mail.utoronto.ca
+    Phone: (647) 745-6828
+    Discord: j9t11#9204
 
 Guidelines:
 	Methods of communication: Email, Discord, Phone as shown above
