@@ -34,7 +34,7 @@ Guidelines:
 	
 	Submitting deliverables: Daniel and Patrick will check at the very least. Ideally we should all review anything that gets submitted as the final sprint deliverable. Submission should be ready at least 24 hours before the deadline to allow for any last minute revisions.
 	
-	Contigency Planning: We need to make sure each member has good documentation so we can pick up the work if anyone drops for any reason. We will discuss any missed meetings or tasks at scrums and retrospective and document causes and potential solutions. ALWASYS REFERENCE your work! Ask each other for help if your stuck. 
+	Contigency Planning: We need to make sure each member has good documentation so we can pick up the work if anyone drops for any reason. We will discuss any missed meetings or tasks at scrums and retrospective to document causes and potential solutions. ALWASYS REFERENCE your work! Ask each other for help if you're stuck. 
 		
 	
 	
