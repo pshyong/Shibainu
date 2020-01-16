@@ -44,7 +44,8 @@
 	Version Control:
 		Things Not to Commit (Will all be included in .gitignore): 
 			- temporary files (e.g. .swp)
-			- IDE specific files (e.g. .idea/)
+			- IDE specific folder/files (e.g. .idea/)
+			- Environment variables
 			- Any test files that are for personal tests and not for group/project tests
 		Content of log messages: 
 			- Must include the features implemented/fixed
@@ -53,7 +54,9 @@
 		- For every new feature and/or bug fixes, we must submit it as a pull request, and then at least two of us will review the changes before merging to the master branch
 		- Everything will need to be done on a seperate branch, no one should commit to master. If someone commits to master, we are forced to roll back to previous commits and branch off.
 
-	Roles and Division: We need to understand what each other is good at first, ideally we will want a team leader.
+	Roles and Division:
+		- Daniel will be the team leader and divide the task among ourself
+		- For dividing the work, depending on what the work is, we will all have a meeting to divide up the work among ourselves.
 	
 	Submitting deliverables: Daniel and Patrick will check at the very least. Ideally we should all review anything that gets submitted as the final sprint deliverable. Submissions should be ready at least 24 hours before the deadline to allow for any last minute revisions.
 	
