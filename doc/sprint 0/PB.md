@@ -15,7 +15,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
 **Create a database with NoSQL:** 
 - As a developer, I want to design and create a database so that forum users can post in their designated subpages
 - Estimate: 8
-- Priority: highest
+- Priority: Highest
 - Criteria of Satisfaction:  
   - Be able to create tables and insert dummy data
   - Tables required: (Will be refined when we actually design it)
@@ -30,7 +30,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
 **Create CRUD:** 
 - As a developer, I want to create APIs for CRUD functionality.
 - Estimate: 13
-- Priority: highest
+- Priority: Highest
 - Criteria of Satisfaction:
   - Be able to create(POST), read(GET), upload(PUT), and delete(DELETE) rows/columns in the database with APIs
 
@@ -134,7 +134,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
 **Account sign-up:** 
 - As a frequent user, I would like to be able to use features that an anonymous user would not be to, such as having a post history.
 - Estimate: 5
-- Priority: Moderate 
+- Priority: Medium
 - Criteria of Satisfaction:
     - Have an account sign-up page with basic info: name, password, email (username)
     - Once signed-up, user should be redirected to the login page 
@@ -143,7 +143,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
 **Search for thread/post:** 
 - As a user with an account, I want to be able to quickly find threads/posts I'm interested in quickly
 - Estimate: 5
-- Priority: Moderate 
+- Priority: Medium
 - Criteria of Satisfaction:
     - Users should be able to type keywords into a search bar and only have posts and threads that contain the keywords appear 
     - Users should be able to specify where to look for the keywords (title, posts, etc…)
@@ -152,7 +152,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
 **Edit my thread:** 
 - As a first-year student, I want to be able to edit a thread I created earlier to clarify what I meant by “Easy 4.0”
 - Estimate: 2
-- Priority: Moderate
+- Priority: Medium
 - Criteria of Satisfaction:
     - Only available to users with an account
     - Be able to track my own threads
@@ -164,7 +164,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
 **Delete a thread:** 
 - As a regular user, I want to be able to delete a thread that I created so that no one can reply to it anymore.
 - Estimate: 2
-- Priority: Moderate
+- Priority: Medium
 - Criteria of Satisfaction:
   - Deleting a thread will result in that thread no longer showing up in their subcategories anymore
   - Users can no longer find or read any posts from the deleted thread
@@ -172,21 +172,21 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
 **Down/up voting:** 
 - As a user, I want to be able to upvote and downvote posts so that I demonstrate that I found a post useful or not useful without having to clutter up a thread with a post
 - Estimate: 2
-- Priority: Moderate 
+- Priority: Medium
 - Criteria of Satisfaction:
     - Users should be able to press a button to like a post
     - Users should be able to press a different button to dislike a post
     - Posts should show how many users liked or disliked it
   
-**Sort:** 
+**Sort threads or posts:** 
 - As a user, I want to be able to sort threads and posts so that I can find specific threads and posts easier 
 - Estimate: 1
-- Priority: Moderate 
+- Priority: Medium
 - Criteria of Satisfaction:
     - Users should be able to sort posts/threads by time created/updated, number of posts, number of likes, etc…
 
 **Style your own subpage:** 
-- As a user with an account, I want to be able to save my posts so I can find it later.
+- As a user with an account, I want to be able to style my own subpage to make it more unique.
 - Estimate: 5
 - Priority: Low 
 - Criteria of Satisfaction:
