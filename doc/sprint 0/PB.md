@@ -62,30 +62,61 @@ Most important user stories:
   - Be able to navigate from main page -> subpage -> category -> thread and vice versa.
   - Back/reload buttons should work as expected
 
+**Create a post in a thread:**
+- As a senior, I want to respond to a thread about which courses are easy 4.0s for my program.
+- Estimate: 5
+- Priority: highest
+- CoS:
+  - Be able to type and submit my post
+  - Be able to view my post afterwards
+  - Should contain:
+    - Text content
+    - Date/time posted
+    - Posted by <username> or <anonymous>
+    - Optional: include pictures 
 
-**Reply to a thread:** 
-- As a senior, I want to be able to reply to a thread that someone had posted to ask about which courses to take.
+**Edit/delete a post:**
+- As a senior, I want to edit or delete a post I created earlier to fix some mistakes.
 - Estimate: 3
 - Priority: highest
-- Criteria of Satisfaction:
-
+- CoS:
+    - Only available to users with an account
+    - Be able to track my own posts 
+    - Clicking on the edit button should allow me to edit my original post
+    - Clicking on the cancel button should undo everything
+    - Clicking on the post button should post my revision.
+    - Delete button should mark the post as deleted and the content should change to “This post has been deleted”
+    - Be able to see my revised post under the thread.
+    
 **Edit my thread:** 
-- As a regular user, I want to be able to edit my post after posting so that I can correct my spelling errors.
+- As a first-year student, I want to be able to edit a thread I created earlier to clarify what I meant by “Easy 4.0”
 - Estimate: 2
-- Priority: moderate
-- Criteria of Satisfaction:
+- Priority: Moderate
+- CoS:
+    - Only available to users with an account
+    - Be able to track my own threads
+    - Clicking on the edit button should allow me to edit my original thread
+    - Clicking on the cancel button should undo everything
+    - Clicking on the post button should post my revision.
+    - Be able to see my revised thread under the category page
 
-**React to a thread:** 
+**React to a post:** 
 - As a regular user, I want to be able to react to a thread by emoji so that I don’t have to manually type anything.
 - Estimate: 1
 - Priority: low
-- Criteria of Satisfaction:
+- CoS:
+    - Users are able to include emojis in their posts 
+    - Users should be able to “like” a post with an emoji
+    - Click on an emoji like the like button and have the emoji appear like a normal like
 
 **Delete a thread:** 
 - As a regular user, I want to be able to delete a thread that I created so that no one can reply to it anymore.
 - Estimate: 2
 - Priority: moderate
-- Criteria of Satisfaction:
+- CoS:
+  - Deleting a thread will result in that thread no longer showing up in their subcategories anymore
+  - Users can no longer find or read any posts from the deleted thread
+
 
 **Anonymity:** 
 - As someone who lives on campus, I want to ask about how to get my roommate to take out the garbage without exposing either of our identity.  
