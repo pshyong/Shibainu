@@ -1,6 +1,7 @@
 ## Team Name: shibainu
 
-Our project is an Internet forum with anonymous features. The main objective of our forum is providing a platform for users to communicate with each other without being limited by some TOS while keeping the forum appropriate and keeping users anonymous. We can keep an anonymous forum appropriate by having posts that are anonymously posted required to be approved by an admin.
+**Project Objectives**  
+The project that we decided to do is an Internet forum with anonymous features. The main objective of our forum is providing a platform for users to communicate with each other without being limited by some TOS, all while keeping the forum appropriate and keeping users anonymous. We can keep an anonymous forum appropriate by having posts that are anonymously posted, required to be approved by an admin.
 
 
 **Key Users**  
