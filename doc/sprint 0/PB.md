@@ -13,7 +13,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
 ## User Stories  
   
 **Create a database with NoSQL:** 
-- As a developer, I want to design and create a database so that forum users can post in their designated subpages
+- As a developer, I want to design and create a database so that we can store data required to host a forum.
 - Estimate: 8
 - Priority: Highest
 - Criteria of Satisfaction:  
@@ -28,7 +28,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
       - post(posted_by, date/time, content)
       
 **Create CRUD:** 
-- As a developer, I want to create APIs for CRUD functionality.
+- As a developer, I want to create APIs for CRUD functionality so that we can perform the related actions.
 - Estimate: 13
 - Priority: Highest
 - Criteria of Satisfaction:
@@ -36,7 +36,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
 
 
 **Create a main page/subpage:**
-- As an admin, I want to create a main page/subpage for forum users to interact in. Both main page and subpage is fixed (for now)
+- AAs an admin, I want to create a main page/subpage so that forum users can navigate to their desired category. Both main page and subpage is fixed (for now)
 - Estimate: 5
 - Priority: Highest
 - Criteria of Satisfaction:
@@ -70,7 +70,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
   - Back/reload buttons should work as expected
 
 **Create a post in a thread:**
-- As a senior, I want to respond to a thread about which courses are easy 4.0s for my program.
+- As a senior, I want to respond to a thread about which courses are easy 4.0s for my program so that the freshman can get some guidance.
 - Estimate: 5
 - Priority: Highest
 - Criteria of Satisfaction:
@@ -83,7 +83,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
     - Optional: include pictures 
 
 **Posting anonymously:** 
-- As a freshman who lives on campus, I want to ask about how to get my roommate to take out the garbage without exposing either of our identity.  
+- As a freshman who lives on campus, I want to ask anonymously about how to get my roommate to take out the garbage so that our identities are not exposed
 - Estimate: 5
 - Priority: Highest 
 - Criteria of Satisfaction:
