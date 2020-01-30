@@ -11,13 +11,6 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
 - Posting anonymously
 
 ## User Stories  
-
-**Create CRUD:** 
-- As a developer, I want to create APIs for CRUD functionality.
-- Estimate: 13
-- Priority: highest
-- Criteria of Satisfaction:
-  - Be able to create(POST), read(GET), upload(PUT), and delete(DELETE) rows/columns in the database with APIs
   
 **Create a database with NoSQL:** 
 - As a developer, I want to design and create a database so that forum users can post in their designated subpages
@@ -33,6 +26,14 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
       - sub_category(title, threads)
       - thread(title, posts)
       - post(posted_by, date/time, content)
+      
+**Create CRUD:** 
+- As a developer, I want to create APIs for CRUD functionality.
+- Estimate: 13
+- Priority: highest
+- Criteria of Satisfaction:
+  - Be able to create(POST), read(GET), upload(PUT), and delete(DELETE) rows/columns in the database with APIs
+
 
 **Create a main page/subpage:**
 - As an admin, I want to create a main page/subpage for forum users to interact in. Both main page and subpage is fixed (for now)
