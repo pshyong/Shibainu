@@ -1,4 +1,6 @@
-Story points:
+# Product Backlog 
+
+**Story points:**
 Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
 
 **Most important user stories:**
@@ -36,7 +38,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
 
 
 **Create a main page/subpage:**
-- As an admin, I want to create a main page/subpage so that forum users have something interact in
+- As an admin, I want to create a main page/subpage so that forum users can navigate to their desired category. Both main page and subpage are fixed (for now)
 - Estimate: 5
 - Priority: Highest
 - Criteria of Satisfaction:
@@ -195,7 +197,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
     - moderator/admins should be able to choose the colour of the elements on their subpage
 
 **Smart filter system for all posts:** 
-- As a teacher in charge of a subpage, I want to prevent users from posting inappropriate content automatically.
+- As a teacher in charge of a subpage, I want to prevent users from posting inappropriate content automatically so that my students are not exposed to inappropriate content.
 - Estimate: 5
 - Priority: Low 
 - Criteria of Satisfaction:
