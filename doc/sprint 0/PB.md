@@ -1,7 +1,9 @@
 Story points:
 Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
 
-
+Most important user stories:
+- Create a database with NoSQL
+- 
 ## User Stories  
 
 **Create a database with NoSQL:** 
@@ -9,31 +11,57 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
 - Estimate: 8
 - Priority: highest
 - Criteria of Satisfaction:  
--- PUT POINTS HERE  
+  - Be able to create tables and insert dummy data
+  - Tables required: (Will be refined when we actually design it)
+      - user(name, email, ,role, age?, school?)
+      - main_page(title, sub_pages)
+      - sub_page(title, categories)
+      - category(title, sub_categories)
+      - sub_category(title, threads)
+      - thread(title, posts)
+      - post(posted_by, date/time, content)
 
 **Create CRUD:** 
 - As a developer, I want to create APIs for CRUD functionality.
 - Estimate: 13
 - Priority: highest
 - Criteria of Satisfaction:
+  - Be able to create(POST), read(GET), upload(PUT), and delete(DELETE) rows/columns in the database with APIs
 
 **Create a main page/subpage:**
 - As an admin, I want to create a main page/subpage for forum users to interact in. Both main page and subpage is fixed (for now)
 - Estimate: 5
 - Priority: highest
 - Criteria of Satisfaction:
+  - Have the mainpage that points to subpages
+  - Be able to create a subpage (such as UTM) with a specific topic
+  - A subpage should contain different categories.
+  - Main page should have links to subpages and vice versa
+  - Back buttons and reload should work as expected
 
-**Create a category:**
-- As a senior in university, I want to start a category about my specific program at my specific school so that all students can share our experiences
+**Create a category under subpage:**
+- As a senior in university, I want to start a category about my specific program (such as CS) at my school so that all students can share our experiences.
 - Estimate: 5
 - Priority: highest
 - Criteria of Satisfaction:
+  - Be able to create a category under a specific subpage.
+  - A category should contain different threads
+  - Be able to navigate from main page -> subpage -> category and vice versa
+  - back/reload buttons should work as expected
 
-**Create a thread/post:** 
-- As a freshman in university, I want to start a thread about which courses are easy 4.0 for my specific program so that I can focus on my core courses. Also may include pictures. 
+**Create a thread under category:** 
+- As a freshman in university, I want to start a thread about which courses are easy 4.0 for my specific program so that I can focus on my core courses. 
 - Estimate: 5
 - Priority: highest
 - Criteria of Satisfaction:
+  - Only available for users with an account
+  - Be able to create a thread under a specific category
+  - A thread should have a title, created by, date/time.
+  - A thread should contain different posts
+  - A thread should contain a textbox for typing up a post
+  - Be able to navigate from main page -> subpage -> category -> thread and vice versa.
+  - Back/reload buttons should work as expected
+
 
 **Reply to a thread:** 
 - As a senior, I want to be able to reply to a thread that someone had posted to ask about which courses to take.
