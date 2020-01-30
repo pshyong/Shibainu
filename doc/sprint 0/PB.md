@@ -203,7 +203,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
     - Filter out aggressive,  abusive, racist, or sexist languages
 
 **Save posts:** 
-- As a user with an account, I want to be able to save my posts so I can find it later.
+- As a user with an account, I want to be able to save my posts so that I can find it later.
 - Estimate: 3
 - Priority: Low 
 - Criteria of Satisfaction:
