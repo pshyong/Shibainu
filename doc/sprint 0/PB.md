@@ -140,8 +140,8 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
     - Once signed-up, user should be redirected to the login page 
     - Sign-in with the newly created username and password should be successful.
 
-**Search:** 
-- As a user with an account, I want to be able to quickly find threads I found useful or liked so that I don’t have to waste time looking for the thread 
+**Search for thread/post:** 
+- As a user with an account, I want to be able to quickly find threads/posts I'm interested in quickly
 - Estimate: 5
 - Priority: Moderate 
 - Criteria of Satisfaction:
