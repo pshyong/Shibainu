@@ -1,9 +1,10 @@
 **Team organization**
-  Kuan Yu Chu: Lead developer
-  - Has experience working with most aspects of software development and act as a key role in deciding our technologies, setting up our environment and UI/UX design.
+
+  - Kuan Yu Chu: Lead developer
+    - Has experience working with most aspects of software development and act as a key role in deciding our technologies, setting up our environment and UI/UX design.
   
-  Jiun Yenn Shyong: Organizer/Backend dev
-   -Has experience working in an Agile environment and can help organize the sprints. Also has some experience in DB design and REST API.
+  - Jiun Yenn Shyong: Organizer/Backend dev
+    - Has experience working in an Agile environment and can help organize the sprints. Also has some experience in DB design and REST API.
    
    Jason Chan:
    
