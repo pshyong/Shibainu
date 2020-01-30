@@ -195,7 +195,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
     - moderator/admins should be able to choose the colour of the elements on their subpage
 
 **Smart filter system for all posts:** 
-- As an admin, I want to prevent users from posting inappropriate content automatically.
+- As an admin, I want to prevent users from posting inappropriate content automatically so that the users are safe from harassment.
 - Estimate: 5
 - Priority: Low 
 - Criteria of Satisfaction:
