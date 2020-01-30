@@ -1,8 +1,7 @@
 ## Team Name: shibainu
 
 **Project Objectives**  
-The project that we decided to do is an Internet forum with anonymous features. The main objective of our forum is providing a platform for users to communicate with each other without being limited by some TOS, all while keeping the forum appropriate and keeping users anonymous. We can keep an anonymous forum appropriate by having posts that are anonymously posted, required to be approved by an admin.
-
+The project that we decided to do is an Internet forum with anonymous features. The main objective of our forum is to provide a platform for users to communicate with each other without being limited by some TOS, all while keeping the forum appropriate and keeping users anonymous. We can keep an anonymous forum appropriate by having posts that are anonymously posted, required to be approved by an admin.
 
 **Key Users**  
 Below are some key users that may use our forum (more detailed personas in Personas.pdf):    
@@ -16,7 +15,6 @@ In our personas, we listed examples of some key users that may be wanting to use
 
 **Key Principles**  
 As stated earlier, the main focus of forum is anonymity. This will allow privacy for users and students of our forum as they would be able to ask questions and provide feedback without the fear of punishment. Ontop of anonymity, we would also like to focus on ease of use. We have seen many forums with complicated posting mechanism that may even discourage users to post on their forums. We want to provide a service where users can easily ask questions, while not having to go through a sign-up process that may be complicated for some users or they may not be willing to sign up to post something.
-
 
 **Key Scenarios**     
 Since one of our main focuses on our forum is anonymity, it should be no suprise that most of our key scenarios focus on that feature. For example if a user had a question that needs to be answered, but they don’t want to register or give away their email address they can do so on our forum. Another scenario that may occur is when a user wants to give some kind of feedback to something (i.e. a post) but also don’t want to register, they can do so by simply replying without an account. A major scenario that may lead users to use our forum is that they want to be active on a forum but don’t want anyone to know their identity. 
