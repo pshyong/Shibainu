@@ -1,9 +1,15 @@
 Story points:
 Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
 
-Most important user stories:
+**Most important user stories:**
 - Create a database with NoSQL
-- 
+- Create CRUD
+- Create main page/subpage
+- Create category under subpage
+- Create threads under category
+- Create posts in threads
+- Posting anonymously
+
 ## User Stories  
 
 **Create a database with NoSQL:** 
