@@ -10,7 +10,8 @@
    
    Patrick Hogeveen:
    
-   Rach Ilagan:
+  - Rach Ilagan: Backend developer
+    - Has experience in creating and developing web applications using REST, NoSQL DB and open-sourced projects.
    
    Shuai Yu:
   
