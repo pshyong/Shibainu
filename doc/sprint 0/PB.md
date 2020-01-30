@@ -38,7 +38,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
 
 
 **Create a main page/subpage:**
-- As an admin, I want to create a main page/subpage so that forum users have something interact in
+- As an admin, I want to create a main page/subpage so that forum users can navigate to their desired category. Both main page and subpage are fixed (for now)
 - Estimate: 5
 - Priority: Highest
 - Criteria of Satisfaction:
@@ -197,7 +197,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
     - moderator/admins should be able to choose the colour of the elements on their subpage
 
 **Smart filter system for all posts:** 
-- As an admin, I want to prevent users from posting inappropriate content automatically so that the users are safe from harassment.
+- As an admin, I want to prevent users from posting inappropriate content automatically so that the users feel safe.
 - Estimate: 5
 - Priority: Low 
 - Criteria of Satisfaction:
@@ -239,7 +239,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
     - Click on an emoji like the like button and have the emoji appear like a normal like
 
 **Drawing Images:** 
-- As a user, I would like to be able to send a private message to someone so that I can communicate with them without having everyone knowing the contents of my conversation
+- As a user, I would like to be able to make quick free hand drawings and make minor edits to the images other users have posted so that I can better communicate my point. 
 - Estimate: 13
 - Priority: Lowest
 - Criteria of Satisfaction:
