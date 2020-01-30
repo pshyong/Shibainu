@@ -57,19 +57,17 @@
 
 - Version Control:
 
-        Things Not to Commit (Will all be included in .gitignore):
-    		- temporary files (e.g. .swp)
-    		- IDE specific folder/files (e.g. .idea/)
-    		- Environment variables
-    		- Any test files that are for personal tests and not for group/project tests
-    	Content of log messages:
-    		- Must include the features implemented/fixed
-    		- Must follow "The seven rules of a great Git commit message" from (here)[https://chris.beams.io/posts/git-commit/]
-    		- In addition to the great git commit messages, we must also include the JIRA ticket number with the following format: [Issue #] Commit Message
-    	- For every new feature and/or bug fixes, we must submit it as a pull request, and then at least two of us will 
-        review the changes before merging to the master branch
-    	- Everything will need to be done on a seperate branch, no one should commit to master. If someone commits to master, 
-        we are forced to roll back to previous commits and branch off.
+    - Things Not to Commit (Will all be included in .gitignore):
+        - temporary files (e.g. .swp)
+    	- IDE specific folder/files (e.g. .idea/)
+    	- Environment variables
+    	- Any test files that are for personal tests and not for group/project tests
+    - Content of log messages:
+    	- Must include the features implemented/fixed
+    	- Must follow "The seven rules of a great Git commit message" from (here)[https://chris.beams.io/posts/git-commit/]
+    	- In addition to the great git commit messages, we must also include the JIRA ticket number with the following format: [Issue #] Commit Message
+    - For every new feature and/or bug fixes, we must submit it as a pull request, and then at least two of us will review the changes before merging to the master branch
+    - Everything will need to be done on a seperate branch, no one should commit to master. If someone commits to master, we are forced to roll back to previous commits and branch off.
 
 
 - Roles and Division: As decided among group members, Daniel will be the team leader (But of course scrum master will be the TA). In order to divide tasks up, we will all communicate with each other to see what is doable in the specified sprint, and estimate how long it will take each of us to do, with those in-mind we will first take people who are interested in that part, and we will let the person do it; however we all must have equal work this is where Daniel will make sure that everyone including himself have a fair and equal workload.
