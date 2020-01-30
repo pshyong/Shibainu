@@ -47,7 +47,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
   - Back buttons and reload should work as expected
 
 **Create a category under subpage:**
-- As a senior in university, I want to start a category about my specific program (such as CS) at my school so that all students can share our experiences.
+- As a second-year university student, I want to start a category about my specific program, medicine, at my school so that all students can share our experiences.
 - Estimate: 5
 - Priority: Highest
 - Criteria of Satisfaction:
@@ -57,7 +57,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
   - back/reload buttons should work as expected
 
 **Create a thread under category:** 
-- As a freshman in university, I want to start a thread about which courses are easy 4.0 for my specific program so that I can focus on my core courses. 
+- As a second-year university student, I want to start a thread about which courses are easy 4.0 for my specific program so that I can focus on my core courses. 
 - Estimate: 5
 - Priority: Highest
 - Criteria of Satisfaction:
@@ -83,7 +83,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
     - Optional: include pictures 
 
 **Posting anonymously:** 
-- As a freshman who lives on campus, I want to ask anonymously about how to get my roommate to take out the garbage so that our identities are not exposed
+- As the Don of a residence, I want to ask anonymously about how to get a tenant to take out their trash so that our identities are not exposed
 - Estimate: 5
 - Priority: Highest 
 - Criteria of Satisfaction:
@@ -195,7 +195,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
     - moderator/admins should be able to choose the colour of the elements on their subpage
 
 **Smart filter system for all posts:** 
-- As an admin, I want to prevent users from posting inappropriate content automatically.
+- As a teacher in charge of a subpage, I want to prevent users from posting inappropriate content automatically.
 - Estimate: 5
 - Priority: Low 
 - Criteria of Satisfaction:
@@ -237,7 +237,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
     - Click on an emoji like the like button and have the emoji appear like a normal like
 
 **Drawing Images:** 
-- As a user, I would like to be able to send a private message to someone so that I can communicate with them without having everyone knowing the contents of my conversation
+- As a teacher, I would like to be able to make quick free hand drawings and make minor edits to the images other users have posted so that I can better communicate my point. 
 - Estimate: 13
 - Priority: Lowest
 - Criteria of Satisfaction:
