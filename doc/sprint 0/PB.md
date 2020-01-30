@@ -28,7 +28,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
       - post(posted_by, date/time, content)
       
 **Create CRUD:** 
-- As a developer, I want to create APIs for CRUD functionality.
+- As a developer, I want to create APIs for CRUD functionality so that we can perform the related actions.
 - Estimate: 13
 - Priority: Highest
 - Criteria of Satisfaction:
@@ -36,7 +36,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
 
 
 **Create a main page/subpage:**
-- As an admin, I want to create a main page/subpage for forum users to interact in. Both main page and subpage is fixed (for now)
+- As an admin, I want to create a main page/subpage so that forum users have something interact in
 - Estimate: 5
 - Priority: Highest
 - Criteria of Satisfaction:
@@ -70,7 +70,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
   - Back/reload buttons should work as expected
 
 **Create a post in a thread:**
-- As a senior, I want to respond to a thread about which courses are easy 4.0s for my program.
+- As a senior, I want to be able to respond to a thread so that I can tell other students about which courses are easy 4.0s for my program.
 - Estimate: 5
 - Priority: Highest
 - Criteria of Satisfaction:
@@ -83,7 +83,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
     - Optional: include pictures 
 
 **Posting anonymously:** 
-- As a freshman who lives on campus, I want to ask about how to get my roommate to take out the garbage without exposing either of our identity.  
+- As a freshman who lives on campus, I want to ask question anonymously so that I can ask about how to get my roommate to take out the garbage without exposing either of our identity.  
 - Estimate: 5
 - Priority: Highest 
 - Criteria of Satisfaction:
@@ -92,7 +92,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
     - Users needs to complete a CAPTCHA before they can post 
 
 **Edit/delete a post:**
-- As a senior, I want to edit or delete a post I created earlier to fix some mistakes.
+- As a regular user, I want to be able to edit my post after posting so that I can correct my spelling errors.
 - Estimate: 3
 - Priority: Highest
 - Criteria of Satisfaction:
@@ -114,7 +114,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
     - Allow moderators/admins to lock threads so users can cool off
 
 **Optional approval system for threads:** 
-- As a teacher, I want to create a thread where no anonymous posts are allowed.
+- As a teacher, I want to create a thread where no anonymous posts are allowed so that I know who is posting in my thread.
 - Estimate: 3
 - Priority: High 
 - Criteria of Satisfaction:
@@ -123,7 +123,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
     - Users are no longer able to post anonymously in such threads
     
 **Delay posting for anonymous users:** 
-- As a moderator/admin, I want to prevent trolls and other malicious users from abusing the anonymous posting feature to spam threads with inappropriate content. 
+- As a moderator/admin, I want to prevent trolls and other malicious users from abusing the anonymous posting feature so that spams and inappropriate content can be kept to a minimum.
 - Estimate: 3
 - Priority: High 
 - Criteria of Satisfaction:
@@ -132,7 +132,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
     - Posts can be cancelled if they are not "alive"
 
 **Account sign-up:** 
-- As a frequent user, I would like to be able to use features that an anonymous user would not be to, such as having a post history.
+- As a frequent user, I would like to be able to make an account so that I can use features that an anonymous user would not be to, such as having a post history.
 - Estimate: 5
 - Priority: Medium
 - Criteria of Satisfaction:
@@ -141,7 +141,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
     - Sign-in with the newly created username and password should be successful.
 
 **Search for thread/post:** 
-- As a user with an account, I want to be able to quickly find threads/posts I'm interested in quickly
+- As a user with an account, I want to be able to quickly find threads/posts I'm interested in quickly so that I don't have to waste time looking for them
 - Estimate: 5
 - Priority: Medium
 - Criteria of Satisfaction:
@@ -150,7 +150,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
     - Users should be able to specify if all keywords or if any keyword is sufficient for a match
 
 **Edit my thread:** 
-- As a first-year student, I want to be able to edit a thread I created earlier to clarify what I meant by “Easy 4.0”
+- As a first-year student, I want to be able to edit a thread I created earlier so that I can clarify what I meant by “Easy 4.0”
 - Estimate: 2
 - Priority: Medium
 - Criteria of Satisfaction:
@@ -186,7 +186,7 @@ Fibonacci-like format: 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100
     - Users should be able to sort posts/threads by time created/updated, number of posts, number of likes, etc…
 
 **Style your own subpage:** 
-- As a user with an account, I want to be able to style my own subpage to make it more unique.
+- As a user with an account, I want to be able to style my own subpage so that I can make it more unique.
 - Estimate: 5
 - Priority: Low 
 - Criteria of Satisfaction:
