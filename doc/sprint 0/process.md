@@ -19,12 +19,6 @@
 
   Working on the .md files together allowed us to experiment different ways of working together. We mostly did a great job in communicating what each other is responsible for and what we're currently working on. Going forward, we should rely on Jira more when managing our work.
 
-  
-  - Reflect on how your team worked together
-  - How did you organize the team?
-  - What tools did we use?
-  
-
 **Decision making**
   
    Our first step in making a decision is identifying and agreeing on the problem to be solved. The next step is to gather information to make a decision based on facts and data instead of assumptions. Information gathering was done by sharing our experiences and researching online. Once we have enough information, we woud propose possible soutions and weigh the differences in terms of how it affects our target audience and our workload. Finally, we would agree on a solution and document it. 
@@ -35,19 +29,10 @@
   
   As a baseline for estimating, we first discussed tasks that we are all familiar with. For example, we agreed that a user story such as "Adding a drop down box in the sign-up page" is 0.5, and "Create CRUD APIs" is 13. The estimates were done after discussing the work required based on one of our experiences although some spikes might be required further down the road. In general, each story took 1 or 2 rounds of voting and outliers described their reasoning before we moved on to vote again. The estimation process was smooth and going forward, we would like to utilize a polling system instead of just saying the number out loud.
   
-  - How did we define priority and points? 
-  - How many rounds of voting?
-  
-
 **Meetings**
 
 We met once a week in person during and right after tutorial. Most of the communication was done via Discord consistently and we had one online meeting to groom and estimate the user stories.
-
-   - In person or online?
-  - How frequent?
   
 **Next phase**
   
   Going forward, we need to do a better job at updating each other on our own task in the scrum channel. We also need to be checking daily to update or workflow. We will also be using git-flow to manage commits. Our next task is to make sure we're all comfortable with using Jira to track and update each user story and assign them to specific members. It would also be idea to find a time where we can all sit down to code together.
-
-  - What lessons should you take forward to the next phase?
