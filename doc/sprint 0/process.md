@@ -9,7 +9,8 @@
   - Jason Chan:
     - Has some experience working with most aspects of software development. Can help in places where help is needed.
    
-   Patrick Hogeveen:
+  - Patrick Hogeveen: Developer
+    - Has some experience with software development.
    
   - Rach Ilagan: Backend developer
     - Has experience in creating and developing web applications using REST, NoSQL DB and open-sourced projects.
