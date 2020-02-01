@@ -6,7 +6,7 @@
   - Jiun Yenn Shyong: Organizer/Backend dev
     - Has experience working in an Agile environment and can help organize the sprints. Also has some experience in DB design and REST API.
    
-  - Jason Chan:
+  - Jason Chan: Developer/UI
     - Has some experience working with most aspects of software development. Can help in places where help is needed.
    
   - Patrick Hogeveen: Developer
