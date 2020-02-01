@@ -15,8 +15,8 @@
   - Rach Ilagan: Backend developer
     - Has experience in creating and developing web applications using REST, NoSQL DB and open-sourced projects.
    
-   Shuai Yu: Developer
-   - Has experience with Full stack development, APIs, and web development
+  - Shuai Yu: Developer
+    - Has experience with Full stack development, APIs, and web development. Can also help in other areas when needed
   
   Initially, our team relied on Discord to communicate and organize team meetings. We were able to bounce ideas off each other for project ideas and eventually agreed on the project. In general, communication between all team members was consistent but we had trouble getting everyone on the same call at the same time due to scheduling conflicts. We eventually found a compromise and groomed/estimated all the user stories together. 
 
