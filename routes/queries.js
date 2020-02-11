@@ -1,13 +1,21 @@
-const Pool = require('pg').Pool
-const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'forum',
-  password: '123456',
-  port: 5432,
-})
+// ! Please follow these for developing your api
+// ! https://florimond.dev/blog/articles/2018/08/restful-api-design-13-best-practices-to-make-your-users-happy/
 
-const addPage = (request, response) => {
+// Constants that we should be using to grab both our configuration
+// and express sanitization/validator
+const db = require('../config')
+const express = require('express')
+
+const {
+    body,
+    validationResult
+} = require('express-validator');
+const {
+    sanitizeBody
+} = require('express-validator');
+
+
+exports.addPage = function (request, response) {
 	if (!request.body.hasOwnProperty("title")) {
 		console.error("Request body did not have title parameter")
 		response.status(400).end()
@@ -24,7 +32,7 @@ const addPage = (request, response) => {
 	}
 }
 
-const getPages = (request, response) => {
+exports.getPages = function (request, response) {
 	pool.query("SELECT * FROM mainpage;",
 		(error, results) => {
 			if (error) {	
@@ -35,10 +43,4 @@ const getPages = (request, response) => {
 			}
 	})
 	
-}
-
-
-module.exports = {
-	addPage,
-	getPages
 }
