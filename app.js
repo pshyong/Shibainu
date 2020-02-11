@@ -55,7 +55,3 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
-
-app.listen(port, () => {
-  console.log(`App running on port ${port}.`)
-})
