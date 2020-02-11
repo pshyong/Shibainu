@@ -13,7 +13,7 @@ router.use(jsonParser)
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'shibainu' });
 });
 
 // ! Try and group the api calls to ones that are similar
