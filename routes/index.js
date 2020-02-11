@@ -23,3 +23,4 @@ router.post('/api/pages/addPage', db.addPage);
 router.get('/api/pages/getPages', db.getPages);
 
 module.exports = router;
+
