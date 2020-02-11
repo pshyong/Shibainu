@@ -13,12 +13,12 @@
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "express-validator": "^6.4.0",
-    "http-errors": "~1.6.3",
+    "http-errors": "^1.6.3",
     "morgan": "~1.9.1",
     "node-sass": "^4.13.1",
     "node-sass-middleware": "^0.11.0",
-    "serve-favicon": "^2.5.0",
-    "pg": "7.18.1"
+    "pg": "7.18.1",
+    "serve-favicon": "^2.5.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
