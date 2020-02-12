@@ -15,6 +15,7 @@ const {
 } = require('express-validator');
 
 
+
 exports.addPage = function (request, response) {
 	// We first want to verify such message exists and is a well message
 	body('title').notEmpty().isAlphanumeric().withMessage("Missing title response"),
