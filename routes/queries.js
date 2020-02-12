@@ -14,6 +14,16 @@ const {
     sanitizeBody
 } = require('express-validator');
 
+const getPostQuery = "SELECT * FROM post;";
+
+function sendJSON(statusCode, payload) {
+    return JSON.stringify({status_code: statusCode, payload: payload})
+}
+
+function sendError(statusCode, message, additionalInfo={}) {
+    return JSON.stringify({status_code:statusCode, error: {message: message, additional_information: additionalInfo}})
+}
+
 
 exports.addPage = function (request, response) {
 	// We first want to verify such message exists and is a well message
@@ -77,7 +87,12 @@ exports.addPost = function (request, response) {
 }
 
 exports.getPost = function (request, response) {
-	response.status(401).end()
+	db.task(async t => {
+		const result = await t.any(getPostQuery);
+		return result;
+	}).then (result => {
+		response.status(200).json(result)
+	}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
 	
 }
 
