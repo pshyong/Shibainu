@@ -16,10 +16,11 @@ const getPagesQuery = "SELECT * FROM subpage;";
 
 const addCategoryQuery = "INSERT INTO category(subject, user_account_id, last_posted_by, page_id) VALUES ($1, $2, $3, $4) RETURNING subject, cat_id;";
 const getCategoryQuery = "SELECT * FROM category WHERE page_id = $1;";
-const addThreadQuery = "INSERT INTO tread(title) tread(cat_id) VALUES ($1) ($2) RETURNING title, page_id";
+
+const addThreadQuery = "INSERT INTO thread(subject, sub_cat_id, user_account_id) VALUES ($1, $2, $3) RETURNING subject, page_id";
 const getThreadQuery = "SELECT * FROM thread;";
 
-const addPostQuery = "INSERT INTO post(title) post(content) post(thread_id) VALUES ($1) ($2) ($3) RETURNING title, page_id";
+const addPostQuery = "INSERT INTO post(content, thread_id) VALUES ($1, $2) RETURNING content, post_id";
 const getPostQuery = "SELECT * FROM post;";
 
 function sendJSON(statusCode, payload) {
@@ -146,13 +147,15 @@ exports.getCategories = [
 		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
 	}
 ];
+
+// const addThreadQuery = "INSERT INTO thread(subject, sub_cat_id, user_account_id) VALUES ($1, $2, $3) RETURNING subject, page_id";
 exports.addThread = [
-	body('title').exists().withMessage("Missing Title Parameter").bail()
-	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Title Parameter").bail().escape(),
-	body('cat_id').exists().withMessage("Missing category Id Parameter").bail()
-	  .isInt().withMessage("Invalid category Id Parameter").bail().escape(),
-
-
+	body('subject').exists().withMessage("Missing Subject Parameter").bail()
+	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Subject Parameter").bail().escape(),
+	body('sub_cat_id').exists().withMessage("Missing subcategory Id Parameter").bail()
+	  .isInt().withMessage("Invalid subcategory Id Parameter").bail().escape(),
+	body('user_account_id').exists().withMessage("Missing User Account Id Parameter").bail()
+	  .isInt().withMessage("Invalid User Account Id Parameter").bail().escape(),
 
 	async function (req, res, next) {
 		//see if we have any errors
@@ -165,11 +168,11 @@ exports.addThread = [
 		}
 		
 		db.task(async t => {
-			const result = await t.one(addThreadQuery, [req.body.subject, req.body.user_account_id, req.body.user_account_id, req.body.page_id]);
+			const result = await t.one(addThreadQuery, [req.body.subject, req.body.sub_cat_id, req.body.user_account_id]);
 			return result;
 		}).then (result => {
 			if ("subject" in result) {
-				res.status(200).send(`Category inserted with title ${result.subject} and page ${result.cat_id}`);
+				res.status(200).send(`Category inserted with title ${result.subject} and page ${result.thread_id}`);
 			} else {
 				res.status(400).send("Unable to insert the category");
 			}
@@ -191,13 +194,10 @@ exports.getThread = function (request, response) {
 exports.addPost = [
 
 	//need to check that atleast a title,page id and content exist.
-	body('title').exists().withMessage("Missing Title Parameter").bail()
-	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Title Parameter").bail().escape(),
-	body('page_id').exists().withMessage("Missing Page Id Parameter").bail()
-	  .isInt().withMessage("Invalid Page Id Parameter").bail().escape(),
-	body('content').exists().withMessage("Missing content Parameter").bail()
-	  .isInt().withMessage("Invalid content Parameter").bail().escape(),
-
+	body('content').exists().withMessage("Missing Content Parameter").bail()
+	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Content Parameter").bail().escape(),
+	body('thread_id').exists().withMessage("Missing Thread Id Parameter").bail()
+	  .isInt().withMessage("Invalid Thread Id Parameter").bail().escape(),
 
 	async function (req, res, next) {
 		//see if we have any errors
@@ -212,13 +212,12 @@ exports.addPost = [
 		//here may be have to check if post is already in db?
 
 		db.task(async t => { //try to add to the db
-			const result = await t.one(addPostQuery, [req.body.title],[req.body.page_id],[req.body.content]);
+			const result = await t.one(addPostQuery, [req.body.content],[req.body.thread_id]);
 			return result;
 		}).then (result => {
-
 			if ("title" in result) {
 				// return 200 if we successfully added the page
-				res.status(200).send(`Page inserted with title ${result.title} and page ${result.page_id}`); 
+				res.status(200).send(`Page inserted with title ${result.content} and page ${result.post_id}`); 
 			} else {
 				// return 400 if we unsuccessfully added the page
 				res.status(400).send("Unable to insert the page");
