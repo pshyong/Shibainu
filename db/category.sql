@@ -4,7 +4,6 @@ CREATE TABLE Category (
     subject varchar(100)  NOT NULL,
     created timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     user_account_id integer NOT NULL,
-    thread_ids int NULL,
     last_posted_by int  NULL,
     page_id SERIAL REFERENCES subpage(page_id)
 );

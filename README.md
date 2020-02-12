@@ -32,6 +32,8 @@ All routes must go through /api/
 Current routes are the follow:
 - /api/pages/addPage
 - /api/pages/getPages
+- /api/pages/addCategory
+- /api/pages/getCategories
 
 ## Note
 - You must develop everything in feature/issue-tag and only merge to develop when done and only submit pull request if you know its working so at least 2 of us can review the code
