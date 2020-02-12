@@ -22,17 +22,10 @@ function sendError(statusCode, message, additionalInfo={}) {
     return JSON.stringify({status_code:statusCode, error: {message: message, additional_information: additionalInfo}})
 }
 
-<<<<<<< HEAD
-
-exports.addPage = function (request, response) {
-	// We first want to verify such message exists and is a well message
-	body('title').notEmpty().isAlphanumeric().withMessage("Missing title response"),
-=======
 exports.addPage = [
 	// We first want to verify such message exists and is a well messaget
 	body('title').exists().withMessage("Missing Title Parameter").bail()
 	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Title Parameter").bail().escape(),
->>>>>>> SHIB-9-API
 	// As we get more fields to add, you must keep adding on to this
 	// refer to express-validator if you're unsure what to do here
 	// Removed sanitize body, since it will now be deprecated
