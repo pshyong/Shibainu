@@ -1,33 +1,64 @@
     <div id="header">
-        <nav class="flex bg-blue-500 border-b border-gray-200 fixed top-0 inset-x-0 z-100 h-16 items-center2">
-            <!-- <div class="w-full max-w-screen-xl relative mx-auto px-6"> -->
-                <!-- <div class="flex items-center -mx-6"> -->
+        <div class="flex bg-gray-800 border-b border-gray-200 fixed top-0 inset-x-0 z-100 h-12 items-center">
+            <div class="w-full max-w-screen-xl relative mx-auto px-6">
+                <nav class="flex items-center xl:-mx-32">
+                    <!-- <div class="w-full max-w-screen-xl relative mx-auto px-6"> -->
+                    <!-- <div class="flex items-center -mx-6"> -->
                     <div class="ml-5 flex items-center flex-shrink-0 text-white mr-4">
-                        <span class="font-semibold text-xl tracking-tight" style="text-transform: uppercase;">shibainu</span>
+                        <span class="font-semibold text-xl tracking-tight"
+                            style="text-transform: uppercase;">shibainu</span>
                     </div>
-                    <div class="block lg:hidden">
-                        <button class="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
-                        <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
-                        </button>
-                    </div>
-                    <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto text-gray-600">
-                        
-                        <div class="text-sm lg:flex-grow">
-                            <input type="search" name="serch" placeholder="Search your way...." class="bg-white h-8 px-5 pr-64 rounded-md text-sm focus:outline-none">
-                            <button type="submit" class="absolute right-0 top-0 mt-3 mr-4">
-                            <!-- <svg class="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" width="512px" height="512px">
-                                <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z"/>
-                            </svg> -->
+
+                    <!-- <div class="block lg:hidden">
+                            <button class="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
+                            <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
                             </button>
+                        </div> -->
+
+                    <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto text-gray-600 md:pl-8 ">
+
+                        <div class="text-sm md:flex-grow ">
+                            <div class="w-full lg:px-6 xl:w-3/4 xl:px-12">
+                                <div class="relative">
+                                    <span class="w-full"
+                                        style="position: relative; display: inline-block; direction: ltr;">
+                                        <input id="docsearch"
+                                            class="transition-colors duration-100 ease-in-out focus:outline-0 border border-transparent focus:bg-white focus:border-gray-300 placeholder-gray-600 rounded-lg bg-gray-200 py-2 pr-4 pl-10 block w-full appearance-none leading-normal ds-input"
+                                            type="text" placeholder="Search your way..." autocomplete="off"
+                                            spellcheck="false" role="combobox" aria-autocomplete="list"
+                                            aria-expanded="false" aria-label="search input"
+                                            aria-owns="algolia-autocomplete-listbox-0" dir="auto"
+                                            style="position: relative; vertical-align: top;">
+                                        <pre aria-hidden="true"
+                                            style="position: absolute; visibility: hidden; white-space: pre; font-family: system-ui, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;; font-size: 16px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: normal; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre>
+                                        <span class="ds-dropdown-menu" role="listbox"
+                                            id="algolia-autocomplete-listbox-0"
+                                            style="position: absolute; top: 100%; z-index: 100; display: none; left: 0px; right: auto;">
+                                            <div class="ds-dataset-1"></div>
+                                        </span></span>
+                                    <div class="pointer-events-none absolute inset-y-0 left-0 pl-4 flex items-center">
+                                        <svg class="fill-current pointer-events-none text-gray-600 w-4 h-4"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                            <path
+                                                d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:pl-32">
                             <a href="#" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
-                            Docs
-                        </a> <a href="#" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
-                            Examples
-                        </a> <a href="#" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white">
-                            Blog
-                        </a></div>
-                    <!-- </div>
-                </div> -->
+                                Link1
+                            </a> <a href="#"
+                                class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
+                                Link2
+                            </a> <a href="#" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white">
+                                Link3
+                            </a>
+                        </div>
+                    </div>
+                </nav>
             </div>
-        </nav>
+        </div>
     </div>
