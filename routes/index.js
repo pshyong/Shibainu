@@ -22,4 +22,15 @@ router.get('/', function(req, res, next) {
 router.post('/api/pages/addPage', db.addPage);
 router.get('/api/pages/getPages', db.getPages);
 
+router.post('/api/pages/addCategory', db.addCategory);
+router.get('/api/pages/getCategories', db.getCategories);
+
+router.post('/api/pages/addThread', db.addThread);
+router.get('/api/pages/getThread', db.getThread);
+
+router.post('/api/pages/addPost', db.addPost);
+router.get('/api/pages/getPost', db.getPost);
+
+
 module.exports = router;
+
