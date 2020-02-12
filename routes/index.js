@@ -22,5 +22,8 @@ router.get('/', function(req, res, next) {
 router.post('/api/pages/addPage', db.addPage);
 router.get('/api/pages/getPages', db.getPages);
 
+router.post('/api/pages/addPost', db.addPost);
+router.get('/api/pages/getPost', db.getPost);
+
 module.exports = router;
 

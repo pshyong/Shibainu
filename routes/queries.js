@@ -71,3 +71,14 @@ exports.getPages = function (request, response) {
 	})
 	
 }
+
+exports.addPost = function (request, response) {
+	response.status(403).end()
+}
+
+exports.getPost = function (request, response) {
+	response.status(401).end()
+	
+}
+
+
