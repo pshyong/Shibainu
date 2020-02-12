@@ -11,9 +11,12 @@ const {
     validationResult
 } = require('express-validator');
 
-const getPostQuery = "SELECT * FROM post;";
 const addPageQuery = "INSERT INTO subpage(title) VALUES ($1) RETURNING title, page_id";
 const getPagesQuery = "SELECT * FROM subpage;";
+
+
+const addPostQuery = "INSERT INTO post(title) post(content) VALUES ($1) ($2) RETURNING title, page_id";
+const getPostQuery = "SELECT * FROM post;";
 
 function sendJSON(statusCode, payload) {
     return JSON.stringify({status_code: statusCode, payload: payload})
@@ -78,13 +81,15 @@ exports.getPages = function (request, response) {
 	}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
 }
 
-exports.addPost = function (request, response) {
+exports.addPost = [
 
 	//need to check that atleast a title and page id exist.
 	body('title').exists().withMessage("Missing Title Parameter").bail()
 	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Title Parameter").bail().escape(),
 	body('page_id').exists().withMessage("Missing Page Id Parameter").bail()
 	  .isInt().withMessage("Invalid Page Id Parameter").bail().escape(),
+	body('content').exists().withMessage("Missing content Parameter").bail()
+	  .isInt().withMessage("Invalid content Parameter").bail().escape(),
 
 
 	async function (req, res, next) {
@@ -115,7 +120,7 @@ exports.addPost = function (request, response) {
 		// We want to catch any exception else your program will crash :) have fun with that 
 		.catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
 	}
-}
+];
 
 exports.getPost = function (request, response) {
 	db.task(async t => {
