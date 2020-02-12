@@ -120,6 +120,10 @@ exports.addThread = [
 ];
 
 exports.getThread = function (request, response) {
-	response.status(401).end()
-
+	db.task(async t => {
+		const result = await t.any(getThreadQuery);
+		return result;
+	}).then (result => {
+		response.status(200).json(result)
+	}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
 }
