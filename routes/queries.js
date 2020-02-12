@@ -16,6 +16,8 @@ const getPagesQuery = "SELECT * FROM subpage;";
 
 const addCategoryQuery = "INSERT INTO category(subject, user_account_id, last_posted_by, page_id) VALUES ($1, $2, $3, $4) RETURNING subject, cat_id;";
 const getCategoryQuery = "SELECT * FROM category WHERE page_id = $1;";
+const addThreadQuery = "INSERT INTO tread(title) tread(cat_id) VALUES ($1) ($2) RETURNING title, page_id";
+const getThreadQuery = "SELECT * FROM thread;";
 
 function sendJSON(statusCode, payload) {
     return JSON.stringify({status_code: statusCode, payload: payload})
@@ -88,6 +90,21 @@ exports.addCategory = [
 	async function (req, res, next) {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
+
+exports.addThread = [
+	body('title').exists().withMessage("Missing Title Parameter").bail()
+	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Title Parameter").bail().escape(),
+	body('cat_id').exists().withMessage("Missing category Id Parameter").bail()
+	  .isInt().withMessage("Invalid category Id Parameter").bail().escape(),
+
+
+
+	async function (req, res, next) {
+		//see if we have any errors
+		const errors = validationResult(req);
+
+		if (!errors.isEmpty()) {
+			// if there are errors, we return 400
 			res.status(400).json({ errors: errors.array() });
 			return;
 		}
@@ -123,3 +140,31 @@ exports.getCategories = [
 		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
 	}
 ];
+		//here may be have to check if post is already in db?
+
+		db.task(async t => { //try to add to the db
+			const result = await t.one(addThreadQuery, [req.body.title],[req.body.cat_id]);
+			return result;
+		}).then (result => {
+
+			if ("title" in result) {
+				// return 200 if we successfully added the thread
+				res.status(200).send(`Thread inserted with title ${result.title} and thread ${result.thread_id}`); 
+			} else {
+				// return 400 if we unsuccessfully added the thread
+				res.status(400).send("Unable to insert the thread");
+			}
+		})
+		// We want to catch any exception else your program will crash :) have fun with that 
+		.catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+	}
+];
+
+exports.getThread = function (request, response) {
+	db.task(async t => {
+		const result = await t.any(getThreadQuery);
+		return result;
+	}).then (result => {
+		response.status(200).json(result)
+	}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+}
