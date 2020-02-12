@@ -19,6 +19,9 @@ const getCategoryQuery = "SELECT * FROM category WHERE page_id = $1;";
 const addThreadQuery = "INSERT INTO tread(title) tread(cat_id) VALUES ($1) ($2) RETURNING title, page_id";
 const getThreadQuery = "SELECT * FROM thread;";
 
+const addPostQuery = "INSERT INTO post(title) post(content) post(thread_id) VALUES ($1) ($2) ($3) RETURNING title, page_id";
+const getPostQuery = "SELECT * FROM post;";
+
 function sendJSON(statusCode, payload) {
     return JSON.stringify({status_code: statusCode, payload: payload})
 }
@@ -168,3 +171,56 @@ exports.getThread = function (request, response) {
 		response.status(200).json(result)
 	}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
 }
+
+exports.addPost = [
+
+	//need to check that atleast a title,page id and content exist.
+	body('title').exists().withMessage("Missing Title Parameter").bail()
+	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Title Parameter").bail().escape(),
+	body('page_id').exists().withMessage("Missing Page Id Parameter").bail()
+	  .isInt().withMessage("Invalid Page Id Parameter").bail().escape(),
+	body('content').exists().withMessage("Missing content Parameter").bail()
+	  .isInt().withMessage("Invalid content Parameter").bail().escape(),
+
+
+	async function (req, res, next) {
+		//see if we have any errors
+		const errors = validationResult(req);
+
+		if (!errors.isEmpty()) {
+			// if there are errors, we return 400
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+		
+		//here may be have to check if post is already in db?
+
+		db.task(async t => { //try to add to the db
+			const result = await t.one(addPostQuery, [req.body.title],[req.body.page_id],[req.body.content]);
+			return result;
+		}).then (result => {
+
+			if ("title" in result) {
+				// return 200 if we successfully added the page
+				res.status(200).send(`Page inserted with title ${result.title} and page ${result.page_id}`); 
+			} else {
+				// return 400 if we unsuccessfully added the page
+				res.status(400).send("Unable to insert the page");
+			}
+		})
+		// We want to catch any exception else your program will crash :) have fun with that 
+		.catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+	}
+];
+
+exports.getPost = function (request, response) {
+	db.task(async t => {
+		const result = await t.any(getPostQuery);
+		return result;
+	}).then (result => {
+		response.status(200).json(result)
+	}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+	
+}
+
+
