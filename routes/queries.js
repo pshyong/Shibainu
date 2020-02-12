@@ -29,6 +29,11 @@ exports.addPage = [
 	// We first want to verify expected parameters and escape any special characters
 	body('title').exists().withMessage("Missing Title Parameter").bail()
 	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Title Parameter").bail().escape(),
+	// As we get more fields to add, you must keep adding on to this
+	// refer to express-validator if you're unsure what to do here
+	// Removed sanitize body, since it will now be deprecated
+	// You can do more checking by express-validator's sanitization middlewares
+
 	async function (req, res, next) {
 		// First see if we have any errors
 		const errors = validationResult(req);
@@ -52,7 +57,7 @@ exports.addPage = [
 			if ("title" in result) {
 				// We want to send back 200 for successful query
 				// I am sending back a response just for debugging to see if api actually worked and inserted
-				res.status(200).send(`Subpage inserted with title ${result.title} and page ${result.page_id}`); 
+				res.status(200).send(`Subpage inserted with title: "${result.title}" and page_id: ${result.page_id}`); 
 			} else {
 				// The case where it didnt actually insert correctly
 				res.status(400).send("Unable to insert the subpage");
