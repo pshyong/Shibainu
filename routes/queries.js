@@ -3,7 +3,7 @@
 
 // Constants that we should be using to grab both our configuration
 // and express sanitization/validator
-const db = require('../config')
+const pool = require('../config')
 const express = require('express')
 
 const {
@@ -14,14 +14,21 @@ const {
     sanitizeBody
 } = require('express-validator');
 
+function sendJSON(statusCode, payload) {
+    return JSON.stringify({status_code: statusCode, payload: payload})
+}
 
-exports.addPage = function (request, response) {
-	// We first want to verify such message exists and is a well message
-	body('title').notEmpty().isAlphanumeric().withMessage("Missing title response"),
+function sendError(statusCode, message, additionalInfo={}) {
+    return JSON.stringify({status_code:statusCode, error: {message: message, additional_information: additionalInfo}})
+}
+
+exports.addPage = [
+	// We first want to verify such message exists and is a well messaget
+	body('title').notEmpty().withMessage("Missing title response"),
 	// As we get more fields to add, you must keep adding on to this
 	// refer to express-validator if you're unsure what to do here
-	// Next we must sanitize the body to escape all chars that does injections
-	sanitizeBody('title').escape(), // You can add more by doing sanitizeBody('a1', 'b').escape()
+	// Removed sanitize body, since it will now be deprecated
+	// You can do more checking by express-validator's sanitization middlewares
 	
 	async function (req, res, next) {
 		// First see if we have any errors
@@ -35,7 +42,7 @@ exports.addPage = function (request, response) {
 		let title = req.body.title;
 		// We need to prepare the statement to also do another level of sanization on the database
 		// The following queries should be updated as the database is updated
-		let insert_page = `INSERT INTO mainpage(title, cat_ids) VALUES ($1, 0) RETURNING title`;
+		let insert_page = `INSERT INTO subpage(title) VALUES ($1) RETURNING title, page_id`;
 		// Now we must use promise from javascript to make sure we get a callback
 		// You will keep populate this array if you have multiple queries to do in this function
 		Promise.all([pool.query(insert_page, [title])])
@@ -47,17 +54,17 @@ exports.addPage = function (request, response) {
 			if (rows[0].title) {
 				// We want to send back 200 for successful query
 				// I am sending back a response just for debugging to see if api actually worked and inserted
-				res.status(200).send(`Post inserted with title ${rows[0].title}`); 
+				res.status(200).send(`Post inserted with title ${rows[0].title} and page ${rows[0].page_id}`); 
 			} else {
 				// The case where it didnt actually insert correctly
 				res.status(400).send(`Unable to insert into the specified field`);
 			}
 		})
 		// We want to catch any exception else your program will crash :) have fun with that 
-		.catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + 'error ' + e))})
+		.catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
 		
 	}
-}
+];
 
 exports.getPages = function (request, response) {
 	pool.query("SELECT * FROM mainpage;",
