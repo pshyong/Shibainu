@@ -15,7 +15,7 @@ const addPageQuery = "INSERT INTO subpage(title) VALUES ($1) RETURNING title, pa
 const getPagesQuery = "SELECT * FROM subpage;";
 
 
-const addPostQuery = "INSERT INTO post(title) post(content) VALUES ($1) ($2) RETURNING title, page_id";
+const addPostQuery = "INSERT INTO post(title) post(content) post(thread_id) VALUES ($1) ($2) ($3) RETURNING title, page_id";
 const getPostQuery = "SELECT * FROM post;";
 
 function sendJSON(statusCode, payload) {
@@ -83,7 +83,7 @@ exports.getPages = function (request, response) {
 
 exports.addPost = [
 
-	//need to check that atleast a title and page id exist.
+	//need to check that atleast a title,page id and content exist.
 	body('title').exists().withMessage("Missing Title Parameter").bail()
 	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Title Parameter").bail().escape(),
 	body('page_id').exists().withMessage("Missing Page Id Parameter").bail()
@@ -105,7 +105,7 @@ exports.addPost = [
 		//here may be have to check if post is already in db?
 
 		db.task(async t => { //try to add to the db
-			const result = await t.one(addPostQuery, [req.body.title]);
+			const result = await t.one(addPostQuery, [req.body.title],[req.body.page_id],[req.body.content]);
 			return result;
 		}).then (result => {
 
