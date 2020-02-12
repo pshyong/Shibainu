@@ -24,11 +24,16 @@ app.use(
   })
 )
 
+// Custom sources
+app.use('/assets/css/tailwindcss/', express.static(__dirname + ('/node_modules/tailwindcss/dist')))
+app.use('/assets/js/', express.static(__dirname + ('/node_modules/jquery/dist')))
+
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(sassMiddleware({
-  src: path.join(__dirname, 'public'),
-  dest: path.join(__dirname, 'public'),
+  src: path.join(__dirname, '/public'),
+  dest: path.join(__dirname, '/public'),
+  debug: true,
   indentedSyntax: true, // true = .sass and false = .scss
   sourceMap: true
 }));

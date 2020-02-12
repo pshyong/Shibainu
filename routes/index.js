@@ -11,14 +11,19 @@ const urlencodedParser = bodyParser.urlencoded({
 })
 router.use(jsonParser)
 
-/* GET home page. */
+/* Main pages router */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'shibainu' });
+  res.render('pages/index', { title: 'shibainu' });
+});
+
+// This page will need to have paramters too
+router.get('/pages', function(req, res, next) {
+  res.render('pages/subpage', { title: 'shibainu | subpage' });
 });
 
 // ! Try and group the api calls to ones that are similar
 // ! All api calls should be going through /api/whatever
-// API contexts
+/* API routers */
 router.post('/api/pages/addPage', db.addPage);
 router.get('/api/pages/getPages', db.getPages);
 
