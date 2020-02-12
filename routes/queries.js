@@ -14,6 +14,9 @@ const {
 const addPageQuery = "INSERT INTO subpage(title) VALUES ($1) RETURNING title, page_id";
 const getPagesQuery = "SELECT * FROM subpage;";
 
+const addThreadQuery = "INSERT INTO tread(title) tread(cat_id) VALUES ($1) ($2) RETURNING title, page_id";
+const getThreadQuery = "SELECT * FROM thread;";
+
 function sendJSON(statusCode, payload) {
     return JSON.stringify({status_code: statusCode, payload: payload})
 }
@@ -79,7 +82,41 @@ exports.getPages = function (request, response) {
 
 
 exports.addThread = [
-	response.status(401).end()
+	body('title').exists().withMessage("Missing Title Parameter").bail()
+	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Title Parameter").bail().escape(),
+	body('cat_id').exists().withMessage("Missing category Id Parameter").bail()
+	  .isInt().withMessage("Invalid category Id Parameter").bail().escape(),
+
+
+
+	async function (req, res, next) {
+		//see if we have any errors
+		const errors = validationResult(req);
+
+		if (!errors.isEmpty()) {
+			// if there are errors, we return 400
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+		
+		//here may be have to check if post is already in db?
+
+		db.task(async t => { //try to add to the db
+			const result = await t.one(addThreadQuery, [req.body.title],[req.body.cat_id]);
+			return result;
+		}).then (result => {
+
+			if ("title" in result) {
+				// return 200 if we successfully added the thread
+				res.status(200).send(`Thread inserted with title ${result.title} and thread ${result.thread_id}`); 
+			} else {
+				// return 400 if we unsuccessfully added the thread
+				res.status(400).send("Unable to insert the thread");
+			}
+		})
+		// We want to catch any exception else your program will crash :) have fun with that 
+		.catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+	}
 ];
 
 exports.getThread = function (request, response) {
