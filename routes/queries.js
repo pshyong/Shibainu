@@ -84,16 +84,68 @@ exports.getPages = function (request, response) {
 }
 
 exports.addCategory = [
+	// We first want to verify such message exists and is a well messaget
 	body('subject').exists().withMessage("Missing Subject Parameter").bail()
 	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Title Parameter").bail().escape(),
 	body('user_account_id').exists().withMessage("Missing User Id Parameter").bail()
 	  .isInt().withMessage("Invalid User Id Parameter").bail().escape(),
 	body('page_id').exists().withMessage("Missing Page Id Parameter").bail()
 	  .isInt().withMessage("Invalid Page Id Parameter").bail().escape(),
+	// As we get more fields to add, you must keep adding on to this
+	// refer to express-validator if you're unsure what to do here
+	// Removed sanitize body, since it will now be deprecated
+	// You can do more checking by express-validator's sanitization middlewares
+	
 	async function (req, res, next) {
+		// First see if we have any errors
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+		
+		db.task(async t => {
+			const result = await t.one(addCategoryQuery, [req.body.subject, req.body.user_account_id, req.body.user_account_id, req.body.page_id]);
+			return result;
+		}).then (result => {
+			// Since we are returning title back from the query, we will get a response back if successful
+			// Therefore we will want to use those feedback to check if query succeeded or failed
+			// So now we will want to get things back
+			if ("subject" in result) {
+				// We want to send back 200 for successful query
+				// I am sending back a response just for debugging to see if api actually worked and inserted
+				res.status(200).send(`Category inserted with title ${result.subject} and page ${result.cat_id}`);
+			} else {
+				// The case where it didnt actually insert correctly
+				res.status(400).send("Unable to insert the category");
+			}
+		})
+		// We want to catch any exception else your program will crash :) have fun with that 
+		.catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+	}
+];
 
+exports.getCategories = [
+	body('page_id').exists().withMessage("Missing Page Id Parameter").bail()
+	  .isInt().withMessage("Invalid Page Id Parameter").bail().escape(),
+	async function (req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+		
+		db.task(async t => {
+			const result = await t.any(getCategoryQuery, [req.body.page_id]);
+			return result;
+		}).then (result => {
+			res.status(200).json(result)
+		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+	}
+];
 exports.addThread = [
 	body('title').exists().withMessage("Missing Title Parameter").bail()
 	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Title Parameter").bail().escape(),
@@ -113,7 +165,7 @@ exports.addThread = [
 		}
 		
 		db.task(async t => {
-			const result = await t.one(addCategoryQuery, [req.body.subject, req.body.user_account_id, req.body.user_account_id, req.body.page_id]);
+			const result = await t.one(addThreadQuery, [req.body.subject, req.body.user_account_id, req.body.user_account_id, req.body.page_id]);
 			return result;
 		}).then (result => {
 			if ("subject" in result) {
@@ -125,43 +177,7 @@ exports.addThread = [
 	}
 ];
 
-exports.getCategories = [
-	body('page_id').exists().withMessage("Missing Page Id Parameter").bail()
-	  .isInt().withMessage("Invalid Page Id Parameter").bail().escape(),
-	async function (req, res, next) {
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			res.status(400).json({ errors: errors.array() });
-			return;
-		}
-		
-		db.task(async t => {
-			const result = await t.any(getCategoryQuery, [req.body.page_id]);
-			return result;
-		}).then (result => {
-			res.status(200).json(result)
-		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
-	}
-];
-		//here may be have to check if post is already in db?
 
-		db.task(async t => { //try to add to the db
-			const result = await t.one(addThreadQuery, [req.body.title],[req.body.cat_id]);
-			return result;
-		}).then (result => {
-
-			if ("title" in result) {
-				// return 200 if we successfully added the thread
-				res.status(200).send(`Thread inserted with title ${result.title} and thread ${result.thread_id}`); 
-			} else {
-				// return 400 if we unsuccessfully added the thread
-				res.status(400).send("Unable to insert the thread");
-			}
-		})
-		// We want to catch any exception else your program will crash :) have fun with that 
-		.catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
-	}
-];
 
 exports.getThread = function (request, response) {
 	db.task(async t => {
