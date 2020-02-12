@@ -40,8 +40,12 @@ exports.addPage = [
 			return;
 		}
 		
-		db.task(async t => {
+		// use db.task(async t => {}) to create the promise
+		db.task(async t => { // do actual db calls in async t => {}
+			// wait for db to give results back
 			const result = await t.one(addPageQuery, [req.body.title]);
+			
+			// return results to be used in the 'then' call
 			return result;
 		}).then (result => {
 			// Since we are returning title back from the query, we will get a response back if successful
