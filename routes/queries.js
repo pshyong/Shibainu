@@ -76,3 +76,13 @@ exports.getPages = function (request, response) {
 		response.status(200).json(result)
 	}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
 }
+
+
+exports.addThread = [
+	response.status(401).end()
+];
+
+exports.getThread = function (request, response) {
+	response.status(401).end()
+
+}
