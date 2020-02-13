@@ -28,6 +28,9 @@ module.exports = {
       },
       container: {
         center: true,
+      },
+      variants: {
+        opacity: ['responsive']
       }
     }
   }
