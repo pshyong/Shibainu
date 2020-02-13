@@ -64,13 +64,13 @@ exports.addPage = [
 ];
 
 const getPagesQuery = "SELECT * FROM subpage;";
-exports.getPages = function (request, response) {
+exports.getPages = function (req, res) {
 	db.task(async t => {
 		const result = await t.any(getPagesQuery);
 		return result;
 	}).then (result => {
 		// pg-promise already formates the result as a JSON so just send it back
-		response.status(200).json(result)
+		res.status(200).json(result)
 	}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
 }
 
