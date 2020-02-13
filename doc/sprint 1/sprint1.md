@@ -47,3 +47,28 @@ about user stories to be completed this sprint are clear, tasks breakdown is don
 - Time: Unestimated
 - Priority: Medium
 - Description: Create api that allows front end to add new threads
+
+**Add subcategory API SHIB 49**
+- Time: Unestimated
+- Priority: Medium
+- Create api allowing front to add new subcategory
+
+**Create basic API for posts SHIB 33**
+- Time: Unestimated
+- Priority: Medium
+- Description: Create api allowing front end to add new post to post table of database
+
+**Create tables to hold forum Categories SHIB 37**
+- Time: Unestimated
+- Priority: Medium
+- Description: Two tables should be created one to hold categories and one to hold subcategories
+
+**Create tables to hold forum page SHIB 36**
+- Time: Unestimated
+- Priority: Medium
+- Description: A table should be created to hold the pages of the forum
+
+**Create a table to hold threads SHIB 35**
+- Time: Unestimated
+- Priority: Medium
+- Description: A table in teh database needs to be created to hold forum threads
