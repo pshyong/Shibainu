@@ -1,5 +1,6 @@
 var express = require('express');
-var router = express.Router();
+var router = express.Router({ mergeParams: true, strict: true});
+// const category = require('express').Router({ mergeParams: true });
 
 const db = require('./queries');
 const bodyParser = require('body-parser');
@@ -13,13 +14,13 @@ router.use(jsonParser)
 
 /* Main pages router */
 router.get('/', function(req, res, next) {
-  res.render('pages/index', { title: 'shibainu' });
+  res.render('pages/index', { title: 'shibainu', name: req.params.name, category: req.params.cat_name});
+
 });
 
-// This page will need to have paramters too
-router.get('/pages', function(req, res, next) {
-  res.render('pages/subpage', { title: 'shibainu | subpage' });
-});
+// This page handler for subpage and category
+router.use('/p/:name/?', require('./category'));
+
 
 // ! Try and group the api calls to ones that are similar
 // ! All api calls should be going through /api/whatever
