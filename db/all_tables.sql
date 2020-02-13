@@ -1,4 +1,5 @@
 -- \i /home/pat/csc301/project-shibainu/db/all_tables.sql
+-- \i C:/Users/pshyo/csc301/project-shibainu/db/all_tables.sql
 -- I'm using this file to insert tables fast. We can decide if we want separate files later.
 
 DROP TABLE IF EXISTS user_account, post, thread, subcategory, category, subpage;
@@ -21,7 +22,7 @@ CREATE TABLE IF NOT EXISTS Category (
 CREATE TABLE IF NOT EXISTS Subcategory (
     sub_cat_id SERIAL PRIMARY KEY,
     created timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    main_cat_id int REFERENCES category(cat_id),
+    main_cat_id SERIAL REFERENCES Category(cat_id),
     subject VARCHAR(100) NOT NULL
 );
 

@@ -10,7 +10,7 @@ const {
     body,
     validationResult
 } = require('express-validator');
-
+ 
 function sendJSON(statusCode, payload) {
     return JSON.stringify({status_code: statusCode, payload: payload})
 }
@@ -160,7 +160,7 @@ exports.addSubCategory = [
 		}
 		
 		db.task(async t => {
-			const result = await t.one(addSubCategoryQuery, [req.body.subject, req.body.sub_cat_id]);
+			const result = await t.one(addSubCategoryQuery, [req.body.subject, req.body.main_cat_id]);
 			return result;
 		}).then (result => {
 			// Since we are returning title back from the query, we will get a response back if successful
