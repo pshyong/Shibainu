@@ -6,6 +6,8 @@ about user stories to be completed this sprint are clear, tasks breakdown is don
 
 **Goal**: For this sprint our goal was the create the skeleton of our forum. This included the database, api and front end ui the basic building blocks.
 
+**Team**: Our team consists of 6 members. Jason, Shuai, and Jiun Yenn participated in this meeting.
+
 **Stories**: 
 
 **Resarch Data Models SHIB 43**
@@ -97,3 +99,12 @@ about user stories to be completed this sprint are clear, tasks breakdown is don
 - Estimate: 5
 - Priority: Highest
 - Description: We want a working skeleton of our forum to build upon and test the various components that require implementations
+
+**Breakdown**:
+The basics to be done this sprint are creating a database and working skeleton for our forum. This includes the API's necessary and modeling the design as well as modeling and creating the database.
+- Jason: Will work on Posts and Thread API
+- Shuai: Will work on Pages and Categroies API
+- Rach: Will work on Overall system design and the documentation associated with it
+- Patrick: Will work on ER diagram and database creation
+- Jiun Yenn: Will work on ER diagram and database creation
+- Daniel: Create skeleton page template design
