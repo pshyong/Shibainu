@@ -6,7 +6,6 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "bootstrap": "^4.4.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
@@ -14,11 +13,14 @@
     "express": "~4.16.1",
     "express-validator": "^6.4.0",
     "http-errors": "^1.6.3",
+    "jquery": "^3.4.1",
+    "moment": "^2.24.0",
     "morgan": "~1.9.1",
     "node-sass": "^4.13.1",
     "node-sass-middleware": "^0.11.0",
+    "pg-promise": "10.4.3",
     "serve-favicon": "^2.5.0",
-    "pg-promise": "10.4.3"
+    "tailwindcss": "^1.2.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
