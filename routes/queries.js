@@ -209,8 +209,8 @@ exports.addThread = [
 	body('sub_cat_id').exists().withMessage("Missing subcategory Id Parameter").bail()
 	  .isInt().withMessage("Invalid subcategory Id Parameter").bail().escape(),
 	//   We can comment user_acount_id out until we need it
-	body('user_account_id').exists().withMessage("Missing User Account Id Parameter").bail()
-	  .isInt().withMessage("Invalid User Account Id Parameter").bail().escape(),
+	// body('user_account_id').exists().withMessage("Missing User Account Id Parameter").bail()
+	//   .isInt().withMessage("Invalid User Account Id Parameter").bail().escape(),
 
 	async function (req, res, next) {
 		//see if we have any errors

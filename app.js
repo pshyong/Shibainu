@@ -6,13 +6,9 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const sassMiddleware = require('node-sass-middleware');
 const favicon = require('serve-favicon')
-// const YAML = require('yamljs');
 
 const indexRouter = require('./routes/index');
 const apiRouter = require('./routes/api');
-
-// const routes = require('./routes');
-
 const app = express();
 
 const swaggerJSDoc = require('swagger-jsdoc');
@@ -59,7 +55,7 @@ app.use(sassMiddleware({
 }));
 
 // API-docs
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
