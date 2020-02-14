@@ -23,6 +23,8 @@ router.route('/v1/pages/page')
      *     responses:
      *       200:
      *         description: Successfully get all pages
+     *         schema:
+     *           example: [{"page_id": 1, "title": "I am a page", "description": "Description for a page", "visitor_count": 0, "created": "2020-02-13 08:10:19.72336+07"}]
      *       500:
      *         description: Internal server error
      *       400:

@@ -15,11 +15,13 @@ const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 var options = {
   swaggerDefinition: {
-    server: 'http://localhost:3000/api',
+    host: 'localhost:3000',
+    basePath: '/api/v1',
     info: {
       title: 'shibainu API',
       version: '0.0.1',
-    },
+      description: 'API for all api calls to shibainu server'
+    }
   },
   apis: ['./routes/*'],
 };
