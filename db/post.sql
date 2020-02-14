@@ -8,7 +8,7 @@ CREATE TABLE post (
     user_account_id int DEFAULT 0,
     upvotes int  NOT NULL DEFAULT 0,
     downvotes int NOT NULL DEFAULT 0,
-    session_id VARCHAR(50) NULL,
+    session_id VARCHAR(50) NULL, -- Once their session expired, they cannot modify post anymore
     thread_id SERIAL REFERENCES thread(thread_id),
     PRIMARY KEY(post_id, thread_id)
 );
