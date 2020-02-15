@@ -1,0 +1,79 @@
+    <div id="header">
+        <div class="flex bg-blue-900 top-0 inset-x-0 z-100 h-12 fixed items-center"> <!-- Fixed? -->
+            <div class="w-full max-w-screen-xl relative mx-auto px-6">
+                <nav class="flex items-center">
+                    <div class="ml-5 flex items-center flex-shrink-0 text-white mr-4">
+                        <a class="text-white" href="/"><span class="font-semibold text-xl tracking-tight"
+                            style="text-transform: uppercase;">shibainu</span></a>
+                    </div>
+                    
+                    <div class="block lg:hidden">
+                            <button class="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
+                            <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
+                            </button>
+                        </div>
+
+                    <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto text-gray-600 md:pl-8 ">
+
+                        <div class="text-sm md:flex-grow ">
+                            <div class="w-full lg:px-6 xl:w-3/4 xl:px-12">
+                                <div class="relative">
+                                    <span class="w-full"
+                                        style="position: relative; display: inline-block; direction: ltr;">
+                                        <input id="docsearch"
+                                            class="transition-colors duration-100 ease-in-out focus:outline-0 border border-transparent focus:bg-white focus:border-gray-300 placeholder-gray-800 rounded-lg bg-gray-400 py-2 pr-4 pl-10 block w-full appearance-none leading-normal ds-input"
+                                            type="text" placeholder="Search your way..." autocomplete="off"
+                                            spellcheck="false" role="combobox" aria-autocomplete="list"
+                                            aria-expanded="false" aria-label="search input" dir="auto"
+                                            style="position: relative; vertical-align: top;">
+                                        <pre aria-hidden="true"
+                                            style="position: absolute; visibility: hidden; white-space: pre; font-family: system-ui, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;; font-size: 16px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: normal; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre>
+                                        <span class="ds-dropdown-menu" role="listbox"
+                                            style="position: absolute; top: 100%; z-index: 100; display: none; left: 0px; right: auto;">
+                                            <div class="ds-dataset-1"></div>
+                                        </span></span>
+                                    <div class="pointer-events-none absolute inset-y-0 left-0 pl-4 flex items-center">
+                                        <svg class="fill-current pointer-events-none text-gray-600 w-4 h-4"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                            <path
+                                                d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:pl-32">
+                            <a href="#" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
+                                Link1
+                            </a> <a href="#"
+                                class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
+                                Link2
+                            </a> <a href="#" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white">
+                                Link3
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="flex bg-blue-800 py-12 heading">
+        <div class="container mx-auto text-white">
+            <div class="row-gap-0">
+                <div class="grid-cols-1">
+                    
+                    <%if (locals.category) { %>
+                        <a href="/p/<%= name %>/"><span class="text-3xl lowercase">#</span><span class="uppercase text-3xl"><%= name %></span></a>
+                        <span class="text-lg lowercase">/c/</span><span class="uppercase text-2xl"><a href="/p/<%= name %>/c/<%= category %>/"><%= category %></a></span>
+                    <% } else { %>
+                        <a href="./"><span class="text-3xl lowercase">#</span><span class="uppercase text-3xl"><%= name %></span></a>
+                    <% } %>
+                    
+                    </div>
+                    <span class="text-sm text-gray-300"><%= description %></span>
+            </div>
+           
+        </div>
+    </div>
+    
