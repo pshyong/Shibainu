@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
 });
 
 // This page handler for subpage and category
-router.use('/p/:name/?', require('./category'));
+router.use('/p/:name/?', require('./UI/subpage'));
 
 
 

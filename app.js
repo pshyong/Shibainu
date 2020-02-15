@@ -8,7 +8,7 @@ const sassMiddleware = require('node-sass-middleware');
 const favicon = require('serve-favicon')
 
 const indexRouter = require('./routes/index');
-const apiRouter = require('./routes/api');
+const apiRouter = require('./routes/API/api');
 const app = express();
 
 const swaggerJSDoc = require('swagger-jsdoc');
@@ -23,7 +23,7 @@ var options = {
       description: 'API for all api calls to shibainu server'
     }
   },
-  apis: ['./routes/*'],
+  apis: ['./routes/API/*'],
 };
 const swaggerSpec = swaggerJSDoc(options);
 

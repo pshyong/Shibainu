@@ -3,7 +3,7 @@
 
 // Constants that we should be using to grab both our configuration
 // and express sanitization/validator
-const db = require('../config')
+const db = require('../../config')
 const express = require('express')
 
 const {
