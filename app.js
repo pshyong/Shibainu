@@ -1,16 +1,31 @@
-var createError = require('http-errors');
-var express = require('express');
-var bodyParser = require('body-parser')
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var sassMiddleware = require('node-sass-middleware');
-var favicon = require('serve-favicon')
+const createError = require('http-errors');
+const express = require('express');
+const bodyParser = require('body-parser')
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const sassMiddleware = require('node-sass-middleware');
+const favicon = require('serve-favicon')
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const apiRouter = require('./routes/API/api');
+const app = express();
 
-var app = express();
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+var options = {
+  swaggerDefinition: {
+    host: 'localhost:3000',
+    basePath: '/api/v1',
+    info: {
+      title: 'shibainu API',
+      version: '0.0.1',
+      description: 'API for all api calls to shibainu server'
+    }
+  },
+  apis: ['./routes/API/*'],
+};
+const swaggerSpec = swaggerJSDoc(options);
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 
@@ -41,10 +56,15 @@ app.use(sassMiddleware({
   sourceMap: true
 }));
 
+// API-docs
+app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Main paths
 app.use('/', indexRouter);
-app.use('/api', indexRouter)
+app.use('/api', apiRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

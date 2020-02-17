@@ -13,7 +13,7 @@ router.route('/v1/pages/page')
     /**
      * @swagger
      *
-     * /v1/pages/page:
+     * /pages/page:
      *   get:
      *     description: Returns all the pages in the forums
      *     tags:
@@ -24,7 +24,7 @@ router.route('/v1/pages/page')
      *       200:
      *         description: Successfully get all pages
      *         schema:
-     *           example: [{"page_id": 1, "title": "I am a page", "description": "Description for a page", "visitor_count": 0, "created": "2020-02-13T21:24:27.757Z"}]
+     *           example: [{"page_id": 1, "title": "I am a page", "description": "Description for a page", "visitor_count": 0, "created": "2020-02-13 08:10:19.72336+07"}]
      *       500:
      *         description: Internal server error
      *       400:
@@ -34,7 +34,7 @@ router.route('/v1/pages/page')
     /**
      * @swagger
      *
-     * /v1/pages/page:
+     * /pages/page:
      *   post:
      *     description: Create a new subpage to the database
      *     tags:
@@ -61,7 +61,7 @@ router.route('/v1/pages/Category')
     /**
      * @swagger
      *
-     * /v1/pages/Category:
+     * /pages/Category:
      *   get:
      *     description: Get all the categories of a subpage
      *     tags:
@@ -86,7 +86,7 @@ router.route('/v1/pages/Category')
     /**
      * @swagger
      *
-     * /v1/pages/Category:
+     * /pages/Category:
      *   post:
      *     description: Create a new category in the specified category
      *     tags:
@@ -118,7 +118,7 @@ router.route('/v1/pages/subCategory')
     /**
      * @swagger
      *
-     * /v1/pages/subCategory:
+     * /pages/subCategory:
      *   get:
      *     description: Get the all the subcategory associated to the subcategory
      *     tags:
@@ -143,7 +143,7 @@ router.route('/v1/pages/subCategory')
     /**
      * @swagger
      *
-     * /v1/pages/subCategory:
+     * /pages/subCategory:
      *   post:
      *     description: Create a new sub-category in the specified category
      *     tags:
@@ -175,7 +175,7 @@ router.route('/v1/pages/Thread')
     /**
      * @swagger
      *
-     * /v1/pages/Thread:
+     * /pages/Thread:
      *   get:
      *     description: Get the specified thread
      *     tags:
@@ -200,7 +200,7 @@ router.route('/v1/pages/Thread')
     /**
      * @swagger
      *
-     * /v1/pages/Thread:
+     * /pages/Thread:
      *   post:
      *     description: Create a new thread in a specified sub cateogry
      *     tags:
@@ -234,7 +234,7 @@ router.route('/v1/pages/Post')
     /**
      * @swagger
      *
-     * /v1/pages/Post:
+     * /pages/Post:
      *   get:
      *     description: Get all the post in a specified threads
      *     tags:
@@ -259,7 +259,7 @@ router.route('/v1/pages/Post')
     /**
      * @swagger
      *
-     * /v1/pages/Post:
+     * /pages/Post:
      *   post:
      *     description: Create a new post in a specified thread
      *     tags:

@@ -1,9 +1,10 @@
 // ! Please follow these for developing your api
 // ! https://florimond.dev/blog/articles/2018/08/restful-api-design-13-best-practices-to-make-your-users-happy/
-// ! https://docs.microsoft.com/en-us/azure/architecture/best-practices/api-design
+
 // Constants that we should be using to grab both our configuration
 // and express sanitization/validator
 const db = require('../../config')
+const express = require('express')
 
 const {
     body,
