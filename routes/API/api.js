@@ -224,11 +224,41 @@ router.route('/v1/pages/Thread')
      *       500:
      *         description: Internal server error
      *       400:
-     *         description: Could not create the subcategory
+     *         description: Could not create the thread
      */
     // ! Add thread should also be adding a post since they correlates to each other
     // ! When a user create a thread, they also create a post but as id 1
     .post(db.addThread)
+        /**
+     * @swagger
+     *
+     * /pages/Thread:
+     *   put:
+     *     description: Update the subject of an existing thread
+     *     tags:
+     *       - Thread
+     *     produces:
+     *       - application/json
+     *     parameters:
+     *       - name: thread_id
+     *         description: The id of the thread being updated
+     *         in: formData
+     *         required: true
+     *         type: integer
+     *       - name: subject
+     *         description: The new subject of the thread (aka. Title)
+     *         in: formData
+     *         required: true
+     *         type: string
+     *     responses:
+     *       200:
+     *         description: Successfully update the subject of the thread
+     *       500:
+     *         description: Internal server error
+     *       400:
+     *         description: Could not update the thread's subject
+     */
+    .put(db.updateThread)
 
 router.route('/v1/pages/Post')
     /**
