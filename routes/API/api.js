@@ -229,7 +229,7 @@ router.route('/v1/pages/Thread')
     // ! Add thread should also be adding a post since they correlates to each other
     // ! When a user create a thread, they also create a post but as id 1
     .post(db.addThread)
-        /**
+    /**
      * @swagger
      *
      * /pages/Thread:
@@ -316,6 +316,36 @@ router.route('/v1/pages/Post')
      *         description: Could not create a new post
      */
     .post(db.addPost)
+    /**
+     * @swagger
+     *
+     * /pages/Post:
+     *   put:
+     *     description: Update the contents of an existing post
+     *     tags:
+     *       - Post
+     *     produces:
+     *       - application/json
+     *     parameters:
+     *       - name: post_id
+     *         description: The id of the post being updated
+     *         in: formData
+     *         required: true
+     *         type: integer
+     *       - name: content
+     *         description: The new content of the post
+     *         in: formData
+     *         required: true
+     *         type: string
+     *     responses:
+     *       200:
+     *         description: Successfully update the contents of the post
+     *       500:
+     *         description: Internal server error
+     *       400:
+     *         description: Could not update the post's contents
+     */
+    .put(db.updatePost)
 
 
 module.exports = router;

@@ -342,4 +342,30 @@ exports.getPosts = [
 	}
 ];
 
-
+const updatePostQuery = "UPDATE post SET content=$1 WHERE post_id=$2 RETURNING content, post_id;";
+exports.updatePost = [
+	body('post_id').exists().withMessage("Missing Post Id Parameter").bail()
+	  .isInt().withMessage("Invalid Post Id Parameter").bail().escape(),
+	body('content').exists().withMessage("Missing Content Parameter").bail()
+	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Content Parameter").bail().escape(),
+	async function (req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+		
+		db.task(async t => {
+			const result = await t.one(updatePostQuery, [req.body.content, req.body.post_id]);
+			return result;
+		}).then (result => {
+			if ("content" in result) {
+				res.status(200).send(`Post ${result.post_id} content updated to "${result.content}"`);
+			} else {
+				res.status(400).send("Unable to update the thread subject");
+			}
+		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+	}
+];
