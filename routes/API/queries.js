@@ -257,7 +257,7 @@ exports.getThreads = [
 	}
 ];
 
-const updateThreadQuery = "UPDATE thread SET subject=$1 WHERE thread_id=$2 RETURNING subject, thread_id;";
+const updateThreadQuery = "UPDATE thread SET subject=$1 WHERE thread_id=$2 RETURNING thread_id;";
 exports.updateThread = [
 	body('thread_id').exists().withMessage("Missing Thread Id Parameter").bail()
 	  .isInt().withMessage("Invalid Thread Id Parameter").bail().escape(),
@@ -276,8 +276,8 @@ exports.updateThread = [
 			const result = await t.one(updateThreadQuery, [req.body.subject, req.body.thread_id]);
 			return result;
 		}).then (result => {
-			if ("subject" in result) {
-				res.status(200).send(`Thread ${result.thread_id} title updated to "${result.subject}"`);
+			if ("thread_id" in result) {
+				res.status(200).send(`Thread ${result.thread_id} title updated`);
 			} else {
 				res.status(400).send("Unable to update the thread subject");
 			}
@@ -342,7 +342,7 @@ exports.getPosts = [
 	}
 ];
 
-const updatePostQuery = "UPDATE post SET content=$1 WHERE post_id=$2 RETURNING content, post_id;";
+const updatePostQuery = "UPDATE post SET content=$1 WHERE post_id=$2 RETURNING thread_id, post_id;";
 exports.updatePost = [
 	body('post_id').exists().withMessage("Missing Post Id Parameter").bail()
 	  .isInt().withMessage("Invalid Post Id Parameter").bail().escape(),
@@ -361,8 +361,8 @@ exports.updatePost = [
 			const result = await t.one(updatePostQuery, [req.body.content, req.body.post_id]);
 			return result;
 		}).then (result => {
-			if ("content" in result) {
-				res.status(200).send(`Post ${result.post_id} content updated to "${result.content}"`);
+			if ("post_id" in result && "thread_id" in result) {
+				res.status(200).send(`Contents of post ${result.post_id} of thread ${result.thread_id} updated`);
 			} else {
 				res.status(400).send("Unable to update the thread subject");
 			}
