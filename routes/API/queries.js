@@ -19,6 +19,18 @@ function sendError(statusCode, message, additionalInfo={}) {
     return JSON.stringify({status_code:statusCode, error: {message: message, additional_information: additionalInfo}})
 }
 
+function runDeleteQuery(selectQuery, deleteQuery, args) {
+	return db.task(async t => {
+		return await t.any(selectQuery, args)
+					  .then(post => {
+						  if (post.length == 0) {
+								return null;
+						  }	else {
+							  	return t.result(deleteQuery, args);
+					  }}).catch(e => {throw e})				
+	})
+}
+
 const addPageQuery = "INSERT INTO subpage(title) VALUES ($1) RETURNING title, page_id";
 exports.addPage = [
 	// We first want to verify expected parameters and escape any special characters
@@ -73,6 +85,31 @@ exports.getPages = function (req, res) {
 		res.status(200).json(result)
 	}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
 }
+
+const getSpecificPageQuery = "SELECT * FROM Subpage WHERE page_id = $1;";
+const deletePageQuery = "DELETE FROM Subpage WHERE page_id=$1;";
+exports.deletePage= [
+	body('page_id').exists().withMessage("Missing Subpage Id Parameter").bail()
+	  .isInt().withMessage("Invalid Subpage Id Parameter").bail().escape(),
+	async function (req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+		
+		runDeleteQuery(getSpecificPageQuery, deletePageQuery, [req.body.page_id])
+		.then (result => {
+			if (result == null) {
+				res.status(404).send(`No Subpage with page_id: ${req.body.page_id}`);
+			} else {
+				res.status(200).send();
+			}
+		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+	}
+];
 
 const addCategoryQuery = "INSERT INTO category(subject, page_id) VALUES ($1, $2) RETURNING subject, cat_id;";
 exports.addCategory = [
@@ -134,6 +171,31 @@ exports.getCategories = [
 			return result;
 		}).then (result => {
 			res.status(200).json(result)
+		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+	}
+];
+
+const getSpecificCategoryQuery = "SELECT * FROM Category WHERE cat_id = $1;";
+const deleteCategoryQuery = "DELETE FROM Category WHERE cat_id=$1;";
+exports.deleteCategory= [
+	body('cat_id').exists().withMessage("Missing Category Id Parameter").bail()
+	  .isInt().withMessage("Invalid Category Id Parameter").bail().escape(),
+	async function (req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+		
+		runDeleteQuery(getSpecificCategoryQuery, deleteCategoryQuery, [req.body.cat_id])
+		.then (result => {
+			if (result == null) {
+				res.status(404).send(`No Category with cat_id: ${req.body.cat_id}`);
+			} else {
+				res.status(200).send();
+			}
 		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
 	}
 ];
@@ -202,6 +264,31 @@ exports.getSubCategories = [
 	}
 ];
 
+const getSpecificSubCategoryQuery = "SELECT * FROM Subcategory WHERE sub_cat_id = $1;";
+const deleteSubCategoryQuery = "DELETE FROM Subcategory WHERE sub_cat_id=$1;";
+exports.deleteSubCategory= [
+	body('sub_cat_id').exists().withMessage("Missing Subcategory Id Parameter").bail()
+	  .isInt().withMessage("Invalid Subcategory Id Parameter").bail().escape(),
+	async function (req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+		
+		runDeleteQuery(getSpecificSubCategoryQuery, deleteSubCategoryQuery, [req.body.sub_cat_id])
+		.then (result => {
+			if (result == null) {
+				res.status(404).send(`No Subcategory with sub_cat_id: ${req.body.sub_cat_id}`);
+			} else {
+				res.status(200).send();
+			}
+		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+	}
+];
+
 const addThreadQuery = "INSERT INTO thread(subject, sub_cat_id, user_account_id) VALUES ($1, $2, $3) RETURNING subject, thread_id";
 exports.addThread = [
 	body('subject').exists().withMessage("Missing Subject Parameter").bail()
@@ -257,6 +344,30 @@ exports.getThreads = [
 	}
 ];
 
+const getSpecificThreadQuery = "SELECT * FROM thread WHERE thread_id = $1;";
+const deleteThreadQuery = "DELETE FROM thread WHERE thread_id=$1;";
+exports.deleteThread = [
+	body('thread_id').exists().withMessage("Missing Thread Id Parameter").bail()
+	  .isInt().withMessage("Invalid Thread Id Parameter").bail().escape(),
+	async function (req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+		
+		runDeleteQuery(getSpecificThreadQuery, deleteThreadQuery, [req.body.thread_id])
+		.then (result => {
+			if (result == null) {
+				res.status(404).send(`No thread with thread_id: ${req.body.thread_id}`);
+			} else {
+				res.status(200).send();
+			}
+		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+	}
+];
 
 const addPostQuery = "INSERT INTO post(content, thread_id) VALUES ($1, $2) RETURNING content, post_id";
 exports.addPost = [
@@ -309,17 +420,10 @@ exports.deletePost = [
 			return;
 		}
 		
-		db.task(async t => {
-			return await t.any(getSpecificPostQuery, [req.body.post_id, req.body.thread_id])
-						  .then(post => {
-							  if (post.length == 0) {
-									return null;
-							  }	else {
-								  	return t.result(deletePostQuery, [req.body.post_id, req.body.thread_id]);
-						  }}).catch(e => {throw e})				
-		}).then (result => {
+		runDeleteQuery(getSpecificPostQuery, deletePostQuery, [req.body.post_id, req.body.thread_id])
+		.then (result => {
 			if (result == null) {
-				res.status(404).send(`No post with post_id "${req.body.post_id}" and thread_id: ${req.body.thread_id}`);
+				res.status(404).send(`No post with post_id ${req.body.post_id} and thread_id: ${req.body.thread_id}`);
 			} else {
 				res.status(200).send();
 			}

@@ -56,6 +56,33 @@ router.route('/v1/pages/page')
      *         description: Could not create the requested page
      */
     .post(db.addPage)
+    /**
+     * @swagger
+     *
+     * /pages/page:
+     *   delete:
+     *     description: Delete the specified subpage
+     *     tags:
+     *       - Pages
+     *     produces:
+     *       - application/json
+     *     parameters:
+     *       - name: page_id
+     *         description: The id of the subpage being deleted
+     *         in: formData
+     *         required: true
+     *         type: string
+     *     responses:
+     *       200:
+     *         description: Successfully deleted the subpage
+     *       500:
+     *         description: Internal server error
+     *       400:
+     *         description: Could not delete the specified subpage
+     *       404:
+     *         description: The specified subpage does not exist in the database
+     */
+    .delete(db.deletePage)
 
 router.route('/v1/pages/Category')
     /**
@@ -113,6 +140,33 @@ router.route('/v1/pages/Category')
      *         description: Could not create the category
      */
     .post(db.addCategory)
+    /**
+     * @swagger
+     *
+     * /pages/Category:
+     *   delete:
+     *     description: Delete the specified category
+     *     tags:
+     *       - Category
+     *     produces:
+     *       - application/json
+     *     parameters:
+     *       - name: cat_id
+     *         description: The id of the category being deleted
+     *         in: formData
+     *         required: true
+     *         type: integer
+     *     responses:
+     *       200:
+     *         description: Successfully deleted the category
+     *       500:
+     *         description: Internal server error
+     *       400:
+     *         description: Could not delete the category
+     *       404:
+     *         description: The category does not exists
+     */
+    .delete(db.deleteCategory)
 
 router.route('/v1/pages/subCategory')
     /**
@@ -170,6 +224,33 @@ router.route('/v1/pages/subCategory')
      *         description: Could not create the subcategory
      */
     .post(db.addSubCategory)
+    /**
+     * @swagger
+     *
+     * /pages/subCategory:
+     *   delete:
+     *     description: Delete the specified Subcategory
+     *     tags:
+     *       - Sub Category
+     *     produces:
+     *       - application/json
+     *     parameters:
+     *       - name: sub_cat_id
+     *         description: The id of the Subcategory being delete
+     *         in: formData
+     *         required: true
+     *         type: integer
+     *     responses:
+     *       200:
+     *         description: Successfully Deleted the subcategory
+     *       500:
+     *         description: Internal server error
+     *       400:
+     *         description: Could not delete the subcategory
+     *       404:
+     *         description: Could not find the specified subcategory 
+     */
+    .delete(db.deleteSubCategory)
 
 router.route('/v1/pages/Thread')
     /**
@@ -229,6 +310,33 @@ router.route('/v1/pages/Thread')
     // ! Add thread should also be adding a post since they correlates to each other
     // ! When a user create a thread, they also create a post but as id 1
     .post(db.addThread)
+     /**
+     * @swagger
+     *
+     * /pages/Thread:
+     *   delete:
+     *     description: Delete the specified thread 
+     *     tags:
+     *       - Thread
+     *     produces:
+     *       - application/json
+     *     parameters:
+     *       - name: thread_id
+     *         description: The id of the thread being delete
+     *         in: formData
+     *         required: true
+     *         type: integer
+     *     responses:
+     *       200:
+     *         description: Successfully deleted the thread
+     *       500:
+     *         description: Internal server error
+     *       400:
+     *         description: Could not delete the thread
+     *       404:
+     *         description: The thread does not exists
+     */
+    .delete(db.deleteThread)
 
 router.route('/v1/pages/Post')
     /**
@@ -291,31 +399,31 @@ router.route('/v1/pages/Post')
      *
      * /pages/Post:
      *   delete:
-     *     description: Delete a existing post in a specified thread
+     *     description: Delete an existing post in a specified thread
      *     tags:
      *       - Post
      *     produces:
      *       - application/json
      *     parameters:
      *       - name: post_id
-     *         description: The id of the corresponding post
+     *         description: The id of the post
      *         in: formData
      *         required: true
      *         type: integer
      *       - name: thread_id
-     *         description: The id of the corresponding thread
+     *         description: The id of the thread that the post belongs to
      *         in: formData
      *         required: true
      *         type: integer
      *     responses:
      *       200:
-     *         description: Successfully delete a post inside a specified thread
+     *         description: Successfully deleted the post inside the specified thread
      *       500:
      *         description: Internal server error
      *       400:
      *         description: Could not delete the post
      *       404:
-     *         description: The Post does not exists in the thread
+     *         description: The post does not exist in the thread
      */
     .delete(db.deletePost)
 
