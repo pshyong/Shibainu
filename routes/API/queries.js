@@ -310,18 +310,18 @@ exports.deletePost = [
 		}
 		
 		db.task(async t => {
-			const result = await t.any(getSpecificPostQuery, [req.body.post_id, req.body.thread_id]);
-			return result;
+			return await t.any(getSpecificPostQuery, [req.body.post_id, req.body.thread_id])
+						  .then(post => {
+							  if (post.length == 0) {
+									return null;
+							  }	else {
+								  	return t.result(deletePostQuery, [req.body.post_id, req.body.thread_id]);
+						  }}).catch(e => {throw e})				
 		}).then (result => {
-			if (result.length == 0) {
-				res.status(404).send(`Not post with post_id "${req.body.post_id}" and thread_id: ${req.body.thread_id}`); 
+			if (result == null) {
+				res.status(404).send(`No post with post_id "${req.body.post_id}" and thread_id: ${req.body.thread_id}`);
 			} else {
-				db.task(async t => {
-					await t.none(deletePostQuery, [req.body.post_id, req.body.thread_id]);
-					return;
-				}).then (result => {
-					res.status(200).end()
-				}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+				res.status(200).send();
 			}
 		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
 	}
