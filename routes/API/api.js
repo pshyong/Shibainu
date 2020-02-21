@@ -257,6 +257,8 @@ router.route('/v1/pages/Thread')
      *         description: Internal server error
      *       400:
      *         description: Could not update the thread's subject
+     *       404:
+     *         description: Thread does not exists in database 
      */
     .put(db.updateThread)
 
@@ -331,6 +333,11 @@ router.route('/v1/pages/Post')
      *         description: The id of the post being updated
      *         in: formData
      *         required: true
+     *         type: integer    
+     *       - name: thread_id
+     *         description: The id of the thread the post belongs to
+     *         in: formData
+     *         required: true
      *         type: integer
      *       - name: content
      *         description: The new content of the post
@@ -344,6 +351,8 @@ router.route('/v1/pages/Post')
      *         description: Internal server error
      *       400:
      *         description: Could not update the post's contents
+     *       404:
+     *         description: Post does not exists in database 
      */
     .put(db.updatePost)
 
