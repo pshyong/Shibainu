@@ -286,6 +286,38 @@ router.route('/v1/pages/Post')
      *         description: Could not create a new post
      */
     .post(db.addPost)
+    /**
+     * @swagger
+     *
+     * /pages/Post:
+     *   delete:
+     *     description: Delete a existing post in a specified thread
+     *     tags:
+     *       - Post
+     *     produces:
+     *       - application/json
+     *     parameters:
+     *       - name: post_id
+     *         description: The id of the corresponding post
+     *         in: formData
+     *         required: true
+     *         type: integer
+     *       - name: thread_id
+     *         description: The id of the corresponding thread
+     *         in: formData
+     *         required: true
+     *         type: integer
+     *     responses:
+     *       200:
+     *         description: Successfully delete a post inside a specified thread
+     *       500:
+     *         description: Internal server error
+     *       400:
+     *         description: Could not delete the post
+     *       404:
+     *         description: The Post does not exists in the thread
+     */
+    .delete(db.deletePost)
 
 
 module.exports = router;
