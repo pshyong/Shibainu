@@ -63,16 +63,30 @@ exports.addPage = [
 	}
 ];
 
-const getPagesQuery = "SELECT * FROM subpage;";
-exports.getPages = function (req, res) {
-	db.task(async t => {
-		const result = await t.any(getPagesQuery);
-		return result;
-	}).then (result => {
-		// pg-promise already formates the result as a JSON so just send it back
-		res.status(200).json(result)
-	}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
-}
+const getPagesQuery = "SELECT * FROM subpage WHERE page_id = $1;";
+exports.getPages = [
+
+	body('page_id').exists().withMessage("Missing Page id Parameter").bail()
+	  .isInt().withMessage("Invalid Page Id Parameter").bail().escape(),
+
+
+	async function (req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+		
+		db.task(async t => {
+			const result = await t.any(getPagesQuery, [req.body.page_id]);
+			return result;
+		}).then (result => {
+			res.status(200).json(result)
+		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+	}
+];
 
 const addCategoryQuery = "INSERT INTO category(subject, page_id) VALUES ($1, $2) RETURNING subject, cat_id;";
 exports.addCategory = [
