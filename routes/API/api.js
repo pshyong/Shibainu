@@ -171,11 +171,11 @@ router.route('/v1/pages/subCategory')
      */
     .post(db.addSubCategory)
 
-router.route('/v1/pages/Thread')
+router.route('/v1/pages/Thread/:sub_cat_id')
     /**
      * @swagger
      *
-     * /pages/Thread:
+     * /pages/Thread/{sub_cat_id}:
      *   get:
      *     description: Get the specified thread
      *     tags:
@@ -185,7 +185,7 @@ router.route('/v1/pages/Thread')
      *     parameters:
      *       - name: sub_cat_id
      *         description: The id of the corresponding thread
-     *         in: formData
+     *         in: path
      *         required: true
      *         type: integer
      *     responses:

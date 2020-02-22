@@ -7,7 +7,8 @@ const db = require('../../config')
 const express = require('express')
 
 const {
-    body,
+	body,
+	param,
     validationResult
 } = require('express-validator');
  
@@ -237,8 +238,11 @@ exports.addThread = [
 
 const getThreadQuery = "SELECT * FROM thread where sub_cat_id = $1;";
 exports.getThreads = [
-	body('sub_cat_id').exists().withMessage("Missing Subategory Id Parameter").bail()
-	  .isInt().withMessage("Invalid Subategory Id Parameter").bail().escape(),
+	param('sub_cat_id')
+	.exists()
+	.isInt()
+	.withMessage("Missing Subategory Id Parameter").bail()
+	.withMessage("Invalid Subategory Id Parameter").bail().escape(),
 	async function (req, res, next) {
 		// First see if we have any errors
 		const errors = validationResult(req);
@@ -247,9 +251,11 @@ exports.getThreads = [
 			res.status(400).json({ errors: errors.array() });
 			return;
 		}
-		
+		console.log("I am here");
 		db.task(async t => {
-			const result = await t.any(getThreadQuery, [req.body.sub_cat_id]);
+			let sub_cat_id = req.params.sub_cat_id;
+			console.log(sub_cat_id);
+			const result = await t.any(getThreadQuery, [sub_cat_id]);
 			return result;
 		}).then (result => {
 			res.status(200).json(result)
