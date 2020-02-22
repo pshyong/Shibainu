@@ -171,11 +171,11 @@ router.route('/v1/pages/subCategory')
      */
     .post(db.addSubCategory)
 
-router.route('/v1/pages/Thread/:sub_cat_id')
+router.route('/v1/pages/:page_id/thread/:thread_id')
     /**
      * @swagger
      *
-     * /pages/Thread/{sub_cat_id}:
+     * /pages/{page_id}/thread/{thread_id}:
      *   get:
      *     description: Get the specified thread
      *     tags:
@@ -183,7 +183,12 @@ router.route('/v1/pages/Thread/:sub_cat_id')
      *     produces:
      *       - application/json
      *     parameters:
-     *       - name: sub_cat_id
+     *       - name: page_id
+     *         description: The id of the corresponding page
+     *         in: path
+     *         required: true
+     *         type: integer
+     *       - name: thread_id
      *         description: The id of the corresponding thread
      *         in: path
      *         required: true
@@ -196,7 +201,7 @@ router.route('/v1/pages/Thread/:sub_cat_id')
      *       400:
      *         description: Could not get the specified thread
      */
-    .get(db.getThreads)
+    .get(db.getThread)
     /**
      * @swagger
      *
@@ -230,7 +235,7 @@ router.route('/v1/pages/Thread/:sub_cat_id')
     // ! When a user create a thread, they also create a post but as id 1
     .post(db.addThread)
 
-router.route('/v1/pages/Post')
+router.route('/v1/pages/Post/{thread_id}')
     /**
      * @swagger
      *

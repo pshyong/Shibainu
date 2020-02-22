@@ -203,7 +203,6 @@ exports.getSubCategories = [
 	}
 ];
 
-const addThreadQuery = "INSERT INTO thread(subject, sub_cat_id, user_account_id) VALUES ($1, $2, $3) RETURNING subject, thread_id";
 exports.addThread = [
 	body('subject').exists().withMessage("Missing Subject Parameter").bail()
 	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Subject Parameter").bail().escape(),
@@ -222,7 +221,7 @@ exports.addThread = [
 			res.status(400).json({ errors: errors.array() });
 			return;
 		}
-		
+		let addThreadQuery = "INSERT INTO thread(subject, sub_cat_id, user_account_id) VALUES ($1, $2, $3) RETURNING subject, thread_id";
 		db.task(async t => {
 			const result = await t.one(addThreadQuery, [req.body.subject, req.body.sub_cat_id, req.body.user_account_id]);
 			return result;
@@ -236,13 +235,18 @@ exports.addThread = [
 	}
 ];
 
-const getThreadQuery = "SELECT * FROM thread where sub_cat_id = $1;";
-exports.getThreads = [
-	param('sub_cat_id')
+
+exports.getThread = [
+	param('page_id')
 	.exists()
 	.isInt()
-	.withMessage("Missing Subategory Id Parameter").bail()
-	.withMessage("Invalid Subategory Id Parameter").bail().escape(),
+	.withMessage("Missing Page Id Parameter").bail()
+	.withMessage("Invalid Page Id Parameter").bail().escape(),
+	param('thread_id')
+	.exists()
+	.isInt()
+	.withMessage("Missing Thread Id Parameter").bail()
+	.withMessage("Invalid Thread Id Parameter").bail().escape(),
 	async function (req, res, next) {
 		// First see if we have any errors
 		const errors = validationResult(req);
@@ -251,11 +255,16 @@ exports.getThreads = [
 			res.status(400).json({ errors: errors.array() });
 			return;
 		}
-		console.log("I am here");
+		let getThreadQuery = "SELECT * FROM thread  WHERE thread_id = $1;";
+		let getPostsQuery = "SELECT * FROM post WHERE thread_id = $1;";
+
 		db.task(async t => {
-			let sub_cat_id = req.params.sub_cat_id;
-			console.log(sub_cat_id);
-			const result = await t.any(getThreadQuery, [sub_cat_id]);
+			let thread_id = req.params.thread_id;
+			let page_id = req.params.page_id
+			// console.log(page_id);
+			const thread = await t.any(getThreadQuery, [thread_id]);
+			const posts = await t.any(getPostsQuery, [thread_id]);
+			result = thread.concat(posts);
 			return result;
 		}).then (result => {
 			res.status(200).json(result)
@@ -263,6 +272,28 @@ exports.getThreads = [
 	}
 ];
 
+
+exports.getPosts = [
+	param('thread_id').exists().withMessage("Missing Thread Id Parameter").bail()
+	  .isInt().withMessage("Invalid Thread Id Parameter").bail().escape(),
+	async function (req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+		let getPostQuery = "SELECT * FROM post WHERE thread_id = $1;";
+		db.task(async t => {
+			let post_id = req.params.post_id;
+			const result = await t.any(getPostQuery, [thread_id]);
+			return result;
+		}).then (result => {
+			res.status(200).json(result)
+		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+	}
+];
 
 const addPostQuery = "INSERT INTO post(content, thread_id) VALUES ($1, $2) RETURNING content, post_id";
 exports.addPost = [
@@ -299,26 +330,6 @@ exports.addPost = [
 	}
 ];
 
-const getPostQuery = "SELECT * FROM post WHERE thread_id = $1;";
-exports.getPosts = [
-	body('thread_id').exists().withMessage("Missing Thread Id Parameter").bail()
-	  .isInt().withMessage("Invalid Thread Id Parameter").bail().escape(),
-	async function (req, res, next) {
-		// First see if we have any errors
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			// If there are errors. We want to render form again with sanitized values/errors messages.
-			res.status(400).json({ errors: errors.array() });
-			return;
-		}
-		
-		db.task(async t => {
-			const result = await t.any(getPostQuery, [req.body.thread_id]);
-			return result;
-		}).then (result => {
-			res.status(200).json(result)
-		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
-	}
-];
+
 
 
