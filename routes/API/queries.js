@@ -88,12 +88,10 @@ exports.getPages = [
 			var result = {page_data,page_category_data,page_subcategory_data:[]}
 
 			for (const element of page_category_data) {
-				console.log(element.cat_id);
 				var temp = await t.any(getPagesSubCatQuery, [element.cat_id]);
 				result.page_subcategory_data.push(temp);
 		
 			}
-
 
 
 			return result;

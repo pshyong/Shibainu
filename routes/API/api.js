@@ -15,7 +15,7 @@ router.route('/v1/pages/page')
      *
      * /pages/page:
      *   get:
-     *     description: Returns the subpage requested along with the categories that belong with it, aswell the categories that belong with those categories 
+     *     description: Returns the subpage requested along with the categories that belong with it, aswell the subcategories that belong with those categories 
      *     tags:
      *       - Pages
      *     produces:
