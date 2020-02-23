@@ -85,14 +85,14 @@ exports.getPages = [
 		
 		db.task(async t => {
 
-			const page_data = await t.any(getPagesQuery, [req.params.page_id]);
-			const page_category_data = await t.any(getPagesCatQuery, [req.params.page_id]);
+			const page_d = await t.any(getPagesQuery, [req.params.page_id]);
+			const cat_d = await t.any(getPagesCatQuery, [req.params.page_id]);
 
-			var result = {page_data,page_category_data,page_subcategory_data:[]}
+			var result = {page_d,cat_d,subcat_d:[]}
 
-			for (const element of page_category_data) {
+			for (const element of cat_d) {
 				var temp = await t.any(getPagesSubCatQuery, [element.cat_id]);
-				result.page_subcategory_data.push(temp);
+				result.subcat_d.push(temp);
 		
 			}
 
