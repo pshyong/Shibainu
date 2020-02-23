@@ -8,7 +8,8 @@ const express = require('express')
 
 const {
     body,
-    validationResult
+	param,
+	validationResult
 } = require('express-validator');
  
 function sendJSON(statusCode, payload) {
@@ -68,8 +69,9 @@ const getPagesCatQuery = "SELECT * FROM category WHERE page_id = $1;";
 const getPagesSubCatQuery = "SELECT * FROM subcategory WHERE main_cat_id = $1;";
 exports.getPages = [
 
-	body('page_id').exists().withMessage("Missing Page id Parameter").bail()
+	param('page_id').exists().withMessage("Missing Page id Parameter").bail()
 	  .isInt().withMessage("Invalid Page Id Parameter").bail().escape(),
+
 
 
 	async function (req, res, next) {
@@ -82,8 +84,9 @@ exports.getPages = [
 		}
 		
 		db.task(async t => {
-			const page_data = await t.any(getPagesQuery, [req.body.page_id]);
-			const page_category_data = await t.any(getPagesCatQuery, [req.body.page_id]);
+
+			const page_data = await t.any(getPagesQuery, [req.params.page_id]);
+			const page_category_data = await t.any(getPagesCatQuery, [req.params.page_id]);
 
 			var result = {page_data,page_category_data,page_subcategory_data:[]}
 
@@ -95,6 +98,7 @@ exports.getPages = [
 
 
 			return result;
+
 		}).then (result => {
 			res.status(200).json(result)
 		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})

@@ -9,11 +9,11 @@ const bodyParser = require('body-parser');
 // ! Try and group the api calls to ones that are similar
 // ! All api calls should be going through /api/whatever
 
-router.route('/v1/pages/page')
+router.route('/v1/pages/:page_id')
     /**
      * @swagger
      *
-     * /pages/page:
+     * /pages/{page_id}:
      *   get:
      *     description: Returns the subpage requested along with the categories that belong with it, aswell the subcategories that belong with those categories 
      *     tags:
@@ -23,7 +23,7 @@ router.route('/v1/pages/page')
      *     parameters:
      *       - name: page_id
      *         description: The id of the subpage
-     *         in: formData
+     *         in: path
      *         required: true
      *         type: integer
      *     responses:
