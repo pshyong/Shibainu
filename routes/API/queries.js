@@ -257,6 +257,41 @@ exports.getThreads = [
 	}
 ];
 
+const getSpecificThreadQuery = "SELECT * FROM thread WHERE thread_id = $1;";
+const updateThreadQuery = "UPDATE thread SET subject=$1 WHERE thread_id=$2 RETURNING thread_id;";
+exports.updateThread = [
+	body('thread_id').exists().withMessage("Missing Thread Id Parameter").bail()
+	  .isInt().withMessage("Invalid Thread Id Parameter").bail().escape(),
+	body('subject').exists().withMessage("Missing Subject Parameter").bail()
+	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Subject Parameter").bail().escape(),
+	async function (req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+		
+		db.task(async t => {
+			return await t.any(getSpecificThreadQuery, [req.body.thread_id])
+						  .then(post => {
+							  if (post.length == 0) {
+									return null;
+							  }	else {
+								  	return t.one(updateThreadQuery, [req.body.subject, req.body.thread_id]);
+						  }}).catch(e => {throw e})		
+		}).then (result => {
+			if (result == null) {
+				res.status(404).send(`No thread with thread_id: ${req.body.thread_id}`);
+			} else if ("thread_id" in result) {
+				res.status(200).send(`Thread ${result.thread_id} title updated`);
+			} else {
+				res.status(400).send("Unable to update the thread subject");
+			}
+		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+	}
+];
 
 const addPostQuery = "INSERT INTO post(content, thread_id) VALUES ($1, $2) RETURNING content, post_id";
 exports.addPost = [
@@ -315,4 +350,40 @@ exports.getPosts = [
 	}
 ];
 
-
+const getSpecificPostQuery = "SELECT * FROM post WHERE post_id = $1 AND thread_id = $2;";
+const updatePostQuery = "UPDATE post SET content=$1 WHERE post_id=$2 AND thread_id=$3 RETURNING thread_id, post_id;";
+exports.updatePost = [
+	body('post_id').exists().withMessage("Missing Post Id Parameter").bail()
+	  .isInt().withMessage("Invalid Post Id Parameter").bail().escape(),
+    body('thread_id').exists().withMessage("Missing Thread Id Parameter").bail()
+	   .isInt().withMessage("Invalid Thread Id Parameter").bail().escape(),
+	body('content').exists().withMessage("Missing Content Parameter").bail()
+	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Content Parameter").bail().escape(),
+	async function (req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+		
+		db.task(async t => {
+			return await t.any(getSpecificPostQuery, [req.body.post_id, req.body.thread_id])
+						  .then(post => {
+							  if (post.length == 0) {
+									return null;
+							  }	else {
+								  	return t.one(updatePostQuery, [req.body.content, req.body.post_id, req.body.thread_id])
+						  }}).catch(e => {throw e})				
+		}).then (result => {
+			if (result == null) {
+				res.status(404).send(`No post with post_id "${req.body.post_id}" and thread_id: ${req.body.thread_id}`);
+			} else if ("post_id" in result && "thread_id" in result) {
+				res.status(200).send(`Contents of post ${result.post_id} of thread ${result.thread_id} updated`);
+			} else {
+				res.status(400).send("Unable to update the thread subject");
+			}
+		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+	}
+];
