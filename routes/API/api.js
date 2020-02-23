@@ -305,7 +305,7 @@ router.route('/v1/pages/Thread')
      *       500:
      *         description: Internal server error
      *       400:
-     *         description: Could not create the subcategory
+     *         description: Could not create the thread
      */
     // ! Add thread should also be adding a post since they correlates to each other
     // ! When a user create a thread, they also create a post but as id 1
@@ -337,6 +337,38 @@ router.route('/v1/pages/Thread')
      *         description: The thread does not exists
      */
     .delete(db.deleteThread)
+    /**
+     * @swagger
+     *
+     * /pages/Thread:
+     *   put:
+     *     description: Update the subject of an existing thread
+     *     tags:
+     *       - Thread
+     *     produces:
+     *       - application/json
+     *     parameters:
+     *       - name: thread_id
+     *         description: The id of the thread being updated
+     *         in: formData
+     *         required: true
+     *         type: integer
+     *       - name: subject
+     *         description: The new subject of the thread (aka. Title)
+     *         in: formData
+     *         required: true
+     *         type: string
+     *     responses:
+     *       200:
+     *         description: Successfully update the subject of the thread
+     *       500:
+     *         description: Internal server error
+     *       400:
+     *         description: Could not update the thread's subject
+     *       404:
+     *         description: Thread does not exists in database 
+     */
+    .put(db.updateThread)
 
 router.route('/v1/pages/Post')
     /**
@@ -426,6 +458,43 @@ router.route('/v1/pages/Post')
      *         description: The post does not exist in the thread
      */
     .delete(db.deletePost)
+    /**
+     * @swagger
+     *
+     * /pages/Post:
+     *   put:
+     *     description: Update the contents of an existing post
+     *     tags:
+     *       - Post
+     *     produces:
+     *       - application/json
+     *     parameters:
+     *       - name: post_id
+     *         description: The id of the post being updated
+     *         in: formData
+     *         required: true
+     *         type: integer    
+     *       - name: thread_id
+     *         description: The id of the thread the post belongs to
+     *         in: formData
+     *         required: true
+     *         type: integer
+     *       - name: content
+     *         description: The new content of the post
+     *         in: formData
+     *         required: true
+     *         type: string
+     *     responses:
+     *       200:
+     *         description: Successfully update the contents of the post
+     *       500:
+     *         description: Internal server error
+     *       400:
+     *         description: Could not update the post's contents
+     *       404:
+     *         description: Post does not exists in database 
+     */
+    .put(db.updatePost)
 
 
 module.exports = router;
