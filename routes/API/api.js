@@ -20,6 +20,12 @@ router.route('/v1/pages/page')
      *       - Pages
      *     produces:
      *       - application/json
+     *     parameters:
+     *       - name: page_id
+     *         description: The id of the subpage
+     *         in: formData
+     *         required: true
+     *         type: integer
      *     responses:
      *       200:
      *         description: Successfully get all pages

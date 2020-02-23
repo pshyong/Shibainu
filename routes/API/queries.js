@@ -64,6 +64,7 @@ exports.addPage = [
 ];
 
 const getPagesQuery = "SELECT * FROM subpage WHERE page_id = $1;";
+const getPagesCatQuery = "SELECT * FROM category WHERE page_id = $1;";
 exports.getPages = [
 
 	body('page_id').exists().withMessage("Missing Page id Parameter").bail()
@@ -80,8 +81,12 @@ exports.getPages = [
 		}
 		
 		db.task(async t => {
-			const result = await t.any(getPagesQuery, [req.body.page_id]);
-			return result;
+			const page_data = await t.any(getPagesQuery, [req.body.page_id]);
+			const page_category_data = await t.any(getPagesCatQuery, [req.body.page_id]);
+
+			const ddd = {page_data,page_category_data}
+
+			return ddd;
 		}).then (result => {
 			res.status(200).json(result)
 		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
