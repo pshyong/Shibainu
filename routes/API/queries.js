@@ -65,6 +65,7 @@ exports.addPage = [
 
 const getPagesQuery = "SELECT * FROM subpage WHERE page_id = $1;";
 const getPagesCatQuery = "SELECT * FROM category WHERE page_id = $1;";
+const getPagesSubCatQuery = "SELECT * FROM subcategory WHERE main_cat_id = $1;";
 exports.getPages = [
 
 	body('page_id').exists().withMessage("Missing Page id Parameter").bail()
@@ -84,9 +85,18 @@ exports.getPages = [
 			const page_data = await t.any(getPagesQuery, [req.body.page_id]);
 			const page_category_data = await t.any(getPagesCatQuery, [req.body.page_id]);
 
-			const ddd = {page_data,page_category_data}
+			var result = {page_data,page_category_data,page_subcategory_data:[]}
 
-			return ddd;
+			for (const element of page_category_data) {
+				console.log(element.cat_id);
+				var temp = await t.any(getPagesSubCatQuery, [element.cat_id]);
+				result.page_subcategory_data.push(temp);
+		
+			}
+
+
+
+			return result;
 		}).then (result => {
 			res.status(200).json(result)
 		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
