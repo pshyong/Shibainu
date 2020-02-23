@@ -237,11 +237,6 @@ exports.addThread = [
 
 
 exports.getThread = [
-	param('page_id')
-	.exists()
-	.isInt()
-	.withMessage("Missing Page Id Parameter").bail()
-	.withMessage("Invalid Page Id Parameter").bail().escape(),
 	param('thread_id')
 	.exists()
 	.isInt()
@@ -260,11 +255,12 @@ exports.getThread = [
 
 		db.task(async t => {
 			let thread_id = req.params.thread_id;
-			let page_id = req.params.page_id
-			// console.log(page_id);
 			const thread = await t.any(getThreadQuery, [thread_id]);
 			const posts = await t.any(getPostsQuery, [thread_id]);
-			result = thread.concat(posts);
+			var result = {};
+			// Guaranteed only 1 thread since we're querying by thread_id in Thread.
+			result = thread[0]; 
+			result.posts = posts;
 			return result;
 		}).then (result => {
 			res.status(200).json(result)
