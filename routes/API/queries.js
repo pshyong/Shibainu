@@ -142,7 +142,7 @@ exports.addCategory = [
 			if ("subject" in result) {
 				// We want to send back 200 for successful query
 				// I am sending back a response just for debugging to see if api actually worked and inserted
-				res.status(200).send(`Category inserted with title ${result.subject} and page ${result.cat_id}`);
+				res.status(200).send(`Category inserted with title ${result.subject} and cat_id ${result.cat_id}`);
 			} else {
 				// The case where it didnt actually insert correctly
 				res.status(400).send("Unable to insert the category");
@@ -488,7 +488,6 @@ exports.getPosts = [
 	}
 ];
 
-const getSpecificPostQuery = "SELECT * FROM post WHERE post_id = $1 AND thread_id = $2;";
 const updatePostQuery = "UPDATE post SET content=$1 WHERE post_id=$2 AND thread_id=$3 RETURNING thread_id, post_id;";
 exports.updatePost = [
 	body('post_id').exists().withMessage("Missing Post Id Parameter").bail()
