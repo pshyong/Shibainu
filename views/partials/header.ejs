@@ -1,17 +1,22 @@
     <div id="header">
-        <div class="flex bg-blue-900 top-0 inset-x-0 z-100 h-12 fixed items-center"> <!-- Fixed? -->
+        <div class="flex bg-blue-900 top-0 inset-x-0 z-100 h-12 fixed items-center">
+            <!-- Fixed? -->
             <div class="w-full max-w-screen-xl relative mx-auto px-6">
                 <nav class="flex items-center">
                     <div class="ml-5 flex items-center flex-shrink-0 text-white mr-4">
                         <a class="text-white" href="/"><span class="font-semibold text-xl tracking-tight"
-                            style="text-transform: uppercase;">shibainu</span></a>
+                                style="text-transform: uppercase;">shibainu</span></a>
                     </div>
-                    
+
                     <div class="block lg:hidden">
-                            <button class="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
-                            <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
-                            </button>
-                        </div>
+                        <button
+                            class="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
+                            <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <title>Menu</title>
+                                <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+                            </svg>
+                        </button>
+                    </div>
 
                     <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto text-gray-600 md:pl-8 ">
 
@@ -43,15 +48,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="md:pl-32">
-                            <a href="#" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4 align-middle">
+                        <div class="md:pl-16">
+                            <a href="#"
+                                class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4 align-middle">
                                 Link1
                             </a> <a href="#"
                                 class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
                                 Link2
                             </a> <a href="#" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white">
                                 Link3
-                            </a> 
+                            </a>
+                            
                         </div>
                     </div>
                 </nav>
@@ -62,18 +69,20 @@
         <div class="container mx-auto text-white">
             <div class="row-gap-0">
                 <div class="grid-cols-1">
-                    
+
                     <%if (locals.category) { %>
-                        <a href="/p/<%= name %>/"><span class="text-3xl lowercase">#</span><span class="uppercase text-3xl"><%= name %></span></a>
-                        <span class="text-lg lowercase">/c/</span><span class="uppercase text-2xl"><a href="/p/<%= name %>/c/<%= category %>/"><%= category %></a></span>
+                    <a href="/p/<%= name %>/"><span class="text-3xl lowercase">#</span><span
+                            class="uppercase text-3xl"><%= name %></span></a>
+                    <span class="text-lg lowercase">/c/</span><span class="uppercase text-2xl"><a
+                            href="/p/<%= name %>/c/<%= category %>/"><%= category %></a></span>
                     <% } else { %>
-                        <a href="./"><span class="text-3xl lowercase">#</span><span class="uppercase text-3xl"><%= name %></span></a>
+                    <a href="./"><span class="text-3xl lowercase">#</span><span
+                            class="uppercase text-3xl"><%= name %></span></a>
                     <% } %>
-                    
-                    </div>
-                    <span class="text-sm text-gray-300"><%= description %></span>
+
+                </div>
+                <span class="text-sm text-gray-300"><%= description %></span>
             </div>
-           
+
         </div>
     </div>
-    
