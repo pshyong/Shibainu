@@ -153,6 +153,8 @@ exports.addCategory = [
 	}
 ];
 
+
+
 const getCategoryQuery = "SELECT * FROM category WHERE page_id = $1;";
 exports.getCategories = [
 	body('page_id').exists().withMessage("Missing Page Id Parameter").bail()
@@ -242,10 +244,15 @@ exports.addSubCategory = [
 	}
 ];
 
-const getSubCategoryQuery = "SELECT * FROM subcategory WHERE main_cat_id = $1;";
+const getSubCategoryQuery1 = "select * from subcategory where sub_cat_id = $1;"
+const getSubCategoryQuery2 = "select * from category where cat_id = (select main_cat_id from subcategory where sub_cat_id = $1);" 
+const getSubCategoryQuery3 = "select * from thread where sub_cat_id = 1;";
 exports.getSubCategories = [
+	/*
 	body('main_cat_id').exists().withMessage("Missing Category Id Parameter").bail()
 	  .isInt().withMessage("Invalid Category Id Parameter").bail().escape(),
+	  */
+	
 	async function (req, res, next) {
 		// First see if we have any errors
 		const errors = validationResult(req);
@@ -254,9 +261,12 @@ exports.getSubCategories = [
 			res.status(400).json({ errors: errors.array() });
 			return;
 		}
-		
+		var url = req.url;
 		db.task(async t => {
-			const result = await t.any(getSubCategoryQuery, [req.body.main_cat_id]);
+			const result1 = await t.any(getSubCategoryQuery1, [req.params.sub_cat_id]);
+			const result2 = await t.any(getSubCategoryQuery2, [req.params.sub_cat_id]);
+			const result3 = await t.any(getSubCategoryQuery3, [req.params.sub_cat_id]);
+			var result = {result1, result2, result3};
 			return result;
 		}).then (result => {
 			res.status(200).json(result)
