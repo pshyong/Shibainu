@@ -20,6 +20,7 @@ function sendError(statusCode, message, additionalInfo={}) {
     return JSON.stringify({status_code:statusCode, error: {message: message, additional_information: additionalInfo}})
 }
 
+const getPagesQuery = "SELECT * FROM subpage WHERE page_id = $1;";
 const addPageQuery = "INSERT INTO subpage(title) VALUES ($1) RETURNING title, page_id";
 exports.addPage = [
 	// We first want to verify expected parameters and escape any special characters
@@ -52,8 +53,8 @@ exports.addPage = [
 			// So now we will want to get things back
 			if ("title" in result) {
 				// We want to send back 200 for successful query
-				// I am sending back a response just for debugging to see if api actually worked and inserted
-				res.status(200).send(`Subpage inserted with title: "${result.title}" and page_id: ${result.page_id}`); 
+
+				res.status(200).json(result);
 			} else {
 				// The case where it didnt actually insert correctly
 				res.status(400).send("Unable to insert the subpage");
@@ -64,7 +65,7 @@ exports.addPage = [
 	}
 ];
 
-const getPagesQuery = "SELECT * FROM subpage WHERE page_id = $1;";
+//const getPagesQuery = "SELECT * FROM subpage WHERE page_id = $1;";
 const getPagesCatQuery = "SELECT * FROM category WHERE page_id = $1;";
 const getPagesSubCatQuery = "SELECT * FROM subcategory WHERE main_cat_id = $1;";
 exports.getPages = [
@@ -100,7 +101,7 @@ exports.getPages = [
 			return result;
 
 		}).then (result => {
-			res.status(200).json(result)
+			res.status(200).json(result);
 		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
 	}
 ];

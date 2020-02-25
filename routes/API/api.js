@@ -42,7 +42,7 @@ router.route('/v1/pages/:page_id')
      *
      * /pages/page:
      *   post:
-     *     description: Create a new subpage to the database
+     *     description: Create a new subpage to the database, returns a JSON containing the page_id and title
      *     tags:
      *       - Pages
      *     produces:
@@ -56,6 +56,8 @@ router.route('/v1/pages/:page_id')
      *     responses:
      *       200:
      *         description: Successfully created a new page
+     *         schema:
+     *           example: {"title": "Page Name!","page_id": 12}
      *       500:
      *         description: Internal server error
      *       400:
