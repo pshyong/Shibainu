@@ -13,6 +13,7 @@ router.route('/v1/pages/:page_id')
     /**
      * @swagger
      *
+     * 
      * /pages/{page_id}:
      *   get:
      *     description: Returns the subpage requested along with the categories that belong with it, aswell the subcategories that belong with those categories 
