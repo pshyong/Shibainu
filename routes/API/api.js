@@ -9,12 +9,12 @@ const bodyParser = require('body-parser');
 // ! Try and group the api calls to ones that are similar
 // ! All api calls should be going through /api/whatever
 
-router.route('/v1/pages/:page_id')
+router.route('/v1/pages/Page/:page_id')
     /**
      * @swagger
      *
      * 
-     * /pages/{page_id}:
+     * /pages/Page/{page_id}:
      *   get:
      *     description: Returns the subpage requested along with the categories that belong with it, aswell the subcategories that belong with those categories 
      *     tags:
@@ -66,18 +66,17 @@ router.route('/v1/pages/:page_id')
                                 ]
                             ]
                             }
-            
-     *       400:
-     *         description: Could not get the requested page
      *       500:
      *         description: Internal server error
+     *       400:
+     *          description: Could not get the requested page
      *       
      */
     .get(db.getPages)
     /**
      * @swagger
      *
-     * /pages/page:
+     * /pages/Page/page:
      *   post:
      *     description: Create a new subpage to the database, returns a JSON containing the page_id and title
      *     tags:

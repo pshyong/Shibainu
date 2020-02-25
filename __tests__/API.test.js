@@ -6,31 +6,30 @@ const app = require('../app');
 // ? https://github.com/visionmedia/supertest
 
 describe('Page API POST tests', () => {
-	it('Should get a 200 status code', async (done) => {
-	  const res = await request(app)
-	  .post('/api/v1/pages/page')
-	  .send({title: "Page POST API test"})
-	  expect(res.statusCode).toEqual(200)
-	  done()
-	})
+  it('Should get a 200 status code', async (done) => {
+    const res = await request(app)
+    .post('/api/v1/pages/Page/page')
+    .send({title: "Page POST API test"})
+    expect(res.statusCode).toEqual(200)
+    done()
   })
+})
+
   
-	
-  var subpage_id = -1
-  describe('Page API GET tests', () => {  
-	it('Should get a 200 status code and "Page POST API test" title', async (done) => {
-	  const res = await request(app)
-	  .get('/api/v1/pages/page')
-	  .send()
-	  
-	  expect(res.statusCode).toEqual(200)
-	  expect(res.body.length).toEqual(1)
-	  expect(res.body[0].title).toEqual('Page POST API test')
-	  
-	  subpage_id = res.body[0].page_id
-	  done()
-	})
+var subpage_id = 1
+describe('Page API GET tests', () => {  
+  it('Should get a 200 status code and "Page POST API test" title', async (done) => {
+    const res = await request(app)
+    .get('/api/v1/pages/Page/1')
+    .send()
+    
+    expect(res.statusCode).toEqual(200)
+    //expect(res.body.length).toEqual(1)
+    expect(res.body.title).toEqual('Page POST API test')
+
+    done()
   })
+})
 
 describe('Category API POST tests', () => {
   it('Should get a 200 status code', async (done) => {

@@ -20,7 +20,6 @@ function sendError(statusCode, message, additionalInfo={}) {
     return JSON.stringify({status_code:statusCode, error: {message: message, additional_information: additionalInfo}})
 }
 
-const getPagesQuery = "SELECT * FROM subpage WHERE page_id = $1;";
 function runDeleteQuery(selectQuery, deleteQuery, args) {
 	return db.task(async t => {
 		return await t.any(selectQuery, args)
@@ -33,6 +32,7 @@ function runDeleteQuery(selectQuery, deleteQuery, args) {
 	})
 }
 
+const getPagesQuery = "SELECT * FROM subpage WHERE page_id = $1;";
 const addPageQuery = "INSERT INTO subpage(title) VALUES ($1) RETURNING title, page_id";
 exports.addPage = [
 	// We first want to verify expected parameters and escape any special characters
