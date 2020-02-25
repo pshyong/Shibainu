@@ -1,6 +1,13 @@
 // tailwind.config.js
 module.exports = {
     theme: {
+      colors: {
+        primary: '#2980b9',
+        secondary: '#3498db',
+        background: '#ecf0f1',
+        silver: '#bdc3c7',
+        orange: '#e67e22',
+      },
       screens: {
         sm: '640px',
         md: '768px',
@@ -33,4 +40,4 @@ module.exports = {
         opacity: ['responsive']
       }
     }
-  }
+  };

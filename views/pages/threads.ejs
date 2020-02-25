@@ -8,52 +8,94 @@
     <% include ../partials/head.ejs %>
 </head>
 
-<body>
+<body class="min-h-screen bg-gray-400">
     <% include ../partials/header.ejs %>
 
-    <div class="flex bg-gray-500 text-gray-900 w-full h-full py-12 mx-auto">
+    <div class="flex text-gray-900 w-full h-full py-12 mx-auto">
         <div class="container mx-auto w-full">
             <!-- Defining the grid for the cateogies -->
             <div class="grid grid-cols-3 gap-4 row-auto ">
-                <div class="col-span-3 bg-gray-500 h-12 items-center justify-center">
+                <div class="col-span-3 h-12 items-center justify-center">
                     <div>
                         <div class="container w-full">
-                            <!-- <h1 class="mb-8 uppercase">
-                                <%= thread_title %>
-                      </h1> -->
-                                <table class="w-full shadow-lg rounded">
-                                    <div class="px-4 py-2 border-b border-gray uppercase text-left bg-gray-300 text-gray-700 font-bold"><%= thread_title %> <span class="font-normal text-gray-600 text-xs">by Anonymous#1</span></div>
-                                    <tbody class="bg-white">
-                                        <tr class="accordion border-b border-grey-light hover:bg-gray-100">
-                                            <td></td>
-                                            <td class="items-center px-12">
-                                                <span class="w-full">
-                                                    <img class="hidden mr-1 md:mr-2 md:inline-block h-16 w-16 rounded-full object-cover "
-                                                        src="https://cdn0.iconfinder.com/data/icons/user-63/512/399_Personal_Personalization_Profile_User-512.png"
-                                                        alt="" />
-                                                </span>
-                                                <span class="w-full">
-                                                    <p class="md:hidden text-xs text-gray-600 font-medium">Anonymous#1</p>
-                                                    <p class="hidden md:table-cell text-xs text-gray-500 font-medium">
-                                                        Anonymous#1</p>
-                                                        <br>
-                                                    
-                                                </span>
-                                            </td>
-                                            <td class="hidden md:table-cell w-full">
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc nec nulla sed urna laoreet auctor. Proin sodales orci fermentum, euismod dui in, malesuada sapien. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nullam commodo eros id justo malesuada, non tincidunt ipsum vehicula. Duis ut tortor ornare, pulvinar sem nec, suscipit magna. Praesent eu finibus odio. Aliquam lacus enim, vehicula id auctor at, vehicula at mi. Pellentesque mauris leo, cursus eget nunc at, blandit lacinia lectus. Quisque imperdiet vulputate turpis consectetur faucibus. Quisque a tempus ligula. In blandit odio ac urna semper, vel consequat justo bibendum. Nunc iaculis mollis quam eu laoreet. Nulla scelerisque egestas odio, hendrerit vestibulum tortor congue vitae.
-
-                                                    Cras non ante elementum, pellentesque lacus sit amet, aliquet velit. Suspendisse fringilla aliquet vehicula. Cras quis ante eget augue porttitor commodo et et leo. Mauris placerat dui eget diam consectetur molestie. In volutpat sed metus eu fermentum. Maecenas pulvinar arcu nec purus viverra, eget volutpat tortor lacinia. Phasellus pellentesque sit amet lectus nec commodo. Maecenas tempus risus urna, sed tristique velit pretium et. Proin quis ornare ex. Nunc venenatis velit magna, vitae ultricies mauris sagittis eget. Sed posuere sem elit, sed hendrerit felis mattis a. In at dolor odio. Nunc ornare ultrices orci et commodo. Ut porttitor libero varius, sagittis sapien nec, aliquet ligula. Aliquam finibus sagittis urna eget ultrices. Mauris faucibus cursus magna.</p>
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
+                            <table class="w-full shadow-lg rounded">
+                                <div
+                                    class="px-4 py-2 border-b border-gray uppercase text-left bg-gray-300 text-gray-700 text-xl">
+                                    <%= thread_title %> <span class="font-normal text-gray-600 text-xs">by
+                                        Anonymous#1</span></div>
+                            </table>
+                            <!-- Start of post -->
+                            <table class="w-full shadow-lg rounded">
+                                <tbody class="bg-white">
                                     
-                                </table>
-                                <div class="w-full shadow-lg bg-white text-right">
-                                    <p class="pl-1 text-xs text-gray-500 font-medium p-2">
-                                    <%= date_posted %></p></div>
+                                    <tr class="accordion border-b border-grey-light hover:bg-gray-100">
+                                        <td></td>
+                                        <td class="items-center px-12">
+                                            <span class="w-full">
+                                                <img class="hidden mr-1 md:mr-2 md:inline-block h-16 w-16 rounded-full object-cover "
+                                                    src="https://cdn0.iconfinder.com/data/icons/user-63/512/399_Personal_Personalization_Profile_User-512.png"
+                                                    alt="" />
+                                            </span>
+                                            <span class="w-full">
+                                                <p class="md:hidden text-xs text-gray-600 font-medium">Anonymous#1</p>
+                                                <p class="hidden md:table-cell text-xs text-gray-500 font-medium">
+                                                    Anonymous#1</p>
+                                                <br>
+
+                                            </span>
+                                        </td>
+                                        <td class="hidden md:table-cell w-full p-4">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc nec nulla
+                                                sed urna laoreet auctor. Proin sodales orci fermentum, euismod dui in,
+                                                malesuada sapien. Class aptent taciti sociosqu ad litora torquent per
+                                                conubia nostra, per inceptos himenaeos. Nullam commodo eros id justo
+                                                malesuada, non tincidunt ipsum vehicula. Duis ut tortor ornare, pulvinar
+                                                sem nec, suscipit magna. Praesent eu finibus odio. Aliquam lacus enim,
+                                                vehicula id auctor at, vehicula at mi. Pellentesque mauris leo, cursus
+                                                eget nunc at, blandit lacinia lectus. Quisque imperdiet vulputate turpis
+                                                consectetur faucibus. Quisque a tempus ligula. In blandit odio ac urna
+                                                semper, vel consequat justo bibendum. Nunc iaculis mollis quam eu
+                                                laoreet. Nulla scelerisque egestas odio, hendrerit vestibulum tortor
+                                                congue vitae.
+
+                                                Cras non ante elementum, pellentesque lacus sit amet, aliquet velit.
+                                                Suspendisse fringilla aliquet vehicula. Cras quis ante eget augue
+                                                porttitor commodo et et leo. Mauris placerat dui eget diam consectetur
+                                                molestie. In volutpat sed metus eu fermentum. Maecenas pulvinar arcu nec
+                                                purus viverra, eget volutpat tortor lacinia. Phasellus pellentesque sit
+                                                amet lectus nec commodo. Maecenas tempus risus urna, sed tristique velit
+                                                pretium et. Proin quis ornare ex. Nunc venenatis velit magna, vitae
+                                                ultricies mauris sagittis eget. Sed posuere sem elit, sed hendrerit
+                                                felis mattis a. In at dolor odio. Nunc ornare ultrices orci et commodo.
+                                                Ut porttitor libero varius, sagittis sapien nec, aliquet ligula. Aliquam
+                                                finibus sagittis urna eget ultrices. Mauris faucibus cursus magna.</p>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                            <div class="w-full shadow-lg bg-white text-right border-b-2">
+                                <p class="pl-1 text-xs text-gray-500 font-medium p-2">
+                                    Posted on: <%= date_posted %></p>
                             </div>
+                            <!-- End of post -->
+                        </div>
+                        <!-- Start of new post field-->
+                        <form>
+                            <div class="container w-full shadow-lg bg-white mt-3 p-4">
+                                <div class="px-4 py-2 border-b border-gray uppercase text-left bg-gray-200 text-gray-700 font-bold">
+                                    Leave your reply as an anonymous
+                                </div>
+                                <textarea class="form-textarea focus:bg-white focus:outline-none focus:shadow-outline border border-gray-300 py-2 px-4 block w-full appearance-none leading-normal" rows="7" type="text" placeholder="Make sure to post thing that is legal... :)"></textarea>
+                                <div class="text-right pt-2">
+                                    <button class="h-10 col-start-4 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" type="submit">
+                                        Comment
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- End of new post field -->
                         <!-- </div> -->
                     </div>
                 </div>
