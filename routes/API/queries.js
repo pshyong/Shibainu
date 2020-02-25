@@ -91,12 +91,12 @@ exports.getPages = [
 
 			var result = {page_d,cat_d,subcat_d:[]}
 
+			//loop through each cat to get their sub cats
 			for (const element of cat_d) {
 				var temp = await t.any(getPagesSubCatQuery, [element.cat_id]);
 				result.subcat_d.push(temp);
 		
 			}
-
 
 			return result;
 
