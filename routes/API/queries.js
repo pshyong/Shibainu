@@ -235,7 +235,6 @@ exports.addThread = [
 	}
 ];
 
-
 exports.getThread = [
 	param('thread_id')
 	.exists()
@@ -258,7 +257,15 @@ exports.getThread = [
 			const thread = await t.any(getThreadQuery, [thread_id]);
 			const posts = await t.any(getPostsQuery, [thread_id]);
 			var result = {};
-			// Guaranteed only 1 thread since we're querying by thread_id in Thread.
+			if (!thread[0]) {
+				res.status(400).send('Thread not found');
+				return;
+			}
+			// A thread must've been created with at least one post, hence we also check for post.
+			if (!posts[0]) {
+				res.status(400).send('Post not found');
+				return;
+			}
 			result = thread[0]; 
 			result.posts = posts;
 			return result;
@@ -268,10 +275,9 @@ exports.getThread = [
 	}
 ];
 
-
-exports.getPosts = [
-	param('thread_id').exists().withMessage("Missing Thread Id Parameter").bail()
-	  .isInt().withMessage("Invalid Thread Id Parameter").bail().escape(),
+exports.getPost = [
+	param('post_id').exists().withMessage("Missing Post Id Parameter").bail()
+	  .isInt().withMessage("Invalid Post Id Parameter").bail().escape(),
 	async function (req, res, next) {
 		// First see if we have any errors
 		const errors = validationResult(req);
@@ -280,10 +286,18 @@ exports.getPosts = [
 			res.status(400).json({ errors: errors.array() });
 			return;
 		}
-		let getPostQuery = "SELECT * FROM post WHERE thread_id = $1;";
+		let getPostQuery = "SELECT * FROM post WHERE post_id = $1;";
+	
 		db.task(async t => {
 			let post_id = req.params.post_id;
-			const result = await t.any(getPostQuery, [thread_id]);
+			const posts = await t.any(getPostQuery, [post_id]);
+			console.log(posts);
+			if (!posts[0]) {
+				res.status(400).send('Post not found');
+				return;
+			}
+			var result = {};
+			result = posts[0];
 			return result;
 		}).then (result => {
 			res.status(200).json(result)

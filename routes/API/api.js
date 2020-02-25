@@ -177,7 +177,7 @@ router.route('/v1/pages/thread/:thread_id')
      *
      * /pages/thread/{thread_id}:
      *   get:
-     *     description: Get the specified thread
+     *     description: Get the specified thread with its child posts
      *     tags:
      *       - Thread
      *     produces:
@@ -230,21 +230,21 @@ router.route('/v1/pages/thread/:thread_id')
     // ! When a user create a thread, they also create a post but as id 1
     .post(db.addThread)
 
-router.route('/v1/pages/Post/{thread_id}')
+router.route('/v1/pages/post/:post_id')
     /**
      * @swagger
      *
-     * /pages/Post:
+     * /pages/post/{post_id}:
      *   get:
-     *     description: Get all the post in a specified threads
+     *     description: Get the post with the specified post_id
      *     tags:
      *       - Post
      *     produces:
      *       - application/json
      *     parameters:
-     *       - name: thread_id
-     *         description: The id of the corresponding thread
-     *         in: formData
+     *       - name: post_id
+     *         description: The id of the post in question.
+     *         in: path
      *         required: true
      *         type: integer
      *     responses:
@@ -255,7 +255,7 @@ router.route('/v1/pages/Post/{thread_id}')
      *       400:
      *         description: Could not get the corresponding posts in a thread
      */
-    .get(db.getPosts)
+    .get(db.getPost)
     /**
      * @swagger
      *
@@ -287,5 +287,5 @@ router.route('/v1/pages/Post/{thread_id}')
      */
     .post(db.addPost)
 
-
+    
 module.exports = router;
