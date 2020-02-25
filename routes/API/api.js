@@ -28,13 +28,49 @@ router.route('/v1/pages/:page_id')
      *         type: integer
      *     responses:
      *       200:
-     *         description: Successfully get all pages
+     *         description: Successfully got the page
      *         schema:
-     *           example: [{"page_id": 1, "title": "I am a page", "description": "Description for a page", "visitor_count": 0, "created": "2020-02-13 08:10:19.72336+07"}]
+     *           example: {
+                            "page_d": [
+                                {
+                                "page_id": 1,
+                                "title": "Toyota",
+                                "description": null,
+                                "visiter_count": 0,
+                                "created": "2020-02-22T05:01:56.255Z"
+                                }
+                            ],
+                            "cat_d": [
+                                {
+                                "cat_id": 1,
+                                "subject": "Sports Cars",
+                                "created": "2020-02-22T05:26:50.633Z",
+                                "page_id": 1
+                                }
+                            ],
+                            "subcat_d": [
+                                [
+                                {
+                                    "sub_cat_id": 1,
+                                    "created": "2020-02-23T04:27:46.861Z",
+                                    "main_cat_id": 1,
+                                    "subject": "Supra"
+                                },
+                                {
+                                    "sub_cat_id": 2,
+                                    "created": "2020-02-23T04:27:50.041Z",
+                                    "main_cat_id": 1,
+                                    "subject": "GT86"
+                                }
+                                ]
+                            ]
+                            }
+            
+     *       400:
+     *         description: Could not get the requested page
      *       500:
      *         description: Internal server error
-     *       400:
-     *         description: Could not get all the pages
+     *       
      */
     .get(db.getPages)
     /**
