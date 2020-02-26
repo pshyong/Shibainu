@@ -8,7 +8,8 @@ const express = require('express')
 
 const {
     body,
-    validationResult
+	param,
+	validationResult
 } = require('express-validator');
  
 function sendJSON(statusCode, payload) {
@@ -31,6 +32,7 @@ function runDeleteQuery(selectQuery, deleteQuery, args) {
 	})
 }
 
+const getPagesQuery = "SELECT * FROM subpage WHERE page_id = $1;";
 const addPageQuery = "INSERT INTO subpage(title) VALUES ($1) RETURNING title, page_id";
 exports.addPage = [
 	// We first want to verify expected parameters and escape any special characters
@@ -63,8 +65,8 @@ exports.addPage = [
 			// So now we will want to get things back
 			if ("title" in result) {
 				// We want to send back 200 for successful query
-				// I am sending back a response just for debugging to see if api actually worked and inserted
-				res.status(200).send(`Subpage inserted with title: "${result.title}" and page_id: ${result.page_id}`); 
+
+				res.status(200).json(result);
 			} else {
 				// The case where it didnt actually insert correctly
 				res.status(400).send("Unable to insert the subpage");
@@ -75,16 +77,46 @@ exports.addPage = [
 	}
 ];
 
-const getPagesQuery = "SELECT * FROM subpage;";
-exports.getPages = function (req, res) {
-	db.task(async t => {
-		const result = await t.any(getPagesQuery);
-		return result;
-	}).then (result => {
-		// pg-promise already formates the result as a JSON so just send it back
-		res.status(200).json(result)
-	}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
-}
+//const getPagesQuery = "SELECT * FROM subpage WHERE page_id = $1;";
+const getPagesCatQuery = "SELECT * FROM category WHERE page_id = $1;";
+const getPagesSubCatQuery = "SELECT * FROM subcategory WHERE main_cat_id = $1;";
+exports.getPages = [
+
+	param('page_id').exists().withMessage("Missing Page id Parameter").bail()
+	  .isInt().withMessage("Invalid Page Id Parameter").bail().escape(),
+
+
+
+	async function (req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+		
+		db.task(async t => {
+
+			const page_d = await t.any(getPagesQuery, [req.params.page_id]);
+			const cat_d = await t.any(getPagesCatQuery, [req.params.page_id]);
+
+			var result = {page_d,cat_d,subcat_d:[]}
+
+			//loop through each cat to get their sub cats
+			for (const element of cat_d) {
+				var temp = await t.any(getPagesSubCatQuery, [element.cat_id]);
+				result.subcat_d.push(temp);
+		
+			}
+
+			return result;
+
+		}).then (result => {
+			res.status(200).json(result);
+		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+	}
+];
 
 const getSpecificPageQuery = "SELECT * FROM Subpage WHERE page_id = $1;";
 const deletePageQuery = "DELETE FROM Subpage WHERE page_id=$1;";
