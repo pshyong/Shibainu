@@ -103,7 +103,7 @@ router.route('/v1/pages/Page/:page_id')
     /**
      * @swagger
      *
-     * /pages/page:
+     * /pages/Page/page:
      *   delete:
      *     description: Delete the specified subpage
      *     tags:
