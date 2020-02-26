@@ -208,6 +208,7 @@ exports.addThread = [
 	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Subject Parameter").bail().escape(),
 	body('sub_cat_id').exists().withMessage("Missing subcategory Id Parameter").bail()
 	  .isInt().withMessage("Invalid subcategory Id Parameter").bail().escape(),
+	body('content').exists().withMessage("Missing content Parameter").bail().escape(),
 	//   We can comment user_acount_id out until we need it
 	// body('user_account_id').exists().withMessage("Missing User Account Id Parameter").bail()
 	//   .isInt().withMessage("Invalid User Account Id Parameter").bail().escape(),
@@ -221,15 +222,32 @@ exports.addThread = [
 			res.status(400).json({ errors: errors.array() });
 			return;
 		}
-		let addThreadQuery = "INSERT INTO thread(subject, sub_cat_id, user_account_id) VALUES ($1, $2, $3) RETURNING subject, thread_id";
+		let addThreadQuery = "INSERT INTO thread(subject, sub_cat_id) VALUES ($1, $2) RETURNING thread_id, subject";
 		db.task(async t => {
-			const result = await t.one(addThreadQuery, [req.body.subject, req.body.sub_cat_id, req.body.user_account_id]);
-			return result;
-		}).then (result => {
-			if ("subject" in result) {
-				res.status(200).send(`Thread inserted with title: "${result.subject}" and thread_id: ${result.thread_id}`);
+			const thread = await t.one(addThreadQuery, [req.body.subject, req.body.sub_cat_id]);
+			return thread;
+		}).then (thread => {
+			if ("thread_id" in thread) {
+				thread_id = thread.thread_id;
+				const addPostQuery = "INSERT INTO post(content, thread_id) VALUES ($1, $2) RETURNING post_id, content;"
+				db.task(async t => {
+					const post = await t.one(addPostQuery, [req.body.content,thread_id]);
+					return post;
+				}).then (post => {
+					if ("post_id" in post) {
+						result = {}
+						result.thread = thread;
+						result.post = post;
+						res.status(200).send(result);
+					}
+					// If post was not created
+					else {
+						res.status(400).send("Unable to create a post after the thread");
+					}
+				})
+			// if thread was not created
 			} else {
-				res.status(400).send("Unable to insert the thread");
+				res.status(400).send("Unable to create a thread");
 			}
 		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
 	}
@@ -291,7 +309,6 @@ exports.getPost = [
 		db.task(async t => {
 			let post_id = req.params.post_id;
 			const posts = await t.any(getPostQuery, [post_id]);
-			console.log(posts);
 			if (!posts[0]) {
 				res.status(400).send('Post not found');
 				return;
@@ -305,7 +322,6 @@ exports.getPost = [
 	}
 ];
 
-const addPostQuery = "INSERT INTO post(content, thread_id) VALUES ($1, $2) RETURNING content, post_id";
 exports.addPost = [
 	body('content').exists().withMessage("Missing Content Parameter").bail()
 	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Content Parameter").bail().escape(),
@@ -322,17 +338,20 @@ exports.addPost = [
 			return;
 		}
 		//here may be have to check if post is already in db?
-
+		//  RETURNING content, post_id"
+		const addPostQuery = "INSERT INTO post(content, thread_id) VALUES ($1, $2) RETURNING post_id;"
 		db.task(async t => { //try to add to the db
 			const result = await t.one(addPostQuery, [req.body.content,req.body.thread_id]);
 			return result;
 		}).then (result => {
-			if ("content" in result) {
+			if ("post_id" in result) {
 				// return 200 if we successfully added the page
-				res.status(200).send(`Post inserted with content: "${result.content}" and post_id: ${result.post_id}`); 
+				// KEEP OLD CODE so I know how to format the string :D
+				// res.status(200).send(`Post inserted with content: "${result.content}" and post_id: ${result.post_id}`); 
+				res.status(200).send(result); 
 			} else {
 				// return 400 if we unsuccessfully added the page
-				res.status(400).send("Unable to insert the post");
+				res.status(400).send("Unable to create the post");
 			}
 		})
 		// We want to catch any exception else your program will crash :) have fun with that 

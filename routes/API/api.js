@@ -171,7 +171,7 @@ router.route('/v1/pages/subCategory')
      */
     .post(db.addSubCategory)
 
-router.route('/v1/pages/thread/:thread_id')
+router.route('/v1/pages/thread/:thread_id?')
     /**
      * @swagger
      *
@@ -200,9 +200,9 @@ router.route('/v1/pages/thread/:thread_id')
     /**
      * @swagger
      *
-     * /pages/Thread:
+     * /pages/thread:
      *   post:
-     *     description: Create a new thread in a specified sub cateogry
+     *     description: Create a new thread in a specified subcateogry
      *     tags:
      *       - Thread
      *     produces:
@@ -218,6 +218,11 @@ router.route('/v1/pages/thread/:thread_id')
      *         in: formData
      *         required: true
      *         type: string
+     *       - name: content
+     *         description: The content of the thread. This content belongs to the first post.
+     *         in: formData
+     *         required: true
+     *         type: string
      *     responses:
      *       200:
      *         description: Successfully created a thread inside
@@ -230,7 +235,7 @@ router.route('/v1/pages/thread/:thread_id')
     // ! When a user create a thread, they also create a post but as id 1
     .post(db.addThread)
 
-router.route('/v1/pages/post/:post_id')
+router.route('/v1/pages/post/:post_id?')
     /**
      * @swagger
      *
@@ -259,7 +264,7 @@ router.route('/v1/pages/post/:post_id')
     /**
      * @swagger
      *
-     * /pages/Post:
+     * /pages/post:
      *   post:
      *     description: Create a new post in a specified thread
      *     tags:
