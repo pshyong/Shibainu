@@ -5,6 +5,7 @@ CREATE TABLE post (
     post_id SERIAL,
     content text  NOT NULL,
     created timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_date timestamp DEFAULT CURRENT_TIMESTAMP,
     user_account_id int DEFAULT 0,
     upvotes int  NOT NULL DEFAULT 0,
     downvotes int NOT NULL DEFAULT 0,
