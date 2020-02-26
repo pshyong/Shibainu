@@ -233,7 +233,8 @@ exports.addSubCategory = [
 			if ("subject" in result) {
 				// We want to send back 200 for successful query
 				// I am sending back a response just for debugging to see if api actually worked and inserted
-				res.status(200).send(`Subategory inserted with subject: "${result.subject}" and sub_cat_id: ${result.sub_cat_id}`);
+				//res.status(200).send(`Subategory inserted with subject: "${result.subject}" and sub_cat_id: ${result.sub_cat_id}`);
+				res.status(200).json(result);
 			} else {
 				// The case where it didnt actually insert correctly
 				res.status(400).send("Unable to insert the subcategory");
@@ -246,7 +247,7 @@ exports.addSubCategory = [
 
 const getSubCategoryQuery1 = "select * from subcategory where sub_cat_id = $1;"
 const getSubCategoryQuery2 = "select * from category where cat_id = (select main_cat_id from subcategory where sub_cat_id = $1);" 
-const getSubCategoryQuery3 = "select * from thread where sub_cat_id = 1;";
+const getSubCategoryQuery3 = "select * from thread where sub_cat_id = $1;";
 exports.getSubCategories = [
 	/*
 	body('main_cat_id').exists().withMessage("Missing Category Id Parameter").bail()
@@ -263,11 +264,13 @@ exports.getSubCategories = [
 		}
 		var url = req.url;
 		db.task(async t => {
-			const result1 = await t.any(getSubCategoryQuery1, [req.params.sub_cat_id]);
-			const result2 = await t.any(getSubCategoryQuery2, [req.params.sub_cat_id]);
-			const result3 = await t.any(getSubCategoryQuery3, [req.params.sub_cat_id]);
-			var result = {result1, result2, result3};
+			const subCategory = await t.any(getSubCategoryQuery1, [req.params.sub_cat_id]);
+			const Category = await t.any(getSubCategoryQuery2, [req.params.sub_cat_id]);
+			const Threads = await t.any(getSubCategoryQuery3, [req.params.sub_cat_id]);
+			
+			var result = {subCategory, Category, Threads};
 			return result;
+			
 		}).then (result => {
 			res.status(200).json(result)
 		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})

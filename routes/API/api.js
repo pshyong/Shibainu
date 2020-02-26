@@ -172,7 +172,7 @@ router.route('/v1/pages/subCategory/:sub_cat_id')
     /**
      * @swagger
      *
-     * /pages/subCategory:
+     * /pages/subCategory/{sub_cat_id}:
      *   get:
      *     description: Get the all the subcategory associated to the subcategory
      *     tags:
@@ -180,9 +180,9 @@ router.route('/v1/pages/subCategory/:sub_cat_id')
      *     produces:
      *       - application/json
      *     parameters:
-     *       - name: sub_cat_id
+     *       - name: name
      *         description: The id of the corresponding subcategory
-     *         in: formData
+     *         in: path
      *         required: true
      *         type: integer
      *     responses:
@@ -197,7 +197,7 @@ router.route('/v1/pages/subCategory/:sub_cat_id')
     /**
      * @swagger
      *
-     * /pages/subCategory:
+     * /pages/subCategory/sub:
      *   post:
      *     description: Create a new sub-category in the specified category
      *     tags:
@@ -205,7 +205,7 @@ router.route('/v1/pages/subCategory/:sub_cat_id')
      *     produces:
      *       - application/json
      *     parameters:
-     *       - name: title
+     *       - name: sub_cat_id
      *         description: The id of the corresponding category to add to
      *         in: formData
      *         required: true
@@ -227,7 +227,7 @@ router.route('/v1/pages/subCategory/:sub_cat_id')
     /**
      * @swagger
      *
-     * /pages/subCategory:
+     * /pages/subCategory/del:
      *   delete:
      *     description: Delete the specified Subcategory
      *     tags:
