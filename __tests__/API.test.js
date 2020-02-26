@@ -78,7 +78,6 @@ describe('Subcategory API GET tests', () => {
 	   expect(res.statusCode).toEqual(200)
 	   expect(res.body.length).toEqual(1)
 	   expect(res.body[0].subject).toEqual('Subcategory POST API test')
-	   console.log(`SubCat API GET res: ${res.body[0]}`);
 	   subcategory_id = res.body[0].sub_cat_id
 	   res.body
 	   done()
@@ -95,7 +94,8 @@ describe('Thread API POST tests', () => {
 		expect(res.body.post.content).toEqual("Thread POST API Test Post Content");
 		// console.log(`Thread API POST res: ${res.body.thread.subject}`);
 		// console.log(`New post_id with new thread: ${res.body.post.post_id}`);
-		thread_id = res.body.post.post_id;
+		// console.log(`Thread API POST thread_id: ${res.body.thread.thread_id}`)
+		thread_id = res.body.thread.thread_id;
 	    done()
 	})
 })
@@ -117,23 +117,16 @@ describe('Thread API GET tests', () => {
 describe('Thread API PUT tests', () => {
 	it('Should get a 200 status code', async (done) => {
 		const res = await request(app)
-		.put('/api/v1/pages/thread')
-	    .send({subject: "Thread PUT API test", thread_id: thread_id})
-	    expect(res.statusCode).toEqual(200)
-	    
-	   const res2 = await request(app)
-	   .get(`/api/v1/pages/thread/${thread_id}`)
-	//    .send({sub_cat_id: subcategory_id})
-	    
-	   expect(res2.statusCode).toEqual(200)
-
-	// body.length is getting undefined for some reason
-	//    expect(res2.body.length).toEqual(1)
-	
-	   expect(res2.body[0].subject).toEqual('Thread PUT API test')
-	   expect(res2.body[0].thread_id).toEqual(thread_id)
-	   done()
-	 })
+			.put('/api/v1/pages/thread')
+			.send({ subject: "Thread PUT API test", thread_id: thread_id })
+		expect(res.statusCode).toEqual(200)
+		const res2 = await request(app)
+			.get(`/api/v1/pages/thread/${thread_id}`)
+		expect(res2.statusCode).toEqual(200)
+		expect(res2.body.subject).toEqual('Thread PUT API test')
+		expect(res2.body.thread_id).toEqual(thread_id)
+		done()
+	})
 })
 var post_id = -1
 describe('Post API POST tests', () => {
@@ -147,21 +140,14 @@ describe('Post API POST tests', () => {
 	})
 })
 
-
 describe('Post API GET tests', () => {  
-	 it('Should get a 200 status code and "Post POST API test" content', async (done) => {
-	   const res = await request(app)
-	   .get(`/api/v1/pages/post/${thread_id}`);
-
-	    
-	   expect(res.statusCode).toEqual(200)
-	// body.length is getting undefined for some reason
-	//    expect(res.body.length).toEqual(1)
-
-	   expect(res.body.content).toEqual('Thread POST API Test Post Content')
-	   
-	   done()
-	 })
+	it('Should get a 200 status code and "Post POST API test" content', async (done) => {
+		const res = await request(app)
+			.get(`/api/v1/pages/post/${post_id}`);
+		expect(res.statusCode).toEqual(200)
+		expect(res.body.content).toEqual('Post POST API test')
+		done()
+	})
 })
 
 describe('Post API PUT tests', () => {
@@ -170,17 +156,13 @@ describe('Post API PUT tests', () => {
 		.put('/api/v1/pages/post')
 	    .send({content: "Post PUT API test", thread_id: thread_id, post_id: post_id})
 	    expect(res.statusCode).toEqual(200)
-
 	   const res2 = await request(app)
-	   .get('/api/v1/pages/Post')
-	   .send({thread_id: thread_id})
-	    
+	   .get(`/api/v1/pages/post/${post_id}`)
+	  
 	   expect(res2.statusCode).toEqual(200)
-	   expect(res2.body.length).toEqual(1)
-	   expect(res2.body[0].content).toEqual('Post PUT API test')
-	   expect(res2.body[0].thread_id).toEqual(thread_id)
-	   expect(res2.body[0].post_id).toEqual(post_id)
-	   
+	   expect(res2.body.content).toEqual('Post PUT API test')
+	   expect(res2.body.thread_id).toEqual(thread_id)
+	   expect(res2.body.post_id).toEqual(post_id)
 	   done()
 	 })
 })
@@ -188,7 +170,7 @@ describe('Post API PUT tests', () => {
 describe('DELETE API error tests', () => {
 	it('Should get a 500 status code', async (done) => {
 		const res = await request(app)
-		.delete('/api/v1/pages/Thread')
+		.delete('/api/v1/pages/thread')
 	    .send({thread_id: thread_id})
 	    expect(res.statusCode).toEqual(500)
 	    done()
@@ -220,7 +202,7 @@ describe('DELETE API error tests', () => {
 	
 	it('Should get a 404 status code', async (done) => {
 		const res = await request(app)
-		.delete('/api/v1/pages/Thread')
+		.delete('/api/v1/pages/thread')
 	    .send({thread_id: -1})
 	    expect(res.statusCode).toEqual(404)
 	    done()
@@ -254,16 +236,13 @@ describe('DELETE API error tests', () => {
 describe('Post API DELETE tests', () => {
 	it('Should get a 200 status code', async (done) => {
 		const res = await request(app)
-		.delete('/api/v1/pages/Post')
+		.delete('/api/v1/pages/post')
 	    .send({thread_id: thread_id, post_id: post_id})
-	    expect(res.statusCode).toEqual(200)
-
+		expect(res.statusCode).toEqual(200)
+		
 	   const res2 = await request(app)
-	   .get('/api/v1/pages/Post')
-	   .send({thread_id: thread_id})
-	    
-	   expect(res2.statusCode).toEqual(200)
-	   expect(res2.body.length).toEqual(0)
+	   .get(`/api/v1/pages/post/${post_id}`)
+	   expect(res2.statusCode).toEqual(400)
 	   
 	   done()
 	 })
@@ -271,18 +250,30 @@ describe('Post API DELETE tests', () => {
 
 describe('Thread API DELETE tests', () => {
 	it('Should get a 200 status code', async (done) => {
+		// Need to make sure thread has no children posts.
+		// For testing we know there were 2 children - 1 from creating the thread (since creating a thread
+		// creates a post), and one from testing post POST API.
+
+		// First we find and delete the last post
+		const post = await request(app)
+		.get(`/api/v1/pages/thread/${thread_id}`)
+		expect(post.statusCode).toEqual(200)
+		console.log(`Delete thread API ${post.body.posts[0].post_id}`);
+		post_id = post.body.posts[0].post_id;
+		
+		const delpost = await request(app)
+		.delete('/api/v1/pages/post')
+	    .send({thread_id: thread_id, post_id: post_id})
+		expect(delpost.statusCode).toEqual(200)
+
 		const res = await request(app)
-		.delete('/api/v1/pages/Thread')
+		.delete('/api/v1/pages/thread')
 	    .send({thread_id: thread_id})
 	    expect(res.statusCode).toEqual(200)
 	    
 	   const res2 = await request(app)
-	   .get('/api/v1/pages/Thread')
-	   .send({sub_cat_id: subcategory_id})
-	    
-	   expect(res2.statusCode).toEqual(200)
-	   expect(res2.body.length).toEqual(0)
-	   
+	   .get(`/api/v1/pages/thread/${thread_id}`)
+	   expect(res2.statusCode).toEqual(400)
 	   done()
 	 })
 })
