@@ -9,34 +9,76 @@ const bodyParser = require('body-parser');
 // ! Try and group the api calls to ones that are similar
 // ! All api calls should be going through /api/whatever
 
-router.route('/v1/pages/page')
+router.route('/v1/pages/Page/:page_id')
     /**
      * @swagger
      *
-     * /pages/page:
+     * 
+     * /pages/Page/{page_id}:
      *   get:
-     *     description: Returns all the pages in the forums
+     *     description: Returns the subpage requested along with the categories that belong with it, aswell the subcategories that belong with those categories 
      *     tags:
      *       - Pages
      *     produces:
      *       - application/json
+     *     parameters:
+     *       - name: page_id
+     *         description: The id of the subpage
+     *         in: path
+     *         required: true
+     *         type: integer
      *     responses:
      *       200:
-     *         description: Successfully get all pages
+     *         description: Successfully got the page
      *         schema:
-     *           example: [{"page_id": 1, "title": "I am a page", "description": "Description for a page", "visitor_count": 0, "created": "2020-02-13 08:10:19.72336+07"}]
+     *           example: {
+                            "page_d": [
+                                {
+                                "page_id": 1,
+                                "title": "Toyota",
+                                "description": null,
+                                "visiter_count": 0,
+                                "created": "2020-02-22T05:01:56.255Z"
+                                }
+                            ],
+                            "cat_d": [
+                                {
+                                "cat_id": 1,
+                                "subject": "Sports Cars",
+                                "created": "2020-02-22T05:26:50.633Z",
+                                "page_id": 1
+                                }
+                            ],
+                            "subcat_d": [
+                                [
+                                {
+                                    "sub_cat_id": 1,
+                                    "created": "2020-02-23T04:27:46.861Z",
+                                    "main_cat_id": 1,
+                                    "subject": "Supra"
+                                },
+                                {
+                                    "sub_cat_id": 2,
+                                    "created": "2020-02-23T04:27:50.041Z",
+                                    "main_cat_id": 1,
+                                    "subject": "GT86"
+                                }
+                                ]
+                            ]
+                            }
      *       500:
      *         description: Internal server error
      *       400:
-     *         description: Could not get all the pages
+     *          description: Could not get the requested page
+     *       
      */
     .get(db.getPages)
     /**
      * @swagger
      *
-     * /pages/page:
+     * /pages/Page/page:
      *   post:
-     *     description: Create a new subpage to the database
+     *     description: Create a new subpage to the database, returns a JSON containing the page_id and title
      *     tags:
      *       - Pages
      *     produces:
@@ -50,6 +92,8 @@ router.route('/v1/pages/page')
      *     responses:
      *       200:
      *         description: Successfully created a new page
+     *         schema:
+     *           example: {"title": "Page Name!","page_id": 12}
      *       500:
      *         description: Internal server error
      *       400:
@@ -59,7 +103,7 @@ router.route('/v1/pages/page')
     /**
      * @swagger
      *
-     * /pages/page:
+     * /pages/Page/page:
      *   delete:
      *     description: Delete the specified subpage
      *     tags:

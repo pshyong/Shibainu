@@ -1,0 +1,79 @@
+<% var description = 'I am a description for shibainu project'; %>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../partials/head.ejs %>
+</head>
+
+<body class="min-h-screen bg-gray-400">
+    <% include ../partials/header.ejs %>
+    <div class="container mx-auto py-8">
+        <!--Title-->
+        <h2 class="font-sans font-bold break-normal text-gray-700 px-2 pb-8 text-xl">Lets create something interesting...</h2>
+
+        <!--Card-->
+        <div id='section2' class="p-8 mt-6 lg:mt-0 rounded shadow bg-white">
+
+            <form>
+
+                <div class="md:flex mb-6">
+                    <div class="md:w-1/3">
+                        <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-textfield">
+                            Subject
+                        </label>
+                    </div>
+                    <div class="md:w-2/3">
+                        <input class="form-input block w-full focus:bg-white" id="my-textfield" type="text" value="">
+                        <p class="py-2 text-sm text-gray-600">What is the subject of your post?</p>
+                    </div>
+                </div>
+
+                <div class="md:flex mb-6">
+                    <div class="md:w-1/3">
+                        <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-select">
+                            Category
+                        </label>
+                    </div>
+                    <div class="md:w-2/3">
+                        <select name="" class="form-select block w-full focus:bg-white" id="my-select">
+                            <option value="Announcements">Current - Announcements</option>
+                            <option value="Testing1">Testing1</option>
+                            <option value="Testing2">Testing2</option>
+                            <option value="Testing3">Testing3</option>
+                        </select>
+
+                        <p class="py-2 text-sm text-gray-600">Which category to post in?</p>
+                    </div>
+                </div>
+
+                <div class="md:flex mb-6">
+                    <div class="md:w-1/3">
+                        <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-textarea">
+                            Content
+                        </label>
+                    </div>
+                    <div class="md:w-2/3">
+                        <textarea class="form-textarea block w-full focus:bg-white" id="my-textarea" value="" rows="8" placeholder="Make sure to post thing that is legal... :)"></textarea>
+                        <p class="py-2 text-sm text-gray-600">What is your content of your post?</p>
+                    </div>
+                </div>
+
+                <div class="md:flex md:items-center">
+                    <div class="md:w-1/3"></div>
+                    <div class="md:w-2/3 text-right">
+                        <button class="h-10 col-start-4 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" type="button">
+                            Post thread
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+        <!--/Card-->
+    </div>
+
+    <% include ../partials/footer.ejs %>
+</body>
+
+</html>
