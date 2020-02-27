@@ -5,31 +5,31 @@ const app = require('../app');
 // ? https://jestjs.io/docs/en/getting-started
 // ? https://github.com/visionmedia/supertest
 
+var subpage_id = -1
+
 describe('Page API POST tests', () => {
-	it('Should get a 200 status code', async (done) => {
-		const res = await request(app)
-			.post('/api/v1/pages/page')
-			.send({ title: "Page POST API test" })
-		expect(res.statusCode).toEqual(200)
-		done()
-	})
+  it('Should get a 200 status code', async (done) => {
+    const res = await request(app)
+    .post('/api/v1/pages/Page/page')
+    .send({title: "Page POST API test"})
+	expect(res.statusCode).toEqual(200)
+	subpage_id = res.body.page_id
+    done()
+  })
 })
 
 
-var subpage_id = -1
-describe('Page API GET tests', () => {
-	it('Should get a 200 status code and "Page POST API test" title', async (done) => {
-		const res = await request(app)
-			.get('/api/v1/pages/page')
-			.send()
+describe('Page API GET tests', () => {  
+  it('Should get a 200 status code and "Page POST API test" title', async (done) => {
+    const res = await request(app)
+    .get('/api/v1/pages/Page/' + subpage_id)
+    .send()
+    
+    expect(res.statusCode).toEqual(200)
+    expect(res.body.page_d[0].title).toEqual('Page POST API test')
 
-		expect(res.statusCode).toEqual(200)
-		expect(res.body.length).toEqual(1)
-		expect(res.body[0].title).toEqual('Page POST API test')
-
-		subpage_id = res.body[0].page_id
-		done()
-	})
+    done()
+  })
 })
 
 describe('Category API POST tests', () => {
@@ -57,23 +57,34 @@ describe('Category API GET tests', () => {
 		done()
 	})
 })
-
+var subcategory_id = -1
 describe('Subcategory API POST tests', () => {
 	it('Should get a 200 status code', async (done) => {
 		const res = await request(app)
-			.post('/api/v1/pages/subCategory')
-			.send({ subject: "Subcategory POST API test", main_cat_id: category_id })
+		.post('/api/v1/pages/subCategory/sub')
+	    .send({subject: "Subcategory POST API test", main_cat_id: category_id})
 		expect(res.statusCode).toEqual(200)
-		done()
+		
+		subcategory_id = res.body.sub_cat_id;
+	    done()
 	})
 })
 
-var subcategory_id = -1
-describe('Subcategory API GET tests', () => {
-	it('Should get a 200 status code and "Subcategory POST API test" subject', async (done) => {
-		const res = await request(app)
-			.get('/api/v1/pages/subCategory')
-			.send({ main_cat_id: category_id })
+
+describe('Subcategory API GET tests', () => {  
+	 it('Should get a 200 status code and "Subcategory POST API test" subject', async (done) => {
+	   const res = await request(app)
+	   .get('/api/v1/pages/subCategory/'+subcategory_id)
+	   //.send({main_cat_id: category_id})
+	    
+	   expect(res.statusCode).toEqual(200)
+	   //expect(res.body.length).toEqual(3)
+	   expect(res.body.subCategory[0].subject).toEqual('Subcategory POST API test')
+	   
+	   
+	   done()
+	 })
+})
 
 		expect(res.statusCode).toEqual(200)
 		expect(res.body.length).toEqual(1)
@@ -194,10 +205,10 @@ describe('DELETE API error tests', () => {
 
 	it('Should get a 500 status code', async (done) => {
 		const res = await request(app)
-			.delete('/api/v1/pages/page')
-			.send({ page_id: subpage_id })
-		expect(res.statusCode).toEqual(500)
-		done()
+		.delete('/api/v1/pages/Page/page')
+	    .send({page_id: subpage_id})
+	    expect(res.statusCode).toEqual(500)
+	    done()
 	})
 
 	it('Should get a 404 status code', async (done) => {
@@ -226,10 +237,10 @@ describe('DELETE API error tests', () => {
 
 	it('Should get a 404 status code', async (done) => {
 		const res = await request(app)
-			.delete('/api/v1/pages/page')
-			.send({ page_id: -1 })
-		expect(res.statusCode).toEqual(404)
-		done()
+		.delete('/api/v1/pages/Page/page')
+	    .send({page_id: -1})
+	    expect(res.statusCode).toEqual(404)
+	    done()
 	})
 })
 
@@ -281,19 +292,19 @@ describe('Thread API DELETE tests', () => {
 describe('Subcategory API DELETE tests', () => {
 	it('Should get a 200 status code', async (done) => {
 		const res = await request(app)
-			.delete('/api/v1/pages/subCategory')
-			.send({ sub_cat_id: subcategory_id })
-		expect(res.statusCode).toEqual(200)
-
-		const res2 = await request(app)
-			.get('/api/v1/pages/subCategory')
-			.send({ main_cat_id: category_id })
-
-		expect(res2.statusCode).toEqual(200)
-		expect(res2.body.length).toEqual(0)
-
-		done()
-	})
+		.delete('/api/v1/pages/subCategory')
+	    .send({sub_cat_id: subcategory_id})
+	    expect(res.statusCode).toEqual(200)
+	    
+	   const res2 = await request(app)
+	   .get('/api/v1/pages/subCategory/'+category_id)
+	   //.send({main_cat_id: category_id})
+	    
+	   expect(res2.statusCode).toEqual(200)
+	   expect(res2.body.subCategory.length).toEqual(0)
+	   
+	   done()
+	 })
 })
 
 describe('Category API DELETE tests', () => {
@@ -316,17 +327,17 @@ describe('Category API DELETE tests', () => {
 
 describe('Page API DELETE tests', () => {
 	it('Should get a 200 status code', async (done) => {
-		const res = await request(app)
-			.delete('/api/v1/pages/page')
-			.send({ page_id: subpage_id })
-		expect(res.statusCode).toEqual(200)
-
-		const res2 = await request(app)
-			.get('/api/v1/pages/page')
-			.send()
-
-		expect(res2.statusCode).toEqual(200)
-		expect(res2.body.length).toEqual(0)
-		done()
-	})
+	   const res = await request(app)
+		  .delete('/api/v1/pages/Page/page')
+	    .send({page_id: subpage_id})
+	    expect(res.statusCode).toEqual(200)
+	    
+	   const res2 = await request(app)
+	   .get('/api/v1/pages/Page/' + subpage_id)
+	   .send()
+	    
+	   expect(res2.statusCode).toEqual(200)
+	   expect(res2.body.page_d.length).toEqual(0)
+	   done()
+	 })
 })
