@@ -296,38 +296,13 @@ router.route('/v1/pages/subCategory/:sub_cat_id?')
      */
     .delete(db.deleteSubCategory)
 
-router.route('/v1/pages/Thread')
+router.route('/v1/pages/thread/:thread_id?')
     /**
      * @swagger
      *
-     * /pages/Thread:
-     *   get:
-     *     description: Get the specified thread
-     *     tags:
-     *       - Thread
-     *     produces:
-     *       - application/json
-     *     parameters:
-     *       - name: sub_cat_id
-     *         description: The id of the corresponding thread
-     *         in: formData
-     *         required: true
-     *         type: integer
-     *     responses:
-     *       200:
-     *         description: Successfully get a specified thread
-     *       500:
-     *         description: Internal server error
-     *       400:
-     *         description: Could not get the specified thread
-     */
-    .get(db.getThreads)
-    /**
-     * @swagger
-     *
-     * /pages/Thread:
+     * /pages/thread:
      *   post:
-     *     description: Create a new thread in a specified sub cateogry
+     *     description: Create a new thread in a specified subcateogry
      *     tags:
      *       - Thread
      *     produces:
@@ -343,6 +318,11 @@ router.route('/v1/pages/Thread')
      *         in: formData
      *         required: true
      *         type: string
+     *       - name: content
+     *         description: The content of the thread. This content belongs to the first post.
+     *         in: formData
+     *         required: true
+     *         type: string
      *     responses:
      *       200:
      *         description: Successfully created a thread inside
@@ -351,40 +331,38 @@ router.route('/v1/pages/Thread')
      *       400:
      *         description: Could not create the thread
      */
-    // ! Add thread should also be adding a post since they correlates to each other
-    // ! When a user create a thread, they also create a post but as id 1
     .post(db.addThread)
-     /**
+
+    /**
      * @swagger
      *
-     * /pages/Thread:
-     *   delete:
-     *     description: Delete the specified thread 
+     * /pages/thread/{thread_id}:
+     *   get:
+     *     description: Get the specified thread with its child posts
      *     tags:
      *       - Thread
      *     produces:
      *       - application/json
      *     parameters:
      *       - name: thread_id
-     *         description: The id of the thread being delete
-     *         in: formData
+     *         description: The id of the corresponding thread
+     *         in: path
      *         required: true
      *         type: integer
      *     responses:
      *       200:
-     *         description: Successfully deleted the thread
+     *         description: Successfully get a specified thread
      *       500:
      *         description: Internal server error
      *       400:
-     *         description: Could not delete the thread
-     *       404:
-     *         description: The thread does not exists
+     *         description: Could not get the specified thread
      */
-    .delete(db.deleteThread)
-    /**
+    .get(db.getThread)
+
+     /**
      * @swagger
      *
-     * /pages/Thread:
+     * /pages/thread:
      *   put:
      *     description: Update the subject of an existing thread
      *     tags:
@@ -413,37 +391,40 @@ router.route('/v1/pages/Thread')
      *         description: Thread does not exists in database 
      */
     .put(db.updateThread)
-
-router.route('/v1/pages/Post')
-    /**
+    
+     /**
      * @swagger
      *
-     * /pages/Post:
-     *   get:
-     *     description: Get all the post in a specified threads
+     * /pages/thread:
+     *   delete:
+     *     description: Delete the specified thread 
      *     tags:
-     *       - Post
+     *       - Thread
      *     produces:
      *       - application/json
      *     parameters:
      *       - name: thread_id
-     *         description: The id of the corresponding thread
+     *         description: The id of the thread being delete
      *         in: formData
      *         required: true
      *         type: integer
      *     responses:
      *       200:
-     *         description: Successfully get all the posts in a thread
+     *         description: Successfully deleted the thread
      *       500:
      *         description: Internal server error
      *       400:
-     *         description: Could not get the corresponding posts in a thread
+     *         description: Could not delete the thread
+     *       404:
+     *         description: The thread does not exists
      */
-    .get(db.getPosts)
+    .delete(db.deleteThread)
+
+router.route('/v1/pages/post/:post_id?')
     /**
      * @swagger
      *
-     * /pages/Post:
+     * /pages/post:
      *   post:
      *     description: Create a new post in a specified thread
      *     tags:
@@ -470,42 +451,37 @@ router.route('/v1/pages/Post')
      *         description: Could not create a new post
      */
     .post(db.addPost)
+
     /**
      * @swagger
      *
-     * /pages/Post:
-     *   delete:
-     *     description: Delete an existing post in a specified thread
+     * /pages/post/{post_id}:
+     *   get:
+     *     description: Get the post with the specified post_id
      *     tags:
      *       - Post
      *     produces:
      *       - application/json
      *     parameters:
      *       - name: post_id
-     *         description: The id of the post
-     *         in: formData
-     *         required: true
-     *         type: integer
-     *       - name: thread_id
-     *         description: The id of the thread that the post belongs to
-     *         in: formData
+     *         description: The id of the post in question.
+     *         in: path
      *         required: true
      *         type: integer
      *     responses:
      *       200:
-     *         description: Successfully deleted the post inside the specified thread
+     *         description: Successfully get all the posts in a thread
      *       500:
      *         description: Internal server error
      *       400:
-     *         description: Could not delete the post
-     *       404:
-     *         description: The post does not exist in the thread
+     *         description: Could not get the corresponding posts in a thread
      */
-    .delete(db.deletePost)
+    .get(db.getPost)
+
     /**
      * @swagger
      *
-     * /pages/Post:
+     * /pages/post:
      *   put:
      *     description: Update the contents of an existing post
      *     tags:
@@ -540,5 +516,39 @@ router.route('/v1/pages/Post')
      */
     .put(db.updatePost)
 
+    /**
+     * @swagger
+     *
+     * /pages/post:
+     *   delete:
+     *     description: Delete an existing post in a specified thread
+     *     tags:
+     *       - Post
+     *     produces:
+     *       - application/json
+     *     parameters:
+     *       - name: post_id
+     *         description: The id of the post
+     *         in: formData
+     *         required: true
+     *         type: integer
+     *       - name: thread_id
+     *         description: The id of the thread that the post belongs to
+     *         in: formData
+     *         required: true
+     *         type: integer
+     *     responses:
+     *       200:
+     *         description: Successfully deleted the post inside the specified thread
+     *       500:
+     *         description: Internal server error
+     *       400:
+     *         description: Could not delete the post
+     *       404:
+     *         description: The post does not exist in the thread
+     */
+    .delete(db.deletePost)
+    
 
+    
 module.exports = router;

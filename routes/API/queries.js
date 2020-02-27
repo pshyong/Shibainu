@@ -7,7 +7,7 @@ const db = require('../../config')
 const express = require('express')
 
 const {
-    body,
+  body,
 	param,
 	validationResult
 } = require('express-validator');
@@ -334,12 +334,12 @@ exports.deleteSubCategory= [
 	}
 ];
 
-const addThreadQuery = "INSERT INTO thread(subject, sub_cat_id, user_account_id) VALUES ($1, $2, $3) RETURNING subject, thread_id";
 exports.addThread = [
 	body('subject').exists().withMessage("Missing Subject Parameter").bail()
 	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Subject Parameter").bail().escape(),
 	body('sub_cat_id').exists().withMessage("Missing subcategory Id Parameter").bail()
 	  .isInt().withMessage("Invalid subcategory Id Parameter").bail().escape(),
+	body('content').exists().withMessage("Missing content Parameter").bail().escape(),
 	//   We can comment user_acount_id out until we need it
 	// body('user_account_id').exists().withMessage("Missing User Account Id Parameter").bail()
 	//   .isInt().withMessage("Invalid User Account Id Parameter").bail().escape(),
@@ -353,24 +353,43 @@ exports.addThread = [
 			res.status(400).json({ errors: errors.array() });
 			return;
 		}
-		
+		let addThreadQuery = "INSERT INTO thread(subject, sub_cat_id) VALUES ($1, $2) RETURNING thread_id, subject";
 		db.task(async t => {
-			const result = await t.one(addThreadQuery, [req.body.subject, req.body.sub_cat_id, req.body.user_account_id]);
-			return result;
-		}).then (result => {
-			if ("subject" in result) {
-				res.status(200).send(`Thread inserted with title: "${result.subject}" and thread_id: ${result.thread_id}`);
+			const thread = await t.one(addThreadQuery, [req.body.subject, req.body.sub_cat_id]);
+			return thread;
+		}).then (thread => {
+			if ("thread_id" in thread) {
+				thread_id = thread.thread_id;
+				const addPostQuery = "INSERT INTO post(content, thread_id) VALUES ($1, $2) RETURNING post_id, content;"
+				db.task(async t => {
+					const post = await t.one(addPostQuery, [req.body.content,thread_id]);
+					return post;
+				}).then (post => {
+					if ("post_id" in post) {
+						result = {}
+						result.thread = thread;
+						result.post = post;
+						res.status(200).send(result);
+					}
+					// If post was not created
+					else {
+						res.status(400).send("Unable to create a post after the thread");
+					}
+				})
+			// if thread was not created
 			} else {
-				res.status(400).send("Unable to insert the thread");
+				res.status(400).send("Unable to create a thread");
 			}
 		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
 	}
 ];
 
-const getThreadQuery = "SELECT * FROM thread where sub_cat_id = $1;";
-exports.getThreads = [
-	body('sub_cat_id').exists().withMessage("Missing Subategory Id Parameter").bail()
-	  .isInt().withMessage("Invalid Subategory Id Parameter").bail().escape(),
+exports.getThread = [
+	param('thread_id')
+	.exists()
+	.isInt()
+	.withMessage("Missing Thread Id Parameter").bail()
+	.withMessage("Invalid Thread Id Parameter").bail().escape(),
 	async function (req, res, next) {
 		// First see if we have any errors
 		const errors = validationResult(req);
@@ -379,9 +398,25 @@ exports.getThreads = [
 			res.status(400).json({ errors: errors.array() });
 			return;
 		}
-		
+		let getThreadQuery = "SELECT * FROM thread  WHERE thread_id = $1;";
+		let getPostsQuery = "SELECT * FROM post WHERE thread_id = $1;";
+
 		db.task(async t => {
-			const result = await t.any(getThreadQuery, [req.body.sub_cat_id]);
+			let thread_id = req.params.thread_id;
+			const thread = await t.any(getThreadQuery, [thread_id]);
+			const posts = await t.any(getPostsQuery, [thread_id]);
+			var result = {};
+			if (!thread[0]) {
+				res.status(400).send('Thread not found');
+				return;
+			}
+			// A thread must've been created with at least one post, hence we also check for post.
+			if (!posts[0]) {
+				res.status(400).send('Post not found');
+				return;
+			}
+			result = thread[0]; 
+			result.posts = posts;
 			return result;
 		}).then (result => {
 			res.status(200).json(result)
@@ -389,30 +424,7 @@ exports.getThreads = [
 	}
 ];
 
-const getSpecificThreadQuery = "SELECT * FROM thread WHERE thread_id = $1;";
-const deleteThreadQuery = "DELETE FROM thread WHERE thread_id=$1;";
-exports.deleteThread = [
-	body('thread_id').exists().withMessage("Missing Thread Id Parameter").bail()
-	  .isInt().withMessage("Invalid Thread Id Parameter").bail().escape(),
-	async function (req, res, next) {
-		// First see if we have any errors
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			// If there are errors. We want to render form again with sanitized values/errors messages.
-			res.status(400).json({ errors: errors.array() });
-			return;
-		}
-		
-		runDeleteQuery(getSpecificThreadQuery, deleteThreadQuery, [req.body.thread_id])
-		.then (result => {
-			if (result == null) {
-				res.status(404).send(`No thread with thread_id: ${req.body.thread_id}`);
-			} else {
-				res.status(200).send();
-			}
-		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
-	}
-];
+
 
 const updateThreadQuery = "UPDATE thread SET subject=$1 WHERE thread_id=$2 RETURNING thread_id;";
 exports.updateThread = [
@@ -449,7 +461,32 @@ exports.updateThread = [
 	}
 ];
 
-const addPostQuery = "INSERT INTO post(content, thread_id) VALUES ($1, $2) RETURNING content, post_id";
+const getSpecificThreadQuery = "SELECT * FROM thread WHERE thread_id = $1;";
+const deleteThreadQuery = "DELETE FROM thread WHERE thread_id=$1;";
+exports.deleteThread = [
+	body('thread_id').exists().withMessage("Missing Thread Id Parameter").bail()
+	  .isInt().withMessage("Invalid Thread Id Parameter").bail().escape(),
+	async function (req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+		
+		runDeleteQuery(getSpecificThreadQuery, deleteThreadQuery, [req.body.thread_id])
+		.then (result => {
+			if (result == null) {
+				res.status(404).send(`No thread with thread_id: ${req.body.thread_id}`);
+			} else {
+				res.status(200).send();
+			}
+		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+	}
+];
+
+
 exports.addPost = [
 	body('content').exists().withMessage("Missing Content Parameter").bail()
 	  .matches(/^[a-zA-Z0-9 ]+$/i).withMessage("Invalid Content Parameter").bail().escape(),
@@ -466,17 +503,20 @@ exports.addPost = [
 			return;
 		}
 		//here may be have to check if post is already in db?
-
+		//  RETURNING content, post_id"
+		const addPostQuery = "INSERT INTO post(content, thread_id) VALUES ($1, $2) RETURNING post_id;"
 		db.task(async t => { //try to add to the db
 			const result = await t.one(addPostQuery, [req.body.content,req.body.thread_id]);
 			return result;
 		}).then (result => {
-			if ("content" in result) {
+			if ("post_id" in result) {
 				// return 200 if we successfully added the page
-				res.status(200).send(`Post inserted with content: "${result.content}" and post_id: ${result.post_id}`); 
+				// KEEP OLD CODE so I know how to format the string :D
+				// res.status(200).send(`Post inserted with content: "${result.content}" and post_id: ${result.post_id}`); 
+				res.status(200).send(result); 
 			} else {
 				// return 400 if we unsuccessfully added the page
-				res.status(400).send("Unable to insert the post");
+				res.status(400).send("Unable to create the post");
 			}
 		})
 		// We want to catch any exception else your program will crash :) have fun with that 
@@ -484,13 +524,9 @@ exports.addPost = [
 	}
 ];
 
-const getSpecificPostQuery = "SELECT * FROM post WHERE post_id = $1 AND thread_id = $2;";
-const deletePostQuery = "DELETE FROM post WHERE post_id = $1 AND thread_id=$2;";
-exports.deletePost = [
-	body('post_id').exists().withMessage("Missing Post Id Parameter").bail()
+exports.getPost = [
+	param('post_id').exists().withMessage("Missing Post Id Parameter").bail()
 	  .isInt().withMessage("Invalid Post Id Parameter").bail().escape(),
-	body('thread_id').exists().withMessage("Missing Thread Id Parameter").bail()
-	  .isInt().withMessage("Invalid Thread Id Parameter").bail().escape(),
 	async function (req, res, next) {
 		// First see if we have any errors
 		const errors = validationResult(req);
@@ -499,39 +535,24 @@ exports.deletePost = [
 			res.status(400).json({ errors: errors.array() });
 			return;
 		}
-		
-		runDeleteQuery(getSpecificPostQuery, deletePostQuery, [req.body.post_id, req.body.thread_id])
-		.then (result => {
-			if (result == null) {
-				res.status(404).send(`No post with post_id ${req.body.post_id} and thread_id: ${req.body.thread_id}`);
-			} else {
-				res.status(200).send();
-			}
-		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
-	}
-];
-
-const getPostQuery = "SELECT * FROM post WHERE thread_id = $1;";
-exports.getPosts = [
-	body('thread_id').exists().withMessage("Missing Thread Id Parameter").bail()
-	  .isInt().withMessage("Invalid Thread Id Parameter").bail().escape(),
-	async function (req, res, next) {
-		// First see if we have any errors
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			// If there are errors. We want to render form again with sanitized values/errors messages.
-			res.status(400).json({ errors: errors.array() });
-			return;
-		}
-		
+		let getPostQuery = "SELECT * FROM post WHERE post_id = $1;";
+	
 		db.task(async t => {
-			const result = await t.any(getPostQuery, [req.body.thread_id]);
+			let post_id = req.params.post_id;
+			const posts = await t.any(getPostQuery, [post_id]);
+			if (!posts[0]) {
+				res.status(400).send('Post not found');
+				return;
+			}
+			var result = {};
+			result = posts[0];
 			return result;
 		}).then (result => {
 			res.status(200).json(result)
 		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
 	}
 ];
+
 
 const updatePostQuery = "UPDATE post SET content=$1 WHERE post_id=$2 AND thread_id=$3 RETURNING thread_id, post_id;";
 exports.updatePost = [
@@ -565,6 +586,33 @@ exports.updatePost = [
 				res.status(200).send(`Contents of post ${result.post_id} of thread ${result.thread_id} updated`);
 			} else {
 				res.status(400).send("Unable to update the thread subject");
+			}
+		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+	}
+];
+
+const getSpecificPostQuery = "SELECT * FROM post WHERE post_id = $1 AND thread_id = $2;";
+const deletePostQuery = "DELETE FROM post WHERE post_id = $1 AND thread_id=$2;";
+exports.deletePost = [
+	body('post_id').exists().withMessage("Missing Post Id Parameter").bail()
+	  .isInt().withMessage("Invalid Post Id Parameter").bail().escape(),
+	body('thread_id').exists().withMessage("Missing Thread Id Parameter").bail()
+	  .isInt().withMessage("Invalid Thread Id Parameter").bail().escape(),
+	async function (req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+		
+		runDeleteQuery(getSpecificPostQuery, deletePostQuery, [req.body.post_id, req.body.thread_id])
+		.then (result => {
+			if (result == null) {
+				res.status(404).send(`No post with post_id ${req.body.post_id} and thread_id: ${req.body.thread_id}`);
+			} else {
+				res.status(200).send();
 			}
 		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
 	}
