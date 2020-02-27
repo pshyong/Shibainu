@@ -168,7 +168,7 @@ router.route('/v1/pages/Category')
      */
     .delete(db.deleteCategory)
 
-router.route('/v1/pages/subCategory/:sub_cat_id')
+router.route('/v1/pages/subCategory/:sub_cat_id?')
     /**
      * @swagger
      *
@@ -197,7 +197,7 @@ router.route('/v1/pages/subCategory/:sub_cat_id')
     /**
      * @swagger
      *
-     * /pages/subCategory/sub:
+     * /pages/subCategory:
      *   post:
      *     description: Create a new sub-category in the specified category
      *     tags:
@@ -205,7 +205,7 @@ router.route('/v1/pages/subCategory/:sub_cat_id')
      *     produces:
      *       - application/json
      *     parameters:
-     *       - name: sub_cat_id
+     *       - name: main_cat_id
      *         description: The id of the corresponding category to add to
      *         in: formData
      *         required: true
@@ -227,7 +227,7 @@ router.route('/v1/pages/subCategory/:sub_cat_id')
     /**
      * @swagger
      *
-     * /pages/subCategory/del:
+     * /pages/subCategory:
      *   delete:
      *     description: Delete the specified Subcategory
      *     tags:
