@@ -212,11 +212,11 @@ router.route('/v1/pages/Category')
      */
     .delete(db.deleteCategory)
 
-router.route('/v1/pages/subCategory')
+router.route('/v1/pages/subCategory/:sub_cat_id?')
     /**
      * @swagger
      *
-     * /pages/subCategory:
+     * /pages/subCategory/{sub_cat_id}:
      *   get:
      *     description: Get the all the subcategory associated to the subcategory
      *     tags:
@@ -224,9 +224,9 @@ router.route('/v1/pages/subCategory')
      *     produces:
      *       - application/json
      *     parameters:
-     *       - name: main_cat_id
+     *       - name: name
      *         description: The id of the corresponding subcategory
-     *         in: formData
+     *         in: path
      *         required: true
      *         type: integer
      *     responses:
