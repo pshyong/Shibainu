@@ -10,6 +10,7 @@ on:
       - master
       - develop
       - github-action
+	  - revert-23-revert-22-feature/SHIB-61
 
 jobs:
   build:
