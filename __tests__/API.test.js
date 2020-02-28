@@ -1,9 +1,21 @@
 const request = require('supertest');
 const app = require('../app');
-
+const shell = require('shelljs')
+const exec = require('child_process').exec;
 // ? Please take a look at
 // ? https://jestjs.io/docs/en/getting-started
 // ? https://github.com/visionmedia/supertest
+
+// Clearing database.
+// beforeAll(() => {
+// 	shell.exec('resetter.sh');
+// 	exec('./$PWD resetter', (error, stdout, stderr) => {
+// 		console.log(`ERROR! ${error}`)
+// 		console.log(`stdout: ${stdout}`);
+// 		console.log(`stderror: ${stderr}`);
+// 	})
+// })
+
 
 var subpage_id = -1
 
