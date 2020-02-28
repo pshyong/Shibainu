@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "./resetter && jest --detectOpenHandles --forceExit"
+    "test": "jest --detectOpenHandles --forceExit",
+    "build": "node testing"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

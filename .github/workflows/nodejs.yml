@@ -26,9 +26,10 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: bash resetter
+    - run: npm run-script build
     - run: npm install
     - run: npm run build --if-present
     - run: npm test
+    - run: npm run-script build
       env:
         CI: true
