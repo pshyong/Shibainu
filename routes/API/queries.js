@@ -96,14 +96,12 @@ exports.getPages = [
 		db.task(async t => {
 			
 			let subpage = await t.any(getSubpage, [req.params.page_id]);
-			console.log(subpage);
 			if (subpage.length == 0) {
 				return 404;
 			} else {
 				subpage = subpage[0];
 			}
 			let page_id = subpage["page_id"]
-			console.log(page_id);
 			
 			let page_d = subpage;
 			let cat_d = await t.any(getPagesCatQuery, [page_id]);
@@ -130,11 +128,10 @@ exports.getPages = [
 	}
 ];
 
-const getSpecificPageQuery = "SELECT * FROM Subpage WHERE page_id = $1;";
-const deletePageQuery = "DELETE FROM Subpage WHERE page_id=$1;";
+const getSpecificPageQuery = "SELECT * FROM Subpage WHERE LOWER(title) = LOWER($1)";
+const deletePageQuery = "DELETE FROM Subpage WHERE LOWER(title) = LOWER($1);";
 exports.deletePage= [
-	body('page_id').exists().withMessage("Missing Subpage Id Parameter").bail()
-	  .isInt().withMessage("Invalid Subpage Id Parameter").bail().escape(),
+	body('page_id').exists().withMessage("Missing Subpage Id Parameter").bail(),
 	async function (req, res, next) {
 		// First see if we have any errors
 		const errors = validationResult(req);
