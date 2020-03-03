@@ -22,11 +22,11 @@ router.route('/v1/pages/Page/:page_id')
      *     produces:
      *       - application/json
      *     parameters:
-     *       - name: page_id
+     *       - name: page_name
      *         description: The id of the subpage
      *         in: path
      *         required: true
-     *         type: integer
+     *         type: string
      *     responses:
      *       200:
      *         description: Successfully got the page

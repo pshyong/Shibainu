@@ -71,17 +71,23 @@
                 <div class="grid-cols-1">
 
                     <%if (locals.category) { %>
-                    <a href="/p/<%= name %>/"><span class="text-3xl lowercase">#</span><span
-                            class="uppercase text-3xl"><%= name %></span></a>
+                    <a href="/p/<%= locals.name %>/"><span class="text-3xl lowercase">#</span><span
+                            class="uppercase text-3xl"><%= locals.name %></span></a>
                     <span class="text-lg lowercase">/c/</span><span class="uppercase text-2xl"><a
-                            href="/p/<%= name %>/c/<%= category %>/"><%= category %></a></span>
-                    <% } else { %>
+                            href="/p/<%= locals.name %>/c/<%= locals.category %>/"><%= locals.category %></a></span>
+                    <% } else if (locals.page == 'subpage') { %>
                     <a href="./"><span class="text-3xl lowercase">#</span><span
-                            class="uppercase text-3xl"><%= name %></span></a>
+                            class="uppercase text-3xl"><%= locals.data['subpage']['title'] %></span></a>
+                    <% } else { %>
+                        <a href="./"><span class="text-3xl lowercase">#</span><span
+                            class="uppercase text-3xl"></span></a>
                     <% } %>
 
                 </div>
-                <span class="text-sm text-gray-300"><%= description %></span>
+                <% if (locals.page == 'subpage') { %>
+                    <span class="text-sm text-gray-300"><%= locals.data['subpage']['description'] %></span>
+                <% } %>
+                
             </div>
 
         </div>

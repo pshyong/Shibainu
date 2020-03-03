@@ -77,15 +77,9 @@ exports.addPage = [
 	}
 ];
 
-//const getPagesQuery = "SELECT * FROM subpage WHERE page_id = $1;";
-const getPagesCatQuery = "SELECT * FROM category WHERE page_id = $1;";
-const getPagesSubCatQuery = "SELECT * FROM subcategory WHERE main_cat_id = $1;";
 exports.getPages = [
 
-	param('page_id').exists().withMessage("Missing Page id Parameter").bail()
-	  .isInt().withMessage("Invalid Page Id Parameter").bail().escape(),
-
-
+	param('page_id').exists().withMessage("Missing Page id Parameter").bail(),
 
 	async function (req, res, next) {
 		// First see if we have any errors
@@ -95,24 +89,42 @@ exports.getPages = [
 			res.status(400).json({ errors: errors.array() });
 			return;
 		}
-		
+		let getSubpage = `SELECT * FROM subpage WHERE LOWER(title) = LOWER($1)`;
+		let getPagesCatQuery = "SELECT * FROM category WHERE page_id = $1;";
+		let getPagesSubCatQuery = "SELECT * FROM subcategory WHERE main_cat_id = $1;";
+
 		db.task(async t => {
+			
+			let subpage = await t.any(getSubpage, [req.params.page_id]);
+			console.log(subpage);
+			if (subpage.length == 0) {
+				return 404;
+			} else {
+				subpage = subpage[0];
+			}
+			let page_id = subpage["page_id"]
+			console.log(page_id);
+			
+			let page_d = subpage;
+			let cat_d = await t.any(getPagesCatQuery, [page_id]);
+			let subcat = await t.any(getPagesSubCatQuery, [page_id]);
 
-			const page_d = await t.any(getPagesQuery, [req.params.page_id]);
-			const cat_d = await t.any(getPagesCatQuery, [req.params.page_id]);
-
-			var result = {page_d,cat_d,subcat_d:[]}
+			let result = {"subpage": page_d , 'category': cat_d, 'sub_category': []}
 
 			//loop through each cat to get their sub cats
 			for (const element of cat_d) {
 				var temp = await t.any(getPagesSubCatQuery, [element.cat_id]);
-				result.subcat_d.push(temp);
+				result['sub_category'].push(temp);
 		
 			}
 
 			return result;
 
 		}).then (result => {
+			if (result === 404) {
+				res.status(404).send();
+				return;
+			}
 			res.status(200).json(result);
 		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
 	}
