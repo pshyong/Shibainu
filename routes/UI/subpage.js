@@ -1,5 +1,5 @@
 const express = require('express')
-// TODO: Get rid of moment since it wont be needed here anymore
+// TODO: Get rid of moment since it wont be needed here anymore, that is when everyone is also done the function as well
 const moment = require('moment');
 const router = express.Router({ mergeParams: true });
 const page = require('./page_func');
