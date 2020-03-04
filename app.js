@@ -77,6 +77,11 @@ app.use(
   })
 );
 
+// Global var for current user session id
+app.use((req, res, next) => {
+  res.locals.sessionId = req.session.id;
+});
+
 // Main paths
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
