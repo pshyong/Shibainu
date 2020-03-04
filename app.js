@@ -80,6 +80,7 @@ app.use(
 // Global var for current user session id
 app.use((req, res, next) => {
   res.locals.sessionId = req.session.id;
+  return next();
 });
 
 // Main paths
