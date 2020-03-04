@@ -1,6 +1,4 @@
-<% var description = 'I am a description for shibainu project'; %>
-<% var thread_title = 'A post is great' %>
-<% var date_posted = moment().format('Do MMMM, YYYY'); %>
+<% var description = "" %>
 <!DOCTYPE html>
 <html>
 
@@ -8,9 +6,8 @@
     <% include ../partials/head.ejs %>
 </head>
 
-<body class="min-h-screen bg-gray-400">
+<body onload="loadThread()" class="min-h-screen bg-gray-400">
     <% include ../partials/header.ejs %>
-
     <div class="flex text-gray-900 w-full h-full py-12 mx-auto">
         <div class="container mx-auto w-full">
             <!-- Defining the grid for the cateogies -->
@@ -19,86 +16,45 @@
                     <div>
                         <div class="container w-full">
                             <table class="w-full shadow-lg rounded">
-                                <div
+                                <div 
                                     class="px-4 py-2 border-b border-gray uppercase text-left bg-gray-300 text-gray-700 text-xl">
-                                    <%= thread_title %> <span class="font-normal text-gray-600 text-xs">by
-                                        Anonymous#1</span></div>
+                                    <div id="thread_title"> </div>
+                                    <span class="font-normal text-gray-600 text-xs">by
+                                        Anonymous</span></div>
                             </table>
+                         </div>
                             <!-- Start of post -->
-                            <table class="w-full shadow-lg rounded">
-                                <tbody class="bg-white">
-                                    
-                                    <tr class="accordion border-b border-grey-light hover:bg-gray-100">
-                                        <td></td>
-                                        <td class="items-center px-12">
-                                            <span class="w-full">
-                                                <img class="hidden mr-1 md:mr-2 md:inline-block h-16 w-16 rounded-full object-cover "
-                                                    src="https://cdn0.iconfinder.com/data/icons/user-63/512/399_Personal_Personalization_Profile_User-512.png"
-                                                    alt="" />
-                                            </span>
-                                            <span class="w-full">
-                                                <p class="md:hidden text-xs text-gray-600 font-medium">Anonymous#1</p>
-                                                <p class="hidden md:table-cell text-xs text-gray-500 font-medium">
-                                                    Anonymous#1</p>
-                                                <br>
-
-                                            </span>
-                                        </td>
-                                        <td class="hidden md:table-cell w-full p-4">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc nec nulla
-                                                sed urna laoreet auctor. Proin sodales orci fermentum, euismod dui in,
-                                                malesuada sapien. Class aptent taciti sociosqu ad litora torquent per
-                                                conubia nostra, per inceptos himenaeos. Nullam commodo eros id justo
-                                                malesuada, non tincidunt ipsum vehicula. Duis ut tortor ornare, pulvinar
-                                                sem nec, suscipit magna. Praesent eu finibus odio. Aliquam lacus enim,
-                                                vehicula id auctor at, vehicula at mi. Pellentesque mauris leo, cursus
-                                                eget nunc at, blandit lacinia lectus. Quisque imperdiet vulputate turpis
-                                                consectetur faucibus. Quisque a tempus ligula. In blandit odio ac urna
-                                                semper, vel consequat justo bibendum. Nunc iaculis mollis quam eu
-                                                laoreet. Nulla scelerisque egestas odio, hendrerit vestibulum tortor
-                                                congue vitae.
-
-                                                Cras non ante elementum, pellentesque lacus sit amet, aliquet velit.
-                                                Suspendisse fringilla aliquet vehicula. Cras quis ante eget augue
-                                                porttitor commodo et et leo. Mauris placerat dui eget diam consectetur
-                                                molestie. In volutpat sed metus eu fermentum. Maecenas pulvinar arcu nec
-                                                purus viverra, eget volutpat tortor lacinia. Phasellus pellentesque sit
-                                                amet lectus nec commodo. Maecenas tempus risus urna, sed tristique velit
-                                                pretium et. Proin quis ornare ex. Nunc venenatis velit magna, vitae
-                                                ultricies mauris sagittis eget. Sed posuere sem elit, sed hendrerit
-                                                felis mattis a. In at dolor odio. Nunc ornare ultrices orci et commodo.
-                                                Ut porttitor libero varius, sagittis sapien nec, aliquet ligula. Aliquam
-                                                finibus sagittis urna eget ultrices. Mauris faucibus cursus magna.</p>
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                    
-                                </tbody>
-                            </table>
-                            <div class="w-full shadow-lg bg-white text-right border-b-2">
-                                <p class="pl-1 text-xs text-gray-500 font-medium p-2">
-                                    Posted on: <%= date_posted %></p>
-                            </div>
+                         <div id="posts">
+                            
                             <!-- End of post -->
-                        </div>
+                         </div>
+                         
                         <!-- TODO: Use ejs to display the button based on which page you're at and how many there are-->
                         <!-- TODO: aka, some kind of loop-->
                         <div class="container w-full text-right">
                             <div class="inline-flex mt-2 xs:mt-0 ">
-                                <button
+                            	<button onclick="updatePage(1)"
+                                    class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">
+                                    First
+                                </button>
+                                <button onclick="incrementPage(-1)" id="prev_button" style="display:none"
                                     class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">
                                     Prev
                                 </button>
-                                <button
-                                    class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r">
-                                    1
-                                </button>
-                                <button
+                                
+                                <div id="pages">
+                                	
+                                </div>
+                                
+                                <button onclick="incrementPage(1)" id="next_button"
                                     class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r">
                                     Next
                                 </button>
+                                <button onclick="updatePage(max_page)"
+                                    class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">
+                                    Last
+                                </button>
                             </div>
-                        </div>
                         <!-- Start of new post field-->
                         <form>
                             <div class="container w-full shadow-lg bg-white mt-3 p-4">
@@ -124,5 +80,128 @@
 
     <% include ../partials/footer.ejs %>
 </body>
+
+<script>
+var page_num = 1
+var max_page = -1
+
+function loadThread() {
+  var xhttp = new XMLHttpRequest();
+  document.getElementById("posts").innerHTML = ""
+  
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      result = JSON.parse(this.responseText);
+      
+      document.getElementById("thread_title").innerHTML = result.subject
+       	  
+      <!-- TODO: change page limit to use .env -->
+      max_page = Math.ceil(result.number_of_posts / 25)
+      
+      console.log(max_page)
+      if (max_page == 1) {
+      	console.log("a")
+      	document.getElementById("next_button").style.display = "none";
+      }
+      
+      genratePagination()
+ 	  loadPosts(result.posts);
+    }
+  };
+  <!-- TODO: change localhost to actual DB server -->
+  xhttp.open("GET", "http://localhost:3000/api/v1/pages/Thread/" + <%= thread_id %> + "/1", false);
+  xhttp.send();
+}
+
+function updatePosts() {
+  var xhttp = new XMLHttpRequest();
+  document.getElementById("posts").innerHTML = ""
+  
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      result = JSON.parse(this.responseText);
+      genratePagination()
+ 	  loadPosts(result.posts);
+    }
+  };
+  <!-- TODO: change localhost to actual DB server -->
+  xhttp.open("GET", "http://localhost:3000/api/v1/pages/Thread/" + <%= thread_id %> + "/" + page_num, true);
+  xhttp.send();
+}
+
+function incrementPage(val) {
+	updatePage(page_num + val)
+}
+
+function updatePage(new_page) {
+	console.log(new_page)
+  page_num = new_page
+  
+  var next = document.getElementById("next_button");
+  var prev = document.getElementById("prev_button");
+    
+  if (page_num == max_page) {
+    next.style.display = "none";
+  } else if (next.style.display = "none") {
+    next.style.display = "initial";
+  }
+  
+  if (page_num == 1) {
+    prev.style.display = "none";
+  } else if (prev.style.display = "none") {
+    prev.style.display = "initial";
+  }
+  
+  updatePosts()
+}
+
+function genratePagination() {
+	  document.getElementById("pages").innerHTML = ""
+	  
+	  let button_num = 0
+      for (let i = page_num; i <= max_page; i++) {
+      	if (button_num > 4) {
+      		break
+      	}
+  		$('#pages').append(`<button onclick="updatePage(${i})" class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">
+                                    ${i}
+                                </button>`)
+	  }
+}
+
+function loadPosts(posts) {
+  $('#posts').append(
+	      $.map(posts, function (post) {
+	      var date = new Date(post.created);
+	      
+	      return `<table class="w-full shadow-lg rounded">
+			      	<tbody class="bg-white">
+			      		<tr class="accordion border-b border-grey-light hover:bg-gray-100">
+			      			<td></td>
+			      			<!-- TODO: Update username and picture when feature is added -->
+			      			<td class="items-center px-12">
+			      				<span class="w-full">
+			      					<img class="hidden mr-1 md:mr-2 md:inline-block h-16 w-16 rounded-full object-cover "
+			                        src="https://cdn0.iconfinder.com/data/icons/user-63/512/399_Personal_Personalization_Profile_User-512.png" alt="" />
+			                    </span>
+			                    <span class="w-full">
+			                    	<p class="md:hidden text-xs text-gray-600 font-medium">Anonymous</p>
+									<p class="hidden md:table-cell text-xs text-gray-500 font-medium"> Anonymous</p>
+			                        <br>
+								</span>
+							</td>
+							<td class="hidden md:table-cell w-full p-4">
+								<p>${post.content}</p>
+			                </td>
+			                <td></td>
+			            </tr>
+			        </tbody>
+			       </table>
+			       <div class="w-full shadow-lg bg-white text-right border-b-2">
+			       	<p class="pl-1 text-xs text-gray-500 font-medium p-2">Posted on: ${date.toDateString()} ${date.toLocaleTimeString()}</p>
+			       </div>`
+	}).join("\n"));
+}
+</script>
 
 </html>

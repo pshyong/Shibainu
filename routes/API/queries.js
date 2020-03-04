@@ -3,6 +3,10 @@
 
 // Constants that we should be using to grab both our configuration
 // and express sanitization/validator
+require('dotenv').config();
+
+const post_limit = process.env.POST_LIMIT
+
 const db = require('../../config')
 const express = require('express')
 
@@ -390,6 +394,11 @@ exports.getThread = [
 	.isInt()
 	.withMessage("Missing Thread Id Parameter").bail()
 	.withMessage("Invalid Thread Id Parameter").bail().escape(),
+	param('page_num')
+	.exists()
+	.isInt()
+	.withMessage("Missing Page Number Parameter").bail()
+	.withMessage("Invalid Page Number Parameter").bail().escape(),
 	async function (req, res, next) {
 		// First see if we have any errors
 		const errors = validationResult(req);
@@ -399,12 +408,13 @@ exports.getThread = [
 			return;
 		}
 		let getThreadQuery = "SELECT * FROM thread  WHERE thread_id = $1;";
-		let getPostsQuery = "SELECT * FROM post WHERE thread_id = $1;";
+		let getPostsQuery = `SELECT * FROM post WHERE thread_id = $1 limit ${post_limit} offset $2;`;
 
 		db.task(async t => {
 			let thread_id = req.params.thread_id;
+			let offset = (req.params.page_num - 1) * post_limit
 			const thread = await t.any(getThreadQuery, [thread_id]);
-			const posts = await t.any(getPostsQuery, [thread_id]);
+			const posts = await t.any(getPostsQuery, [thread_id, offset]);
 			var result = {};
 			if (!thread[0]) {
 				res.status(400).send('Thread not found');
