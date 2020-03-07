@@ -9,6 +9,6 @@ CREATE TABLE thread (
     active_state boolean  NOT NULL DEFAULT TRUE,
     number_of_views int default 0,
     number_of_posts int default 0,
-    session_id VARCHAR(50) NULL,
+    session_id VARCHAR(50) NOT NULL,
     sub_cat_id SERIAL REFERENCES subcategory(sub_cat_id)
 );
