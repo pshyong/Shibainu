@@ -3,6 +3,7 @@ CREATE SCHEMA public;
 GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO public;
 
+
 DROP TABLE IF EXISTS user_account, post, thread, subcategory, category, subpage;
 
 CREATE TABLE IF NOT EXISTS Subpage (
@@ -61,3 +62,11 @@ CREATE TABLE IF NOT EXISTS User_account (
     username varchar(20) UNIQUE NOT NULL,
     user_account_id serial PRIMARY KEY
 );
+GRANT ALL ON SCHEMA public TO csc301;
+GRANT ALL PRIVILEGES ON TABLE Subpage TO csc301;
+GRANT ALL PRIVILEGES ON TABLE Category TO csc301;
+GRANT ALL PRIVILEGES ON TABLE Subcategory TO csc301;
+GRANT ALL PRIVILEGES ON TABLE thread TO csc301;
+GRANT ALL PRIVILEGES ON TABLE post TO csc301;
+GRANT ALL PRIVILEGES ON TABLE user_account TO csc301;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO csc301;
