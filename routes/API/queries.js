@@ -393,6 +393,9 @@ exports.addThread = [
 	}
 ];
 
+// Get timestamp in ms:
+let timestamp = Date.now();
+
 exports.getThread = [
 	param('thread_id')
 	.exists()
