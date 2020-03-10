@@ -6,26 +6,15 @@ const exec = require('child_process').exec;
 // ? https://jestjs.io/docs/en/getting-started
 // ? https://github.com/visionmedia/supertest
 
-// Clearing database.
-// beforeAll(() => {
-// 	shell.exec('resetter.sh');
-// 	exec('./$PWD resetter', (error, stdout, stderr) => {
-// 		console.log(`ERROR! ${error}`)
-// 		console.log(`stdout: ${stdout}`);
-// 		console.log(`stderror: ${stderr}`);
-// 	})
-// })
-
-
 var subpage_id = -1
 
 describe('Page API POST tests', () => {
   it('Should get a 200 status code', async (done) => {
     const res = await request(app)
     .post('/api/v1/pages/Page/page')
-    .send({title: "Page POST API test"})
+    .send({title: "CSC304"})
 	expect(res.statusCode).toEqual(200)
-	subpage_id = res.body.page_id
+	subpage_id = res.body['page_id']
     done()
   })
 })
@@ -34,11 +23,12 @@ describe('Page API POST tests', () => {
 describe('Page API GET tests', () => {  
   it('Should get a 200 status code and "Page POST API test" title', async (done) => {
     const res = await request(app)
-    .get('/api/v1/pages/Page/' + subpage_id)
+    .get('/api/v1/pages/Page/' + "CSC304")
     .send()
     
-    expect(res.statusCode).toEqual(200)
-    expect(res.body.page_d[0].title).toEqual('Page POST API test')
+	expect(res.statusCode).toEqual(200)
+	
+    expect(res.body.subpage.title).toEqual('CSC304')
 
     done()
   })
@@ -249,7 +239,7 @@ describe('DELETE API error tests', () => {
 	it('Should get a 404 status code', async (done) => {
 		const res = await request(app)
 		.delete('/api/v1/pages/Page/page')
-	    .send({page_id: -1})
+	    .send({page_id: "CSC301"})
 	    expect(res.statusCode).toEqual(404)
 	    done()
 	})
@@ -341,16 +331,15 @@ describe('Category API DELETE tests', () => {
 describe('Page API DELETE tests', () => {  
 	it('Should get a 200 status code', async (done) => {
 	   const res = await request(app)
-		.delete('/api/v1/pages/Page/page')
-	    .send({page_id: subpage_id})
+		.delete('/api/v1/pages/Page/CSC304')
+	    .send({page_id: "CSC304"})
 	    expect(res.statusCode).toEqual(200)
 	    
 	   const res2 = await request(app)
-	   .get('/api/v1/pages/Page/' + subpage_id)
+	   .get('/api/v1/pages/Page/' + "CSC304")
 	   .send()
 	    
-	   expect(res2.statusCode).toEqual(200)
-	   expect(res2.body.page_d.length).toEqual(0)
+	   expect(res2.statusCode).toEqual(404)
 	   done()
 	 })
 })
