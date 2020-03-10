@@ -463,7 +463,6 @@ exports.addThread = [
     .exists()
     .withMessage('Missing Subject Parameter')
     .bail()
-    .matches(/^[a-zA-Z0-9 ]+$/i)
     .withMessage('Invalid Subject Parameter')
     .bail()
     .escape(),
@@ -591,7 +590,6 @@ exports.updateThread = [
     .exists()
     .withMessage('Missing Subject Parameter')
     .bail()
-    .matches(/^[a-zA-Z0-9 ]+$/i)
     .withMessage('Invalid Subject Parameter')
     .bail()
     .escape(),
@@ -683,7 +681,6 @@ exports.addPost = [
     .exists()
     .withMessage('Missing Content Parameter')
     .bail()
-    .matches(/^[a-zA-Z0-9 ]+$/i)
     .withMessage('Invalid Content Parameter')
     .bail()
     .escape(),
