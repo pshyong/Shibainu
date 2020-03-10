@@ -16,13 +16,13 @@ CREATE TABLE IF NOT EXISTS Category (
     cat_id SERIAL PRIMARY KEY,
     subject varchar(100)  NOT NULL,
     created timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    page_id SERIAL REFERENCES subpage(page_id)
+    page_id SERIAL REFERENCES subpage(page_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Subcategory (
     sub_cat_id SERIAL PRIMARY KEY,
     created timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    main_cat_id SERIAL REFERENCES Category(cat_id),
+    main_cat_id SERIAL REFERENCES Category(cat_id) ON DELETE CASCADE,
     subject VARCHAR(100) NOT NULL
 );
 
@@ -37,7 +37,7 @@ CREATE TABLE thread (
     number_of_views int default 0,
     number_of_posts int default 0,
     session_id VARCHAR(50) NOT NULL,
-    sub_cat_id SERIAL REFERENCES subcategory(sub_cat_id)
+    sub_cat_id SERIAL REFERENCES subcategory(sub_cat_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Post (
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS Post (
     upvotes int  NOT NULL DEFAULT 0,
     downvotes int NOT NULL DEFAULT 0,
     session_id VARCHAR(50) NOT NULL,
-    thread_id SERIAL REFERENCES thread(thread_id),
+    thread_id SERIAL REFERENCES thread(thread_id) ON DELETE CASCADE,
     PRIMARY KEY(post_id, thread_id)
 );
 

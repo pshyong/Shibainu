@@ -1,7 +1,7 @@
 const request = require('supertest');
 const app = require('../app');
-const shell = require('shelljs')
-const exec = require('child_process').exec;
+// const shell = require('shelljs')
+// const exec = require('child_process').exec;
 // ? Please take a look at
 // ? https://jestjs.io/docs/en/getting-started
 // ? https://github.com/visionmedia/supertest
@@ -180,37 +180,6 @@ describe('Post API PUT tests', () => {
 
 // Starting of error testing
 describe('DELETE API error tests', () => {
-	it('Should get a 500 status code', async (done) => {
-		const res = await request(app)
-		.delete('/api/v1/pages/Thread')
-	    .send({thread_id: thread_id})
-	    expect(res.statusCode).toEqual(500)
-	    done()
-	})
-	
-	it('Should get a 500 status code', async (done) => {
-		const res = await request(app)
-		.delete('/api/v1/pages/subCategory')
-	    .send({sub_cat_id: subcategory_id})
-	    expect(res.statusCode).toEqual(500)
-	    done()
-	})
-	
-	it('Should get a 500 status code', async (done) => {
-		const res = await request(app)
-		.delete('/api/v1/pages/Category')
-	    .send({cat_id: category_id})
-	    expect(res.statusCode).toEqual(500)
-	    done()
-	})
-	
-	it('Should get a 500 status code', async (done) => {
-		const res = await request(app)
-		.delete('/api/v1/pages/Page/page')
-	    .send({page_id: subpage_id})
-	    expect(res.statusCode).toEqual(500)
-	    done()
-	})
 	
 	it('Should get a 404 status code', async (done) => {
 		const res = await request(app)
