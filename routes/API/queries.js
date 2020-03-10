@@ -463,7 +463,6 @@ exports.addThread = [
     .exists()
     .withMessage('Missing Subject Parameter')
     .bail()
-    .matches(/^[a-zA-Z0-9 ]+$/i)
     .withMessage('Invalid Subject Parameter')
     .bail()
     .escape(),
@@ -487,55 +486,47 @@ exports.addThread = [
   async function(req, res, next) {
     //see if we have any errors
     const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      // if there are errors, we return 400
-      res.status(400).json({ errors: errors.array() });
-      return;
-    }
-    let addThreadQuery =
-      'INSERT INTO thread(subject, sub_cat_id, session_id) VALUES ($1, $2, $3) RETURNING thread_id, subject';
-    db.task(async t => {
-      const thread = await t.one(addThreadQuery, [
-        req.body.subject,
-        req.body.sub_cat_id,
-        req.session.id
-      ]);
-      return thread;
-    })
-      .then(thread => {
-        if ('thread_id' in thread) {
-          thread_id = thread.thread_id;
-          const addPostQuery =
-            'INSERT INTO post(content, thread_id) VALUES ($1, $2) RETURNING post_id, content;';
-          db.task(async t => {
-            const post = await t.one(addPostQuery, [
-              req.body.content,
-              thread_id
-            ]);
-            return post;
-          }).then(post => {
-            if ('post_id' in post) {
-              result = {};
-              result.thread = thread;
-              result.post = post;
-              res.status(200).send(result);
-            }
-            // If post was not created
-            else {
-              res.status(400).send('Unable to create a post after the thread');
-            }
-          });
-          // if thread was not created
-        } else {
-          res.status(400).send('Unable to create a thread');
-        }
-      })
-      .catch(e => {
-        res.status(500);
-        res.send(sendError(500, '/api' + req.url + ' error ' + e));
-      });
-  }
+	if (!errors.isEmpty()) {
+		// if there are errors, we return 400
+		res.status(400).json({ errors: errors.array() });
+		return;
+	}
+	
+	result = {}
+	
+	let addThreadQuery = 'INSERT INTO thread(subject, sub_cat_id, session_id) VALUES ($1, $2, $3) RETURNING thread_id, subject';
+	const addPostQuery = 'INSERT INTO post(content, thread_id, session_id) VALUES ($1, $2, $3) RETURNING post_id, content;';
+	
+	console.log(req.session)
+	db.task(async t => {
+		return await t.one(addThreadQuery, [req.body.subject, req.body.sub_cat_id, req.session.id])
+					   .then(thread => {
+						   if ("thread_id" in thread) {
+							   thread_id = thread.thread_id;
+							   result.thread = thread;
+							   return t.one(addPostQuery, [req.body.content, thread_id, req.session.id])
+							    	   .then(post => {
+							    		   if ("post_id" in post) {
+							    			   result.post = post;
+							    			   return result;
+							    		   } else {
+							    			   dbError = "Unable to create a post after the thread"
+							    			   return null;
+							    		   }
+							    	   }).catch(e => {throw e})	;
+						   } else {
+							   return null
+						   }
+					   }).catch(e => {throw e})	
+					   
+	}).then (result => {
+		if (result == null) {
+			res.status(400).send(dbError);
+		} else {
+			res.status(200).send(result);
+		}
+	}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+	}
 ];
 
 exports.getThread = [
@@ -599,7 +590,6 @@ exports.updateThread = [
     .exists()
     .withMessage('Missing Subject Parameter')
     .bail()
-    .matches(/^[a-zA-Z0-9 ]+$/i)
     .withMessage('Invalid Subject Parameter')
     .bail()
     .escape(),
@@ -691,7 +681,6 @@ exports.addPost = [
     .exists()
     .withMessage('Missing Content Parameter')
     .bail()
-    .matches(/^[a-zA-Z0-9 ]+$/i)
     .withMessage('Invalid Content Parameter')
     .bail()
     .escape(),
@@ -703,7 +692,6 @@ exports.addPost = [
     .withMessage('Invalid Thread Id Parameter')
     .bail()
     .escape(),
-
   async function(req, res, next) {
     //see if we have any errors
     const errors = validationResult(req);
@@ -716,7 +704,8 @@ exports.addPost = [
     //here may be have to check if post is already in db?
     //  RETURNING content, post_id"
     const addPostQuery =
-      'INSERT INTO post(content, thread_id, session_id) VALUES ($1, $2, $3) RETURNING post_id;';
+   	 "UPDATE thread SET number_of_posts=(number_of_posts + 1) WHERE thread_id = $2;" + 
+	 "INSERT INTO post(content, thread_id, session_id) VALUES ($1, $2, $3) RETURNING post_id;";
     db.task(async t => {
       //try to add to the db
       const result = await t.one(addPostQuery, [
