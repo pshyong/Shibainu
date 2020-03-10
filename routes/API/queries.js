@@ -496,7 +496,7 @@ exports.addThread = [
 	result = {}
 	
 	let addThreadQuery = 'INSERT INTO thread(subject, sub_cat_id, session_id) VALUES ($1, $2, $3) RETURNING thread_id, subject';
-	const addPostQuery = 'INSERT INTO post(content, thread_id) VALUES ($1, $2) RETURNING post_id, content;';
+	const addPostQuery = 'INSERT INTO post(content, thread_id, session_id) VALUES ($1, $2, $3) RETURNING post_id, content;';
 	
 	console.log(req.session)
 	db.task(async t => {
@@ -505,7 +505,7 @@ exports.addThread = [
 						   if ("thread_id" in thread) {
 							   thread_id = thread.thread_id;
 							   result.thread = thread;
-							   return t.one(addPostQuery, [req.body.content,thread_id])
+							   return t.one(addPostQuery, [req.body.content, thread_id, req.session.id])
 							    	   .then(post => {
 							    		   if ("post_id" in post) {
 							    			   result.post = post;
