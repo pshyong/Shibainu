@@ -3,11 +3,19 @@
 
 // Constants that we should be using to grab both our configuration
 // and express sanitization/validator
-const db = require('../../config');
-const express = require('express');
+require('dotenv').config();
 
-const { body, param, validationResult } = require('express-validator');
+const post_limit = process.env.POST_LIMIT
 
+const db = require('../../config')
+const express = require('express')
+
+const {
+  body,
+	param,
+	validationResult
+} = require('express-validator');
+ 
 function sendJSON(statusCode, payload) {
   return JSON.stringify({ status_code: statusCode, payload: payload });
 }
@@ -531,51 +539,49 @@ exports.addThread = [
 ];
 
 exports.getThread = [
-  param('thread_id')
-    .exists()
-    .isInt()
-    .withMessage('Missing Thread Id Parameter')
-    .bail()
-    .withMessage('Invalid Thread Id Parameter')
-    .bail()
-    .escape(),
-  async function(req, res, next) {
-    // First see if we have any errors
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      // If there are errors. We want to render form again with sanitized values/errors messages.
-      res.status(400).json({ errors: errors.array() });
-      return;
-    }
-    let getThreadQuery = 'SELECT * FROM thread  WHERE thread_id = $1;';
-    let getPostsQuery = 'SELECT * FROM post WHERE thread_id = $1;';
+	param('thread_id')
+	.exists()
+	.isInt()
+	.withMessage("Missing Thread Id Parameter").bail()
+	.withMessage("Invalid Thread Id Parameter").bail().escape(),
+	param('page_num')
+	.exists()
+	.isInt()
+	.withMessage("Missing Page Number Parameter").bail()
+	.withMessage("Invalid Page Number Parameter").bail().escape(),
+	async function (req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+		let getThreadQuery = "SELECT * FROM thread  WHERE thread_id = $1;";
+		let getPostsQuery = `SELECT * FROM post WHERE thread_id = $1 limit ${post_limit} offset $2;`;
 
-    db.task(async t => {
-      let thread_id = req.params.thread_id;
-      const thread = await t.any(getThreadQuery, [thread_id]);
-      const posts = await t.any(getPostsQuery, [thread_id]);
-      var result = {};
-      if (!thread[0]) {
-        res.status(400).send('Thread not found');
-        return;
-      }
-      // A thread must've been created with at least one post, hence we also check for post.
-      if (!posts[0]) {
-        res.status(400).send('Post not found');
-        return;
-      }
-      result = thread[0];
-      result.posts = posts;
-      return result;
-    })
-      .then(result => {
-        res.status(200).json(result);
-      })
-      .catch(e => {
-        res.status(500);
-        res.send(sendError(500, '/api' + req.url + ' error ' + e));
-      });
-  }
+		db.task(async t => {
+			let thread_id = req.params.thread_id;
+			let offset = (req.params.page_num - 1) * post_limit
+			const thread = await t.any(getThreadQuery, [thread_id]);
+			const posts = await t.any(getPostsQuery, [thread_id, offset]);
+			var result = {};
+			if (!thread[0]) {
+				res.status(400).send('Thread not found');
+				return;
+			}
+			// A thread must've been created with at least one post, hence we also check for post.
+			if (!posts[0]) {
+				res.status(400).send('Post not found');
+				return;
+			}
+			result = thread[0]; 
+			result.posts = posts;
+			return result;
+		}).then (result => {
+			res.status(200).json(result)
+		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
+	}
 ];
 
 const updateThreadQuery =
