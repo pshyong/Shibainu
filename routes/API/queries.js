@@ -592,9 +592,9 @@ exports.getThread = [
       var result = {};
       var diff = getTimeUntilVisible(thread[0].created);
 
-      if (diff > 0) {
+      if (diff > 0 && thread[0].user_account_id == 0) {
         result.thread_id = thread[0].thread_id;
-        result.delayed = `${diff} minutes until thread is visible`
+        result.delayed = `${diff} minutes left until thread is visible`
         return result;
       }
       
@@ -606,6 +606,7 @@ exports.getThread = [
       }
 
       for (i = 0; i < posts.length; i++) {
+        if (posts[i].user_account_id != 0) continue;
         diff = getTimeUntilVisible(posts[i].created);
         var temp = {};
         temp.post_id = posts[i].post_id;
