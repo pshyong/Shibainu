@@ -7,7 +7,7 @@ function asdf(page_name){
 
 	
     $.post( "http://localhost:3000/api/v1/pages/thread", {sub_cat_id,subject,content } );
-
+    window.location.href = "http://localhost:3000/p/"+page_name;
 
 }
 
