@@ -301,7 +301,7 @@ router.route('/v1/pages/subCategory/:sub_cat_id?/:page_num?')
      */
     .delete(db.deleteSubCategory)
 
-router.route('/v1/pages/thread/:thread_id?')
+router.route('/v1/pages/thread/:thread_id?/:page_num?')
     /**
      * @swagger
      *
@@ -341,7 +341,7 @@ router.route('/v1/pages/thread/:thread_id?')
     /**
      * @swagger
      *
-     * /pages/thread/{thread_id}:
+     * /pages/thread/{thread_id}/{page_num}:
      *   get:
      *     description: Get the specified thread with its child posts
      *     tags:
@@ -351,6 +351,11 @@ router.route('/v1/pages/thread/:thread_id?')
      *     parameters:
      *       - name: thread_id
      *         description: The id of the corresponding thread
+     *         in: path
+     *         required: true
+     *         type: integer
+     *       - name: page_num
+     *         description: The current page number the user is at
      *         in: path
      *         required: true
      *         type: integer

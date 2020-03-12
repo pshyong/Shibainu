@@ -16,9 +16,9 @@ router.route('/c/:cat_name/post-thread')
         res.render('pages/newthread', { title: 'shibainu | subpage', name: req.params.name, category: req.params.cat_name, moment: moment});
 });
 
-router.route('/c/:cat_name/threads/:thread_name/?')
+router.route('/c/:cat_name/threads/:thread_name/:thread_id/?')
     .get(function(req, res) {
-        res.render('pages/threads', { title: 'shibainu | subpage', name: req.params.name, category: req.params.cat_name, moment: moment});
+        res.render('pages/threads', { title: 'shibainu | thread', thread_id: req.params.thread_id, name: req.params.name, category: req.params.cat_name, moment: moment});
 });
 
 

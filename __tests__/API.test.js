@@ -1,7 +1,7 @@
 const request = require('supertest');
 const app = require('../app');
-const shell = require('shelljs')
-const exec = require('child_process').exec;
+// const shell = require('shelljs')
+// const exec = require('child_process').exec;
 // ? Please take a look at
 // ? https://jestjs.io/docs/en/getting-started
 // ? https://github.com/visionmedia/supertest
@@ -110,7 +110,7 @@ describe('Thread API POST tests', () => {
 describe('Thread API GET tests', () => {
 	it('Should get a 200 status code, "Thread POST API test" subject, and "Thread POST API Test Post Content" post content', async (done) => {
 		const res = await request(app)
-			.get(`/api/v1/pages/thread/${thread_id}`)
+			.get(`/api/v1/pages/thread/${thread_id}/1`)
 		expect(res.statusCode).toEqual(200)
 
 		expect(res.body.subject).toEqual('Thread POST API test')
@@ -127,7 +127,7 @@ describe('Thread API PUT tests', () => {
 			.send({ subject: "Thread PUT API test", thread_id: thread_id })
 		expect(res.statusCode).toEqual(200)
 		const res2 = await request(app)
-			.get(`/api/v1/pages/thread/${thread_id}`)
+			.get(`/api/v1/pages/thread/${thread_id}/1`)
 		expect(res2.statusCode).toEqual(200)
 		expect(res2.body.subject).toEqual('Thread PUT API test')
 		expect(res2.body.thread_id).toEqual(thread_id)
@@ -180,37 +180,6 @@ describe('Post API PUT tests', () => {
 
 // Starting of error testing
 describe('DELETE API error tests', () => {
-	it('Should get a 500 status code', async (done) => {
-		const res = await request(app)
-		.delete('/api/v1/pages/Thread')
-	    .send({thread_id: thread_id})
-	    expect(res.statusCode).toEqual(500)
-	    done()
-	})
-	
-	it('Should get a 500 status code', async (done) => {
-		const res = await request(app)
-		.delete('/api/v1/pages/subCategory')
-	    .send({sub_cat_id: subcategory_id})
-	    expect(res.statusCode).toEqual(500)
-	    done()
-	})
-	
-	it('Should get a 500 status code', async (done) => {
-		const res = await request(app)
-		.delete('/api/v1/pages/Category')
-	    .send({cat_id: category_id})
-	    expect(res.statusCode).toEqual(500)
-	    done()
-	})
-	
-	it('Should get a 500 status code', async (done) => {
-		const res = await request(app)
-		.delete('/api/v1/pages/Page/page')
-	    .send({page_id: subpage_id})
-	    expect(res.statusCode).toEqual(500)
-	    done()
-	})
 	
 	it('Should get a 404 status code', async (done) => {
 		const res = await request(app)
@@ -270,7 +239,7 @@ describe('Thread API DELETE tests', () => {
 
 		// First we find and delete the last post
 		const post = await request(app)
-			.get(`/api/v1/pages/thread/${thread_id}`)
+			.get(`/api/v1/pages/thread/${thread_id}/1`)
 		expect(post.statusCode).toEqual(200)
 		// console.log(`Delete thread API ${post.body.posts[0].post_id}`);
 		post_id = post.body.posts[0].post_id;
@@ -286,7 +255,7 @@ describe('Thread API DELETE tests', () => {
 		expect(res.statusCode).toEqual(200)
 
 		const res2 = await request(app)
-			.get(`/api/v1/pages/thread/${thread_id}`)
+			.get(`/api/v1/pages/thread/${thread_id}/1`)
 		expect(res2.statusCode).toEqual(400)
 		done()
 	})

@@ -19,7 +19,7 @@ function loadCategory(id) {
       	document.getElementById("next_button").style.display = "none";
       }
 
-      genratePagination()
+      c_genratePagination()
  	  loadThreads(result.Threads);
     }
   };
@@ -35,7 +35,7 @@ function updateThreads() {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       result = JSON.parse(this.responseText);
-      genratePagination()
+      c_genratePagination()
  	  loadThreads(result.Threads);
     }
   };
@@ -75,7 +75,7 @@ function updatePage(new_page) {
   updateThreads()
 }
 
-function genratePagination() {
+function c_genratePagination() {
 	  document.getElementById("threads").innerHTML = ""
 
 	  let button_num = 0
@@ -111,7 +111,7 @@ function loadThreads(threads) {
                      
                       <span class="py-3 w-full pl-2">
                       
-                          <a href="./threads/${thread.subject}/${thread.thread_id}/1" class="text-gray-800 text-sm">${thread.subject}</a>
+                          <a href="./threads/${thread.subject}/${thread.thread_id}" class="text-gray-800 text-sm">${thread.subject}</a>
                           <p class="md:hidden text-xs text-gray-600 font-medium">Anonymous#1</p>
                           <p class="hidden md:table-cell text-xs text-gray-500 font-medium">
                               Anonymous#1</p>
