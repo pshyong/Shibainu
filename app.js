@@ -7,6 +7,10 @@ const logger = require('morgan');
 const sassMiddleware = require('node-sass-middleware');
 const session = require('express-session');
 const favicon = require('serve-favicon');
+
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const db = require('./config');
 require('dotenv').config();
 
 const indexRouter = require('./routes/index');
@@ -67,6 +71,51 @@ app.use(
 app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Passport
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(
+  new LocalStrategy((username, password, done) => {
+    console.log('Login process:', username);
+    return db
+      .one(
+        'SELECT user_account_id, username ' +
+          'FROM User_account ' +
+          'WHERE username=$1 AND hashed_password=$2',
+        [username, password]
+      )
+      .then(result => {
+        return done(null, result);
+      })
+      .catch(err => {
+        console.error('/login: ' + err);
+        // { message: 'Wrong user name or password' }
+        return done(null, false);
+      });
+  })
+);
+
+passport.serializeUser((user, done) => {
+  log.debug('serialize ', user);
+  done(null, user.user_id);
+});
+
+passport.deserializeUser((id, done) => {
+  log.debug('deserualize ', id);
+  db.one(
+    'SELECT user_account_id, username, FROM User_account ' +
+      'WHERE user_account_id = $1',
+    [id]
+  )
+    .then(user => {
+      //log.debug("deserializeUser ", user);
+      done(null, user);
+    })
+    .catch(err => {
+      done(new Error(`User with the id ${id} does not exist`));
+    });
+});
 
 // Express Session
 app.use(
