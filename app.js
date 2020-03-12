@@ -15,6 +15,7 @@ require('dotenv').config();
 
 const indexRouter = require('./routes/index');
 const apiRouter = require('./routes/API/api');
+const userRouter = require('./routes/users');
 const app = express();
 
 const swaggerJSDoc = require('swagger-jsdoc');
@@ -76,24 +77,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(
-  new LocalStrategy((username, password, done) => {
-    console.log('Login process:', username);
-    return db
-      .one(
-        'SELECT user_account_id, username ' +
-          'FROM User_account ' +
-          'WHERE username=$1 AND hashed_password=$2',
-        [username, password]
-      )
-      .then(result => {
+  new LocalStrategy(
+    { usernameField: 'email' },
+    async (username, password, done) => {
+      console.log('Login process:', username);
+      try {
+        const result = await db.one(
+          'SELECT user_account_id, username ' +
+            'FROM User_account ' +
+            'WHERE username=$1 AND hashed_password=$2',
+          [username, password]
+        );
         return done(null, result);
-      })
-      .catch(err => {
+      } catch (err) {
         console.error('/login: ' + err);
         // { message: 'Wrong user name or password' }
         return done(null, false);
-      });
-  })
+      }
+    }
+  )
 );
 
 passport.serializeUser((user, done) => {
@@ -135,6 +137,7 @@ app.use((req, res, next) => {
 // Main paths
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
+app.use('/', userRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
