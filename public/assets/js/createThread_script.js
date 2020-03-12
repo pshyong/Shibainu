@@ -14,7 +14,7 @@ function asdf(page_name){
 function getCats(page_name){
 
    var xmlHttp = new XMLHttpRequest();
-   xmlHttp.open( "GET", "http://localhost:3000/api/v1/pages/Page/" + page_name, false ); // false for synchronous request
+   xmlHttp.open( "GET", "http://localhost:3000/api/v1/pages/Page/" + page_name, false ); 
    xmlHttp.send( null );
 
    var res = JSON.parse(xmlHttp.responseText);
