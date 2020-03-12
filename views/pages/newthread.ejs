@@ -37,10 +37,12 @@
                     </div>
                     <div class="md:w-2/3">
                         <select name="" class="form-select block w-full focus:bg-white" id="category">
+                            <script>"getCats('<%= locals.name %>')"</script>
                             <option value="Announcements">Current - Announcements</option>
                             <option value="Testing1">Testing1</option>
                             <option value="Testing2">Testing2</option>
                             <option value="Testing3">Testing3</option>
+                            <option value="Testing4"><%= locals.name %></option>
                         </select>
 
                         <p class="py-2 text-sm text-gray-600">Which category to post in?</p>
@@ -62,7 +64,7 @@
                 <div class="md:flex md:items-center">
                     <div class="md:w-1/3"></div>
                     <div class="md:w-2/3 text-right">
-                        <button class="h-10 col-start-4 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" onclick="asdf()" type="button">
+                        <button class="h-10 col-start-4 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" onclick="asdf( '<%= locals.name %>')" type="button">
                             Post thread
                         </button>
                     </div>
