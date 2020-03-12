@@ -16,11 +16,8 @@ function getCats(page_name){
    var xmlHttp = new XMLHttpRequest();
    xmlHttp.open( "GET", "http://localhost:3000/api/v1/pages/Page/Jason", false ); // false for synchronous request
    xmlHttp.send( null );
-   console.log(xmlHttp.responseText)
 
    var res = JSON.parse(xmlHttp.responseText);
-   console.log(res.sub_category[0])
-   console.log(res.sub_category[0].length)
 
    var i;
    for(i =0; i < res.sub_category.length ; i++){

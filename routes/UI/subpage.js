@@ -22,7 +22,7 @@ router.route('/c/:cat_name/post-thread/?')
         res.render('pages/newthread', { title: 'shibainu | subpage', name: req.params.name, category: req.params.cat_name, moment: moment});
 });
 
-router.route('/c/:cat_name/threads/:thread_name/?')
+router.route('/c/:cat_name/threads/:thread_name/:thread_id/?')
     .get(function(req, res) {
         if (!req.url.endsWith('/')) {
             res.redirect(301, req.originalUrl + '/')
