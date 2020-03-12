@@ -36,16 +36,12 @@
                         </label>
                     </div>
                     <div class="md:w-2/3">
-                        <select name="" class="form-select block w-full focus:bg-white" id="category">
-                            <script>"getCats('<%= locals.name %>')"</script>
-                            <option value="Announcements">Current - Announcements</option>
-                            <option value="Testing1">Testing1</option>
-                            <option value="Testing2">Testing2</option>
-                            <option value="Testing3">Testing3</option>
-                            <option value="Testing4"><%= locals.name %></option>
+                        <select name="" class="form-select block w-full focus:bg-white" id="category" onclick="getCats('<%= locals.name %>')">
                         </select>
 
                         <p class="py-2 text-sm text-gray-600">Which category to post in?</p>
+
+
                     </div>
                 </div>
 
