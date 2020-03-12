@@ -9,7 +9,7 @@ function loadCategory(id) {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       result = JSON.parse(this.responseText);
-      console.log(result.subCategory);
+      
       document.getElementById("category_title").innerHTML = result.subCategory[0].subject;
 
       //<!-- TODO: change page limit to use .env -->
