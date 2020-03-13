@@ -1,4 +1,4 @@
-function asdf(page_name){
+function post_thread(page_name){
 
 
     var sub_cat_id = document.getElementById('category').value;
