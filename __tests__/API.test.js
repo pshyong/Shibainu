@@ -76,7 +76,7 @@ describe('Subcategory API POST tests', () => {
 describe('Subcategory API GET tests', () => {  
 	 it('Should get a 200 status code and "Subcategory POST API test" subject', async (done) => {
 	   const res = await request(app)
-	   .get('/api/v1/pages/subCategory/'+subcategory_id)
+	   .get('/api/v1/pages/subCategory/'+subcategory_id+'/1')
 	   //.send({main_cat_id: category_id})
 	    
 	   expect(res.statusCode).toEqual(200)
@@ -254,7 +254,7 @@ describe('Subcategory API DELETE tests', () => {
 	    expect(res.statusCode).toEqual(200)
 	    
 	   const res2 = await request(app)
-	   .get('/api/v1/pages/subCategory/'+category_id)
+	   .get('/api/v1/pages/subCategory/'+category_id+'/1')
 	   //.send({main_cat_id: category_id})
 	    
 	   expect(res2.statusCode).toEqual(200)

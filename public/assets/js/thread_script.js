@@ -35,6 +35,13 @@ function updatePosts() {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       result = JSON.parse(this.responseText);
+      
+      max_page = Math.ceil(result.number_of_posts / 25)
+      
+      if (max_page > page_num) {
+    	  document.getElementById("next_button").style.display = "initial";
+      }
+      
       genratePagination()
  	  loadPosts(result.posts);
     }
@@ -115,4 +122,25 @@ function loadPosts(posts) {
 			       	<p class="pl-1 text-xs text-gray-500 font-medium p-2">Posted on: ${date.toDateString()} ${date.toLocaleTimeString()}</p>
 			       </div>`
 	}).join("\n"));
+}
+
+function uploadPost(thread_id) {
+	var textField = document.getElementById("content")
+	var post = {
+		content: textField.value,
+	    thread_id: thread_id
+	};
+	
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+	    	textField.value = "";
+	    		
+	    	updatePosts();
+	    }
+	  };
+	<!-- TODO: change localhost to actual DB server -->
+	xhttp.open("POST", "http://localhost:3000/api/v1/pages/post", true);
+	xhttp.setRequestHeader("Content-Type", "application/json");
+	xhttp.send(JSON.stringify(post));
 }
