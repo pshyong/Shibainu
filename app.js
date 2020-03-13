@@ -8,6 +8,7 @@ const sassMiddleware = require('node-sass-middleware');
 const session = require('express-session');
 const favicon = require('serve-favicon');
 
+const bcrypt = require('bcrypt');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const db = require('./config');
@@ -82,17 +83,20 @@ passport.use(
     async (username, password, done) => {
       console.log('Login process:', username);
       try {
-        const result = await db.one(
+        const user = await db.one(
           'SELECT user_account_id, username ' +
             'FROM User_account ' +
             'WHERE username=$1 AND hashed_password=$2',
           [username, password]
         );
+
+        if (user) {
+          const match = await bcrypt.compare(password, user.hashed_password);
+        }
         return done(null, result);
       } catch (err) {
         console.error('/login: ' + err);
-        // { message: 'Wrong user name or password' }
-        return done(null, false);
+        return done(null, false, { message: 'Wrong user name or password' });
       }
     }
   )
@@ -130,6 +134,7 @@ app.use(
 
 // Global var for current user session id
 app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
   res.locals.sessionId = req.session.id;
   return next();
 });
