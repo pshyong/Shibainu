@@ -37,8 +37,8 @@ CREATE TABLE thread (
     last_posted_by int NULL,
     active_state boolean  NOT NULL DEFAULT TRUE,
     number_of_views int default 0,
-    number_of_posts int default 0,
-    session_id VARCHAR(50) NULL,
+    number_of_posts int default 1,
+    session_id VARCHAR(50) not NULL,
     sub_cat_id SERIAL REFERENCES subcategory(sub_cat_id) ON DELETE CASCADE
 );
 
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS Post (
     user_account_id int DEFAULT 0,
     upvotes int  NOT NULL DEFAULT 0,
     downvotes int NOT NULL DEFAULT 0,
-    session_id VARCHAR(50) NULL,
+    session_id VARCHAR(50) not NULL,
     thread_id SERIAL REFERENCES thread(thread_id) ON DELETE CASCADE,
     PRIMARY KEY(post_id, thread_id)
 );

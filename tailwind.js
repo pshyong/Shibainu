@@ -4,4 +4,6 @@ module.exports = {
   },
   variants: {},
   plugins: [],
+  borderColors: ["responsive", "hover", "focus", "group-hover"], 
+  visibility: ["responsive", "group-hover"],
 }
