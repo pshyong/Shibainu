@@ -83,7 +83,7 @@ function c_genratePagination() {
       	if (button_num > 4) {
       		break
       	}
-  		$('#pages').append(`<button onclick="updatePage(${i})" class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">
+  		$('#threads').append(`<button onclick="updatePage(${i})" class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">
                                     ${i}
                                 </button>`)
 	  }
