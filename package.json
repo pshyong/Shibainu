@@ -8,6 +8,7 @@
     "build": "node testing"
   },
   "dependencies": {
+    "bcrypt": "^4.0.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
@@ -16,9 +17,9 @@
     "express-session": "^1.17.0",
     "express-validator": "^6.4.0",
     "got": "^10.6.0",
-    "http-errors": "^1.6.3",
+    "http-errors": "^1.7.3",
     "jquery": "^3.4.1",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.5",
     "moment": "^2.24.0",
     "morgan": "~1.9.1",
     "node-sass": "^4.13.1",
