@@ -556,7 +556,6 @@ exports.addThread = [
 ];
 
 
-
 exports.getThread = [
 	param('thread_id')
 	.exists()
@@ -592,6 +591,7 @@ exports.getThread = [
       var result = {};
       var diff = getTimeUntilVisible(thread[0].created);
 
+      // Checking if thread is posted anonymously and time elapsed
       if (diff > 0 && thread[0].user_account_id == 0) {
         result.thread_id = thread[0].thread_id;
         result.delayed = `${diff} minutes left until thread is visible`
@@ -605,6 +605,7 @@ exports.getThread = [
 				return;
       }
 
+      // Checking each post if it was made anonymously and time elapsed.
       for (i = 0; i < posts.length; i++) {
         if (posts[i].user_account_id != 0) continue;
         diff = getTimeUntilVisible(posts[i].created);

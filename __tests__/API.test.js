@@ -106,16 +106,13 @@ describe('Thread API POST tests', () => {
 	})
 })
 
-
+// We need to manually update db to properly test getThread
 describe('Thread API GET tests', () => {
 	it('Should get a 200 status code, "Thread POST API test" subject, and "Thread POST API Test Post Content" post content', async (done) => {
 		const res = await request(app)
 			.get(`/api/v1/pages/thread/${thread_id}/1`)
 		expect(res.statusCode).toEqual(200)
 		expect(res.body.delayed).toEqual('120 minutes left until thread is visible');
-		// expect(res.body.subject).toEqual('Thread POST API test')
-		// expect(res.body.posts[0].content).toEqual('Thread POST API Test Post Content')
-
 		done()
 	})
 })
@@ -236,21 +233,6 @@ describe('Post API DELETE tests', () => {
 
 describe('Thread API DELETE tests', () => {
 	it('Should get a 200 status code', async (done) => {
-		// Need to make sure thread has no children posts.
-		// For testing we know there were 2 children: 1 from creating the thread (since creating a thread
-		// creates a post), and one from testing post POST API.
-
-		// // First we find and delete the last post
-		// const post = await request(app)
-		// 	.get(`/api/v1/pages/thread/${thread_id}/1`)
-		// expect(post.statusCode).toEqual(200)
-		// // console.log(`Delete thread API ${post.body.posts[0].post_id}`);
-		// post_id = post.body.posts[0].post_id;
-
-		// const delpost = await request(app)
-		// 	.delete('/api/v1/pages/post')
-		// 	.send({ thread_id: thread_id, post_id: post_id })
-		// expect(delpost.statusCode).toEqual(200)
 
 		const res = await request(app)
 			.delete('/api/v1/pages/thread')
