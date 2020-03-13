@@ -375,10 +375,9 @@ exports.addSubCategory = [
   }
 ];
 
-const getSubCategoryQuery1 = 'select * from subcategory where sub_cat_id = $1;';
-const getSubCategoryQuery2 =
-  'select * from category where cat_id = (select main_cat_id from subcategory where sub_cat_id = $1);';
-const getSubCategoryQuery3 = 'select * from thread where sub_cat_id = $1;';
+const getSubCategoryQuery1 = "select * from subcategory where sub_cat_id = $1;"
+const getSubCategoryQuery2 = "select * from category where cat_id = (select main_cat_id from subcategory where sub_cat_id = $1);" 
+const getSubCategoryQuery3 = `select * from thread where sub_cat_id = $1 limit ${post_limit} offset $2;`;
 exports.getSubCategories = [
   /*
 	body('main_cat_id').exists().withMessage("Missing Category Id Parameter").bail()
@@ -395,6 +394,7 @@ exports.getSubCategories = [
     }
     var url = req.url;
     db.task(async t => {
+      let offset = (req.params.page_num-1)*post_limit;
       const subCategory = await t.any(getSubCategoryQuery1, [
         req.params.sub_cat_id
       ]);
@@ -402,7 +402,7 @@ exports.getSubCategories = [
         req.params.sub_cat_id
       ]);
       const Threads = await t.any(getSubCategoryQuery3, [
-        req.params.sub_cat_id
+        req.params.sub_cat_id, offset
       ]);
 
       var result = { subCategory, Category, Threads };
