@@ -2,7 +2,7 @@
 
 **Participants:** All members: Kuan Yu Chu (Daniel), Shuai Wen Yu, Jiun Yenn Shyong (Patrick), Jason Yiu-Sum Chan, Patrick James Hogeveen, Rach Ilagan
 
-**Unfinished:**: None, all stories were finished this sprint. 
+**Unfinished:**: None, all stories were finished this sprint.
 
 ## What are practices that you should continue during the next sprint
 

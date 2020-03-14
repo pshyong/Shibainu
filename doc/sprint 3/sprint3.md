@@ -5,6 +5,7 @@ stories for this sprint clearly identified, team capacity recorded, participants
 about user stories to be completed this sprint are clear, tasks breakdown is done.
 
 **Goal**: For this sprint, we continute to focus on integrating our frontend with our backend to be able to perform basic functions that are expected of a forum:
+
 - Display all subcategories and categories under the subpage.
 - Create a thread and display all threads under a subcategory.
 - Post in a thread and dispaly all posts in a thread
