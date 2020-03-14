@@ -106,30 +106,29 @@ describe('Thread API POST tests', () => {
 	})
 })
 
-
+// We need to manually update db to properly test getThread
 describe('Thread API GET tests', () => {
-	it('Should get a 200 status code, "Thread POST API test" subject, and "Thread POST API Test Post Content" post content', async (done) => {
+	it('Should get a 200 status code, "120 minutes left until thread is visible', async (done) => {
 		const res = await request(app)
 			.get(`/api/v1/pages/thread/${thread_id}/1`)
-		expect(res.statusCode).toEqual(200)
-
-		expect(res.body.subject).toEqual('Thread POST API test')
-		expect(res.body.posts[0].content).toEqual('Thread POST API Test Post Content')
-
+		expect(res.statusCode).toEqual(200);
+		expect(res.body.delayed).toEqual('120 minutes left until thread is visible');
 		done()
 	})
 })
 
+// To actually test PUT, we need to manually change the created column since our PUT doesn't 
+// support changing that column.
 describe('Thread API PUT tests', () => {
 	it('Should get a 200 status code', async (done) => {
 		const res = await request(app)
 			.put('/api/v1/pages/thread')
-			.send({ subject: "Thread PUT API test", thread_id: thread_id })
+			.send({ subject: "Thread PUT API test", thread_id: thread_id})
 		expect(res.statusCode).toEqual(200)
 		const res2 = await request(app)
 			.get(`/api/v1/pages/thread/${thread_id}/1`)
 		expect(res2.statusCode).toEqual(200)
-		expect(res2.body.subject).toEqual('Thread PUT API test')
+		expect(res2.body.delayed).toEqual('120 minutes left until thread is visible');
 		expect(res2.body.thread_id).toEqual(thread_id)
 		done()
 	})
@@ -231,23 +230,9 @@ describe('Post API DELETE tests', () => {
 	 })
 })
 
+
 describe('Thread API DELETE tests', () => {
 	it('Should get a 200 status code', async (done) => {
-		// Need to make sure thread has no children posts.
-		// For testing we know there were 2 children - 1 from creating the thread (since creating a thread
-		// creates a post), and one from testing post POST API.
-
-		// First we find and delete the last post
-		const post = await request(app)
-			.get(`/api/v1/pages/thread/${thread_id}/1`)
-		expect(post.statusCode).toEqual(200)
-		// console.log(`Delete thread API ${post.body.posts[0].post_id}`);
-		post_id = post.body.posts[0].post_id;
-
-		const delpost = await request(app)
-			.delete('/api/v1/pages/post')
-			.send({ thread_id: thread_id, post_id: post_id })
-		expect(delpost.statusCode).toEqual(200)
 
 		const res = await request(app)
 			.delete('/api/v1/pages/thread')

@@ -6,9 +6,11 @@
 require('dotenv').config();
 
 const post_limit = process.env.POST_LIMIT
+const delay = process.env.DELAY
 
 const db = require('../../config')
 const express = require('express')
+var moment = require('moment')
 
 const {
   body,
@@ -27,6 +29,24 @@ function sendError(statusCode, message, additionalInfo = {}) {
   });
 }
 
+// Gets the time until a thread or post is visible. 
+function getTimeUntilVisible(created_time) {
+  var d = new Date();
+  var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+  let offset = -4;
+  var toronto = new Date(utc + (3600000*offset));
+  // Get timestamp in ms since January 1, 1970 00:00:00 UTC:
+  // var current = Date();
+  // Parse a date in ms since January 1, 1970 00:00:00 UTC
+  var created = Date.parse(created_time);
+  var diff = toronto - created;
+  // Convert to minutes;
+  diff = Math.floor(diff/1000/60);
+
+  // delay is defined in .env
+  return delay - diff;
+
+}
 function runDeleteQuery(selectQuery, deleteQuery, args) {
   return db.task(async t => {
     return await t
@@ -486,6 +506,7 @@ exports.addThread = [
   async function(req, res, next) {
     //see if we have any errors
     const errors = validationResult(req);
+
 	if (!errors.isEmpty()) {
 		// if there are errors, we return 400
 		res.status(400).json({ errors: errors.array() });
@@ -493,7 +514,6 @@ exports.addThread = [
 	}
 	
 	result = {}
-	
 	let addThreadQuery = 'INSERT INTO thread(subject, sub_cat_id, session_id) VALUES ($1, $2, $3) RETURNING thread_id, subject';
 	const addPostQuery = 'INSERT INTO post(content, thread_id, session_id) VALUES ($1, $2, $3) RETURNING post_id, content;';
 	
@@ -529,6 +549,7 @@ exports.addThread = [
 	}
 ];
 
+
 exports.getThread = [
 	param('thread_id')
 	.exists()
@@ -555,20 +576,46 @@ exports.getThread = [
 			let thread_id = req.params.thread_id;
 			let offset = (req.params.page_num - 1) * post_limit
 			const thread = await t.any(getThreadQuery, [thread_id]);
-			const posts = await t.any(getPostsQuery, [thread_id, offset]);
-			var result = {};
+      
 			if (!thread[0]) {
 				res.status(400).send('Thread not found');
+        return;
+      }
+
+      var result = {};
+      var diff = getTimeUntilVisible(thread[0].created);
+
+      // Checking if thread is posted anonymously and time elapsed
+      if (diff > 0 && thread[0].user_account_id == 0) {
+        result.thread_id = thread[0].thread_id;
+        result.delayed = `${diff} minutes left until thread is visible`
+        return result;
+      }
+      
+      const posts = await t.any(getPostsQuery, [thread_id, offset]);
+      // A thread must've been created with at least one post, hence we also check for post.
+      if (!posts[0]) {
+				res.status(400).send('Empty thread');
 				return;
-			}
-			// A thread must've been created with at least one post, hence we also check for post.
-			if (!posts[0]) {
-				res.status(400).send('Post not found');
-				return;
-			}
+      }
+
+      // Checking each post if it was made anonymously and time elapsed.
+      for (i = 0; i < posts.length; i++) {
+        if (posts[i].user_account_id != 0) continue;
+        diff = getTimeUntilVisible(posts[i].created);
+        var temp = {};
+        temp.post_id = posts[i].post_id;
+        temp.delayed = "";
+        if (diff > 0) {
+          temp["delayed"] = `${diff} minutes left until post is visible`  
+          posts[i] = temp;
+       }
+      }
+
 			result = thread[0]; 
 			result.posts = posts;
-			return result;
+      return result;
+      
 		}).then (result => {
 			res.status(200).json(result)
 		}).catch(e => {res.status(500); res.send(sendError(500, '/api' + req.url + ' error ' + e))})
@@ -677,6 +724,7 @@ exports.deleteThread = [
 ];
 
 exports.addPost = [
+
   body('content')
     .exists()
     .withMessage('Missing Content Parameter')

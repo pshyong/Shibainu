@@ -15,25 +15,25 @@ VALUES ('Subcategory Subject Here',
 (SELECT cat_id FROM Category WHERE subject = 'Category Subject Here')
 ) ON CONFLICT DO NOTHING;
 
-INSERT INTO Thread (subject, sub_cat_id) 
+INSERT INTO Thread (subject, sub_cat_id, session_id) 
 VALUES ('Thread Subject Here',
 (SELECT sub_cat_id from Subcategory WHERE subject = 
-'Subcategory Subject Here')
+'Subcategory Subject Here'), 'sess1'
 ) ON CONFLICT DO NOTHING;
 
-INSERT INTO Post (content, thread_id) 
+INSERT INTO Post (content, thread_id, session_id) 
 VALUES ('Post 1 Content Here',
-(SELECT thread_id from Thread WHERE subject = 'Thread Subject Here')
+(SELECT thread_id from Thread WHERE subject = 'Thread Subject Here'), 'sess2'
 ) ON CONFLICT DO NOTHING;
 
-INSERT INTO Post (content, thread_id) 
+INSERT INTO Post (content, thread_id, session_id) 
 VALUES ('Post 2 Content Here',
-(SELECT thread_id from Thread WHERE subject = 'Thread Subject Here')
+(SELECT thread_id from Thread WHERE subject = 'Thread Subject Here'), 'sess3'
 ) ON CONFLICT DO NOTHING;
 
-INSERT INTO Post (content, thread_id) 
+INSERT INTO Post (content, thread_id, session_id) 
 VALUES ('Post 4 Content Here',
-(SELECT thread_id from Thread WHERE subject = 'Thread Subject Here')
+(SELECT thread_id from Thread WHERE subject = 'Thread Subject Here'), 'sess4'
 ) ON CONFLICT DO NOTHING;
 -- --------------------
 -- Another subcategory:
@@ -43,23 +43,23 @@ VALUES ('Subcategory 2 Subject Here',
 (SELECT cat_id FROM Category WHERE subject = 'Category Subject Here')
 ) ON CONFLICT DO NOTHING;
 
-INSERT INTO Thread (subject, sub_cat_id) 
+INSERT INTO Thread (subject, sub_cat_id, session_id) 
 VALUES ('Thread 2 Subject Here',
 (SELECT sub_cat_id from Subcategory WHERE subject = 
-'Subcategory 2 Subject Here')
+'Subcategory 2 Subject Here'), 'sess4'
 ) ON CONFLICT DO NOTHING;
 
-INSERT INTO Post (content, thread_id) 
+INSERT INTO Post (content, thread_id, session_id) 
 VALUES ('Post 1 Content Here',
-(SELECT thread_id from Thread WHERE subject = 'Thread 2 Subject Here')
+(SELECT thread_id from Thread WHERE subject = 'Thread 2 Subject Here'), 'sess4'
 ) ON CONFLICT DO NOTHING;
 
-INSERT INTO Post (content, thread_id) 
+INSERT INTO Post (content, thread_id, session_id) 
 VALUES ('Post 2 Content Here',
-(SELECT thread_id from Thread WHERE subject = 'Thread 2 Subject Here')
+(SELECT thread_id from Thread WHERE subject = 'Thread 2 Subject Here'), 'sess4'
 ) ON CONFLICT DO NOTHING;
 
-INSERT INTO Post (content, thread_id) 
+INSERT INTO Post (content, thread_id, session_id) 
 VALUES ('Post 4 Content Here',
-(SELECT thread_id from Thread WHERE subject = 'Thread 2 Subject Here')
+(SELECT thread_id from Thread WHERE subject = 'Thread 2 Subject Here'), 'sess4'
 ) ON CONFLICT DO NOTHING;
