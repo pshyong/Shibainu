@@ -31,11 +31,15 @@ function sendError(statusCode, message, additionalInfo = {}) {
 
 // Gets the time until a thread or post is visible. 
 function getTimeUntilVisible(created_time) {
+  var d = new Date();
+  var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+  let offset = -4;
+  var toronto = new Date(utc + (3600000*offset));
   // Get timestamp in ms since January 1, 1970 00:00:00 UTC:
-  var current = Date.now();
+  // var current = Date();
   // Parse a date in ms since January 1, 1970 00:00:00 UTC
   var created = Date.parse(created_time);
-  var diff = current - created;
+  var diff = toronto - created;
   // Convert to minutes;
   diff = Math.floor(diff/1000/60);
 
@@ -604,7 +608,7 @@ exports.getThread = [
         temp.delayed = "";
         console.log(diff);
         if (diff > 0) {
-          temp[`delayed`] = `${diff} minutes left until post is visible`  
+          temp["delayed"] = `${diff} minutes left until post is visible`  
           posts[i] = temp;
        }
       }
