@@ -111,7 +111,8 @@ describe('Thread API GET tests', () => {
 	it('Should get a 200 status code, "120 minutes left until thread is visible', async (done) => {
 		const res = await request(app)
 			.get(`/api/v1/pages/thread/${thread_id}/1`)
-		expect(res.statusCode).toEqual(200)
+		expect(res.statusCode).toEqual(200);
+		console.log(res.body);
 		expect(res.body.delayed).toEqual('120 minutes left until thread is visible');
 		done()
 	})
