@@ -108,7 +108,7 @@ describe('Thread API POST tests', () => {
 
 // We need to manually update db to properly test getThread
 describe('Thread API GET tests', () => {
-	it('Should get a 200 status code, "Thread POST API test" subject, and "Thread POST API Test Post Content" post content', async (done) => {
+	it('Should get a 200 status code, "120 minutes left until thread is visible', async (done) => {
 		const res = await request(app)
 			.get(`/api/v1/pages/thread/${thread_id}/1`)
 		expect(res.statusCode).toEqual(200)
