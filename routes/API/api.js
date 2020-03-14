@@ -22,11 +22,11 @@ router.route('/v1/pages/Page/:page_id')
      *     produces:
      *       - application/json
      *     parameters:
-     *       - name: page_id
+     *       - name: page_name
      *         description: The id of the subpage
      *         in: path
      *         required: true
-     *         type: integer
+     *         type: string
      *     responses:
      *       200:
      *         description: Successfully got the page
@@ -212,11 +212,11 @@ router.route('/v1/pages/Category')
      */
     .delete(db.deleteCategory)
 
-router.route('/v1/pages/subCategory/:sub_cat_id?')
+router.route('/v1/pages/subCategory/:sub_cat_id?/:page_num?')
     /**
      * @swagger
      *
-     * /pages/subCategory/{sub_cat_id}:
+     * /pages/subCategory/{sub_cat_id}/{page_num}:
      *   get:
      *     description: Get the all the subcategory associated to the subcategory
      *     tags:
@@ -224,8 +224,13 @@ router.route('/v1/pages/subCategory/:sub_cat_id?')
      *     produces:
      *       - application/json
      *     parameters:
-     *       - name: name
+     *       - name: sub_cat_id
      *         description: The id of the corresponding subcategory
+     *         in: path
+     *         required: true
+     *         type: integer
+     *       - name: page_num
+     *         description: Current page number
      *         in: path
      *         required: true
      *         type: integer
@@ -296,7 +301,7 @@ router.route('/v1/pages/subCategory/:sub_cat_id?')
      */
     .delete(db.deleteSubCategory)
 
-router.route('/v1/pages/thread/:thread_id?')
+router.route('/v1/pages/thread/:thread_id?/:page_num?')
     /**
      * @swagger
      *
@@ -336,7 +341,7 @@ router.route('/v1/pages/thread/:thread_id?')
     /**
      * @swagger
      *
-     * /pages/thread/{thread_id}:
+     * /pages/thread/{thread_id}/{page_num}:
      *   get:
      *     description: Get the specified thread with its child posts
      *     tags:
@@ -346,6 +351,11 @@ router.route('/v1/pages/thread/:thread_id?')
      *     parameters:
      *       - name: thread_id
      *         description: The id of the corresponding thread
+     *         in: path
+     *         required: true
+     *         type: integer
+     *       - name: page_num
+     *         description: The current page number the user is at
      *         in: path
      *         required: true
      *         type: integer

@@ -49,15 +49,80 @@
                             </div>
                         </div>
                         <div class="md:pl-16">
-                            <a href="#"
+                            <!-- <a href="#"
                                 class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4 align-middle">
                                 Link1
                             </a> <a href="#"
                                 class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
                                 Link2
-                            </a> <a href="#" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white">
+                            </a> 
+                            <a href="#" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white">
                                 Link3
-                            </a>
+                            </a> -->
+                            <a href="#" class="text-gray-300 text-sm font-semibold hover:text-blue-300 mr-4" id="login-form">Sign in</a>
+                            <a href="#" class="text-gray-300 text-sm font-semibold border px-4 py-2 rounded-lg hover:text-blue-300 hover:border-blue-300" id="register-form">Sign up</a>
+                            <div id="loginform" class="hidden mt-3 pt-30 loginform bg-white block absolute">
+                                <div class="w-full max-w-xs">
+                                    <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                                      <div class="mb-4">
+                                        <label class="block text-gray-700 text-sm font-bold mb-2 w-64" for="email">
+                                          Email Address
+                                        </label>
+                                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="text" placeholder="Email Address">
+                                      </div>
+                                      <div class="mb-6">
+                                        <label class="block text-gray-700 text-sm font-bold mb-2 w-64" for="password">
+                                          Password
+                                        </label>
+                                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="*************">
+                                      </div>
+                                      <div class="flex items-center justify-between">
+                                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-32" type="button">
+                                          Sign In
+                                        </button>
+                                      </div>
+                                    </form>
+
+                                  </div>
+                            </div>
+                            <div id="registerform" class="hidden mt-3 pt-30 loginform bg-white block absolute registerform">
+                                <div class="w-full max-w-xs">
+                                    <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                                      <div class="mb-4">
+                                        <label class="block text-gray-700 text-sm font-bold mb-2 w-64" for="email_reg">
+                                          Email Address
+                                        </label>
+                                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email_reg" type="text" placeholder="Email Address">
+                                      </div>
+                                      <div class="mb-6">
+                                        <label class="block text-gray-700 text-sm font-bold mb-2 w-64" for="password_reg">
+                                          Password
+                                        </label>
+                                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password_reg" type="password" placeholder="*************">
+                                        <label class="block text-gray-700 text-sm font-bold mb-2 w-64" for="passwordconfirm">
+                                            Confirm Password
+                                          </label>
+                                          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="passwordconfirm" type="password" placeholder="*************">
+                                      </div>
+                                      <div class="flex items-center justify-between">
+                                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-32" type="button">
+                                          Sign up
+                                        </button>
+                                      </div>
+                                    </form>
+
+                                  </div>
+                            </div>
+                            <!-- <div class="dropdown inline-block relative">
+                                <button class="inline-flex h-8 w-8 rounded-full overflow-hidden border-2 border-gray-700 focus:outline-none focus:border-white items-center">
+                                    <img class="h-full w-full object-cover " src="/assets/img/dabbing-shiba.png">
+                                </button>
+                                <div class="w-32 bg-white rounded-lg py-2 mt-2 dropdown-content hidden absolute">
+                                    <li><a class="block px-4 py-2 text-gray-800 hover:bg-blue-800 hover:text-white" href="#">Account</a></li>
+                                    <li><a class="block px-4 py-2 text-gray-800 hover:bg-blue-800 hover:text-white" href="#">Support</a></li>
+                                    
+                                </div>
+                            </div> -->
                             
                         </div>
                     </div>
@@ -69,20 +134,28 @@
         <div class="container mx-auto text-white">
             <div class="row-gap-0">
                 <div class="grid-cols-1">
-
+                    <!-- TODO: When category page has been implemented, this should be updated as well -->
                     <%if (locals.category) { %>
-                    <a href="/p/<%= name %>/"><span class="text-3xl lowercase">#</span><span
-                            class="uppercase text-3xl"><%= name %></span></a>
+                    <a href="/p/<%= locals.name %>/"><span class="text-3xl lowercase">#</span><span
+                            class="uppercase text-3xl"><%= locals.name %></span></a>
                     <span class="text-lg lowercase">/c/</span><span class="uppercase text-2xl"><a
-                            href="/p/<%= name %>/c/<%= category %>/"><%= category %></a></span>
-                    <% } else { %>
+                            href="/p/<%= locals.name %>/c/<%= locals.category %>/"><%= locals.category %></a></span>
+                    <% } else if (locals.page == 'subpage') { %>
                     <a href="./"><span class="text-3xl lowercase">#</span><span
-                            class="uppercase text-3xl"><%= name %></span></a>
+                            class="uppercase text-3xl"><%= locals.data['subpage']['title'] %></span></a>
+                    <% } else { %>
+                        <a href="./"><span class="text-3xl lowercase">#</span><span
+                            class="uppercase text-3xl"></span></a>
                     <% } %>
 
                 </div>
-                <span class="text-sm text-gray-300"><%= description %></span>
+                <% if (locals.page == 'subpage') { %>
+                    <span class="text-sm text-gray-300"><%= locals.data['subpage']['description'] %></span>
+                <% } %>
+                
             </div>
 
         </div>
     </div>
+
+    <!-- </div> -->

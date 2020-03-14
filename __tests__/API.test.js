@@ -1,21 +1,10 @@
 const request = require('supertest');
 const app = require('../app');
-const shell = require('shelljs')
-const exec = require('child_process').exec;
+// const shell = require('shelljs')
+// const exec = require('child_process').exec;
 // ? Please take a look at
 // ? https://jestjs.io/docs/en/getting-started
 // ? https://github.com/visionmedia/supertest
-
-// Clearing database.
-// beforeAll(() => {
-// 	shell.exec('resetter.sh');
-// 	exec('./$PWD resetter', (error, stdout, stderr) => {
-// 		console.log(`ERROR! ${error}`)
-// 		console.log(`stdout: ${stdout}`);
-// 		console.log(`stderror: ${stderr}`);
-// 	})
-// })
-
 
 var subpage_id = -1
 
@@ -23,9 +12,9 @@ describe('Page API POST tests', () => {
   it('Should get a 200 status code', async (done) => {
     const res = await request(app)
     .post('/api/v1/pages/Page/page')
-    .send({title: "Page POST API test"})
+    .send({title: "CSC304"})
 	expect(res.statusCode).toEqual(200)
-	subpage_id = res.body.page_id
+	subpage_id = res.body['page_id']
     done()
   })
 })
@@ -34,11 +23,12 @@ describe('Page API POST tests', () => {
 describe('Page API GET tests', () => {  
   it('Should get a 200 status code and "Page POST API test" title', async (done) => {
     const res = await request(app)
-    .get('/api/v1/pages/Page/' + subpage_id)
+    .get('/api/v1/pages/Page/' + "CSC304")
     .send()
     
-    expect(res.statusCode).toEqual(200)
-    expect(res.body.page_d[0].title).toEqual('Page POST API test')
+	expect(res.statusCode).toEqual(200)
+	
+    expect(res.body.subpage.title).toEqual('CSC304')
 
     done()
   })
@@ -86,7 +76,7 @@ describe('Subcategory API POST tests', () => {
 describe('Subcategory API GET tests', () => {  
 	 it('Should get a 200 status code and "Subcategory POST API test" subject', async (done) => {
 	   const res = await request(app)
-	   .get('/api/v1/pages/subCategory/'+subcategory_id)
+	   .get('/api/v1/pages/subCategory/'+subcategory_id+'/1')
 	   //.send({main_cat_id: category_id})
 	    
 	   expect(res.statusCode).toEqual(200)
@@ -116,30 +106,29 @@ describe('Thread API POST tests', () => {
 	})
 })
 
-
+// We need to manually update db to properly test getThread
 describe('Thread API GET tests', () => {
-	it('Should get a 200 status code, "Thread POST API test" subject, and "Thread POST API Test Post Content" post content', async (done) => {
+	it('Should get a 200 status code, "120 minutes left until thread is visible', async (done) => {
 		const res = await request(app)
-			.get(`/api/v1/pages/thread/${thread_id}`)
-		expect(res.statusCode).toEqual(200)
-
-		expect(res.body.subject).toEqual('Thread POST API test')
-		expect(res.body.posts[0].content).toEqual('Thread POST API Test Post Content')
-
+			.get(`/api/v1/pages/thread/${thread_id}/1`)
+		expect(res.statusCode).toEqual(200);
+		expect(res.body.delayed).toEqual('120 minutes left until thread is visible');
 		done()
 	})
 })
 
+// To actually test PUT, we need to manually change the created column since our PUT doesn't 
+// support changing that column.
 describe('Thread API PUT tests', () => {
 	it('Should get a 200 status code', async (done) => {
 		const res = await request(app)
 			.put('/api/v1/pages/thread')
-			.send({ subject: "Thread PUT API test", thread_id: thread_id })
+			.send({ subject: "Thread PUT API test", thread_id: thread_id})
 		expect(res.statusCode).toEqual(200)
 		const res2 = await request(app)
-			.get(`/api/v1/pages/thread/${thread_id}`)
+			.get(`/api/v1/pages/thread/${thread_id}/1`)
 		expect(res2.statusCode).toEqual(200)
-		expect(res2.body.subject).toEqual('Thread PUT API test')
+		expect(res2.body.delayed).toEqual('120 minutes left until thread is visible');
 		expect(res2.body.thread_id).toEqual(thread_id)
 		done()
 	})
@@ -190,37 +179,6 @@ describe('Post API PUT tests', () => {
 
 // Starting of error testing
 describe('DELETE API error tests', () => {
-	it('Should get a 500 status code', async (done) => {
-		const res = await request(app)
-		.delete('/api/v1/pages/Thread')
-	    .send({thread_id: thread_id})
-	    expect(res.statusCode).toEqual(500)
-	    done()
-	})
-	
-	it('Should get a 500 status code', async (done) => {
-		const res = await request(app)
-		.delete('/api/v1/pages/subCategory')
-	    .send({sub_cat_id: subcategory_id})
-	    expect(res.statusCode).toEqual(500)
-	    done()
-	})
-	
-	it('Should get a 500 status code', async (done) => {
-		const res = await request(app)
-		.delete('/api/v1/pages/Category')
-	    .send({cat_id: category_id})
-	    expect(res.statusCode).toEqual(500)
-	    done()
-	})
-	
-	it('Should get a 500 status code', async (done) => {
-		const res = await request(app)
-		.delete('/api/v1/pages/Page/page')
-	    .send({page_id: subpage_id})
-	    expect(res.statusCode).toEqual(500)
-	    done()
-	})
 	
 	it('Should get a 404 status code', async (done) => {
 		const res = await request(app)
@@ -249,7 +207,7 @@ describe('DELETE API error tests', () => {
 	it('Should get a 404 status code', async (done) => {
 		const res = await request(app)
 		.delete('/api/v1/pages/Page/page')
-	    .send({page_id: -1})
+	    .send({page_id: "CSC301"})
 	    expect(res.statusCode).toEqual(404)
 	    done()
 	})
@@ -272,23 +230,9 @@ describe('Post API DELETE tests', () => {
 	 })
 })
 
+
 describe('Thread API DELETE tests', () => {
 	it('Should get a 200 status code', async (done) => {
-		// Need to make sure thread has no children posts.
-		// For testing we know there were 2 children - 1 from creating the thread (since creating a thread
-		// creates a post), and one from testing post POST API.
-
-		// First we find and delete the last post
-		const post = await request(app)
-			.get(`/api/v1/pages/thread/${thread_id}`)
-		expect(post.statusCode).toEqual(200)
-		// console.log(`Delete thread API ${post.body.posts[0].post_id}`);
-		post_id = post.body.posts[0].post_id;
-
-		const delpost = await request(app)
-			.delete('/api/v1/pages/post')
-			.send({ thread_id: thread_id, post_id: post_id })
-		expect(delpost.statusCode).toEqual(200)
 
 		const res = await request(app)
 			.delete('/api/v1/pages/thread')
@@ -296,7 +240,7 @@ describe('Thread API DELETE tests', () => {
 		expect(res.statusCode).toEqual(200)
 
 		const res2 = await request(app)
-			.get(`/api/v1/pages/thread/${thread_id}`)
+			.get(`/api/v1/pages/thread/${thread_id}/1`)
 		expect(res2.statusCode).toEqual(400)
 		done()
 	})
@@ -310,7 +254,7 @@ describe('Subcategory API DELETE tests', () => {
 	    expect(res.statusCode).toEqual(200)
 	    
 	   const res2 = await request(app)
-	   .get('/api/v1/pages/subCategory/'+category_id)
+	   .get('/api/v1/pages/subCategory/'+category_id+'/1')
 	   //.send({main_cat_id: category_id})
 	    
 	   expect(res2.statusCode).toEqual(200)
@@ -341,16 +285,15 @@ describe('Category API DELETE tests', () => {
 describe('Page API DELETE tests', () => {  
 	it('Should get a 200 status code', async (done) => {
 	   const res = await request(app)
-		.delete('/api/v1/pages/Page/page')
-	    .send({page_id: subpage_id})
+		.delete('/api/v1/pages/Page/CSC304')
+	    .send({page_id: "CSC304"})
 	    expect(res.statusCode).toEqual(200)
 	    
 	   const res2 = await request(app)
-	   .get('/api/v1/pages/Page/' + subpage_id)
+	   .get('/api/v1/pages/Page/' + "CSC304")
 	   .send()
 	    
-	   expect(res2.statusCode).toEqual(200)
-	   expect(res2.body.page_d.length).toEqual(0)
+	   expect(res2.statusCode).toEqual(404)
 	   done()
 	 })
 })
