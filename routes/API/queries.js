@@ -606,7 +606,6 @@ exports.getThread = [
         var temp = {};
         temp.post_id = posts[i].post_id;
         temp.delayed = "";
-        console.log(diff);
         if (diff > 0) {
           temp["delayed"] = `${diff} minutes left until post is visible`  
           posts[i] = temp;
