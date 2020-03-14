@@ -7,6 +7,7 @@ const logger = require('morgan');
 const sassMiddleware = require('node-sass-middleware');
 const session = require('express-session');
 const favicon = require('serve-favicon');
+const flash = require('connect-flash');
 
 const bcrypt = require('bcrypt');
 const passport = require('passport');
@@ -74,6 +75,9 @@ app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Connect Flash
+app.use(flash());
+
 // Passport
 app.use(passport.initialize());
 app.use(passport.session());
@@ -136,6 +140,8 @@ app.use(
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   res.locals.sessionId = req.session.id;
+  res.locals.success_messages = req.flash('success_messages');
+  res.locals.error_messages = req.flash('error_messages');
   return next();
 });
 
