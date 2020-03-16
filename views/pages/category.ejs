@@ -1,0 +1,67 @@
+<% var description = 'I am a description for shibainu project'; %>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../partials/head.ejs %>
+</head>
+
+<body onload="loadCategory(<%= sub_cat_id %>)" class="min-h-screen bg-gray-400">
+    <% include ../partials/header.ejs %>
+
+    <div class="flex text-gray-900 w-full h-full py-12 mx-auto">
+        <div class="container mx-auto w-full">
+            <!-- Defining the grid for the cateogies -->
+            <div class="grid grid-cols-3 gap-4 row-auto ">
+                <div class="col-span-3 h-12 items-center justify-center">
+                    <div>
+                        <div class="container w-full pb-10">
+                            <div class="grid grid-cols-1 gap-4 inline-block align-middle py-3">
+ 
+                                <h1 id="category_title" class="py-2 uppercase">
+                                    
+                                </h1>
+                                <form class="col-start-4" action="./post-thread">
+                                    <button class="h-10 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" type="submit">
+                                        Post thread
+                                    </button>
+                                </form>
+                            </div>
+                            <div id="threads">
+
+                            </div>
+                            <button onclick="decrementPage(1)" id="prev_button"
+                                    class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">
+                                    Prev
+                            </button>
+                            <button onclick="incrementPage(1)" id="next_button"
+                                    class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r">
+                                    Next
+                                </button>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-span-1 bg-gray-300 h-12 items-center justify-center">
+                    <div class="max-w-sm rounded overflow-hidden shadow-lg bg-white">
+                        <div class="px-6 py-4">
+                          <div class="font-bold text-xl mb-2">Sidebar 1</div>
+                          <p class="text-gray-700 text-base">
+                            I am a sidebar, I am a sidebar, I am a sidebar....
+                          </p>
+                        </div>
+                        <div class="px-6 py-4">
+                          <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#shibainu</span>
+                        </div>
+                      </div>
+                </div> -->
+
+            </div>
+        </div>
+    </div>
+
+    <% include ../partials/footer.ejs %>
+</body>
+
+</html>

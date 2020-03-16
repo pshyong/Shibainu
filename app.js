@@ -1,37 +1,95 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var sassMiddleware = require('node-sass-middleware');
+const createError = require('http-errors');
+const express = require('express');
+const bodyParser = require('body-parser');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const sassMiddleware = require('node-sass-middleware');
+const session = require('express-session');
+const favicon = require('serve-favicon');
+require('dotenv').config();
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const apiRouter = require('./routes/API/api');
+const app = express();
 
-var app = express();
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+var options = {
+  swaggerDefinition: {
+    host: 'localhost:3000',
+    basePath: '/api/v1',
+    info: {
+      title: 'shibainu API',
+      version: '0.0.1',
+      description: 'API for all api calls to shibainu server'
+    }
+  },
+  apis: ['./routes/API/*']
+};
+const swaggerSpec = swaggerJSDoc(options);
+
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
-app.use(express.json());
+
+app.use(bodyParser.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+);
+
+// Custom sources
+app.use(
+  '/assets/css/tailwindcss/',
+  express.static(__dirname + '/node_modules/tailwindcss/dist')
+);
+app.use('/assets/js/', express.static(__dirname + '/node_modules/jquery/dist'));
+
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(sassMiddleware({
-  src: path.join(__dirname, 'public'),
-  dest: path.join(__dirname, 'public'),
-  indentedSyntax: true, // true = .sass and false = .scss
-  sourceMap: true
-}));
+app.use(
+  sassMiddleware({
+    src: path.join(__dirname, '/public'),
+    dest: path.join(__dirname, '/public'),
+    debug: true,
+    indentedSyntax: true, // true = .sass and false = .scss
+    sourceMap: true
+  })
+);
+
+// API-docs
+app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Express Session
+app.use(
+  session({
+    secret: process.env.SECRET_KEY,
+    resave: false,
+    saveUninitialized: true
+  })
+);
+
+// Global var for current user session id
+app.use((req, res, next) => {
+  res.locals.sessionId = req.session.id;
+  return next();
+});
+
+// Main paths
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  res.render('pages/404');
 });
 
 // error handler

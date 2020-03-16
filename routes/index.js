@@ -1,9 +1,16 @@
 var express = require('express');
-var router = express.Router();
+var router = express.Router({ mergeParams: true, strict: true});
 
-/* GET home page. */
+/* Main pages router */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('pages/index', { title: 'shibainu', name: req.params.name, category: req.params.cat_name});
+
 });
 
+// This page handler for subpage and category
+router.use('/p/:name/?', require('./UI/subpage'));
+
+
+
 module.exports = router;
+
