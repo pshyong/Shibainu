@@ -9,7 +9,7 @@
 <% } %>
 <% if(success_messages != ''){ %>
 <div class="alert alert-success alert-dismissible fade show" role="alert">
-  <%= success_msg %>
+  <%= success_messages %>
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -17,7 +17,7 @@
 <% } %>
 <% if(warning_messages != ''){ %>
 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-  <%= error_msg %>
+  <%= warning_messages %>
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -25,7 +25,7 @@
 <% } %>
 <% if(error_messages != ''){ %>
 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-  <%= error %>
+  <%= error_messages %>
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
