@@ -85,41 +85,42 @@ passport.use(
   new LocalStrategy(
     { usernameField: 'email' },
     async (username, password, done) => {
-      console.log('Login process:', username);
+      // Find user first
       try {
         const user = await db.one(
-          'SELECT user_account_id, username ' +
+          'SELECT hashed_password ' +
             'FROM User_account ' +
-            'WHERE username=$1 AND hashed_password=$2',
-          [username, password]
+            'WHERE username=$1;',
+          username
         );
 
         if (user) {
           const match = await bcrypt.compare(password, user.hashed_password);
+          if (match) return done(null, user);
         }
-        return done(null, result);
+        return done(null, false, {
+          message: 'Wrong username or password'
+        });
       } catch (err) {
         console.error('/login: ' + err);
-        return done(null, false, { message: 'Wrong user name or password' });
+        return done(null, false, { message: 'Wrong username or password' });
       }
     }
   )
 );
 
 passport.serializeUser((user, done) => {
-  log.debug('serialize ', user);
   done(null, user.user_id);
 });
 
 passport.deserializeUser((id, done) => {
-  log.debug('deserualize ', id);
+  // Find user first
   db.one(
     'SELECT user_account_id, username, FROM User_account ' +
       'WHERE user_account_id = $1',
     [id]
   )
     .then(user => {
-      //log.debug("deserializeUser ", user);
       done(null, user);
     })
     .catch(err => {
@@ -140,8 +141,9 @@ app.use(
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   res.locals.sessionId = req.session.id;
-  res.locals.success_messages = req.flash('success_messages');
-  res.locals.error_messages = req.flash('error_messages');
+  res.locals.success_messages = req.flash('success');
+  res.locals.warning_messages = req.flash('warn');
+  res.locals.error_messages = req.flash('error');
   return next();
 });
 
@@ -163,7 +165,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('pages/error');
 });
 
 module.exports = app;
