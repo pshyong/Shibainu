@@ -58,6 +58,6 @@ CREATE TABLE IF NOT EXISTS User_account (
     hashed_password varchar(100)  NOT NULL,
     created timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     thread_id integer NULL,
-    username varchar(20) UNIQUE NOT NULL,
+    username varchar(50) UNIQUE NOT NULL,
     user_account_id serial PRIMARY KEY
 );
