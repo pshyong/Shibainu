@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS Post (
 
 CREATE TABLE IF NOT EXISTS User_account (
     name varchar(50) NULL,
-    hashed_password varchar(50)  NOT NULL,
+    hashed_password varchar(100)  NOT NULL,
     created timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     thread_id integer NULL,
     username varchar(20) UNIQUE NOT NULL,
