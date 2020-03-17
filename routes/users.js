@@ -22,7 +22,7 @@ router.get('/logout', (req, res) => {
 router.post('/register', (req, res, next) => {
   console.log(req.body);
   const { email, password, confirmation } = req.body;
-  let errors = [];
+  const errors = [];
 
   if (!email || !password || !confirmation) {
     errors.push({ msg: 'Please enter all fields' });
