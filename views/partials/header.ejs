@@ -47,6 +47,7 @@
                             </div>
                         </div>
                     </div>
+                    <? if(!currentUser) { ?>
                     <div class="md:pl-16">
                         <!-- <a href="#"
                                 class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4 align-middle">
@@ -96,7 +97,6 @@
                         </div>
                         <div id="registerform" class="hidden mt-3 pt-30 loginform bg-white block absolute registerform">
                             <div class="w-full max-w-xs">
-                                <% include ./messages %>
                                 <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" action="/register"
                                     method="POST">
                                     <div class="mb-4">
@@ -106,7 +106,7 @@
                                         <input
                                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                             id="email_reg" type="text" placeholder="Email Address" name="email"
-                                            value="<%= typeof email !== 'undefined' ? email : ''%>">>
+                                            value="<%= typeof email !== 'undefined' ? email : ''%>">
                                     </div>
                                     <div class="mb-6">
                                         <label class="block text-gray-700 text-sm font-bold mb-2 w-64"
@@ -139,6 +139,15 @@
 
                             </div>
                         </div>
+                        <? } else { ?>
+                        <div class="md:pl-16">
+                            <a href="#" class="text-gray-300 text-sm font-semibold hover:text-blue-300 mr-4"
+                                id="username-form"><?= currentUser.email ?></a>
+                            <a href="/logout" class="text-gray-300 text-sm font-semibold hover:text-blue-300 mr-4"
+                                id="logout-form">Logout</a>
+                        </div>
+                        <? } ?>
+                        <% include ./messages %>
                         <!-- <div class="dropdown inline-block relative">
                                 <button class="inline-flex h-8 w-8 rounded-full overflow-hidden border-2 border-gray-700 focus:outline-none focus:border-white items-center">
                                     <img class="h-full w-full object-cover " src="/assets/img/dabbing-shiba.png">
