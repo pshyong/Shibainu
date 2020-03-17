@@ -78,9 +78,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Connect Flash
 app.use(flash());
 
+// Express Session
+app.use(
+  session({
+    secret: process.env.SECRET_KEY,
+    resave: false,
+    saveUninitialized: true
+  })
+);
+
 // Passport
-app.use(passport.initialize());
-app.use(passport.session());
 passport.use(
   new LocalStrategy(
     { usernameField: 'email' },
@@ -88,15 +95,18 @@ passport.use(
       // Find user first
       try {
         const user = await db.one(
-          'SELECT hashed_password ' +
-            'FROM User_account ' +
-            'WHERE username=$1;',
+          'SELECT * FROM User_account WHERE username=$1;',
           username
         );
 
         if (user) {
           const match = await bcrypt.compare(password, user.hashed_password);
-          if (match) return done(null, user);
+          if (match)
+            return done(null, {
+              id: user.user_account_id,
+              username: user.username
+            });
+          else return done(null, false);
         }
         return done(null, false, {
           message: 'Wrong username or password'
@@ -110,16 +120,12 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-  done(null, user.user_id);
+  done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
   // Find user first
-  db.one(
-    'SELECT user_account_id, username, FROM User_account ' +
-      'WHERE user_account_id = $1',
-    [id]
-  )
+  db.one('SELECT * FROM User_account WHERE user_account_id = $1;', id)
     .then(user => {
       done(null, user);
     })
@@ -128,14 +134,8 @@ passport.deserializeUser((id, done) => {
     });
 });
 
-// Express Session
-app.use(
-  session({
-    secret: process.env.SECRET_KEY,
-    resave: false,
-    saveUninitialized: true
-  })
-);
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Global var for current user session id
 app.use((req, res, next) => {
