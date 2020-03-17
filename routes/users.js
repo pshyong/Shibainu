@@ -1,31 +1,25 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 const passport = require('passport');
 const db = require('../config');
 const router = express.Router();
-
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
 
 router.post(
   '/login',
   passport.authenticate('local', {
     successRedirect: '/',
-    failureRedirect: '/'
-  }),
-  (req, res) => {
-    // assign to current user global
-    console.log('User has logged in!');
-  }
+    failureRedirect: '/',
+    failureFlash: true
+  })
 );
 
 router.get('/logout', (req, res) => {
+  req.flash('success', 'You have logged out! See you again.');
   req.logout();
   res.redirect('/');
 });
 
-router.post('/register', (req, res) => {
+router.post('/register', (req, res, next) => {
   console.log(req.body);
   const { email, password, confirmation } = req.body;
   let errors = [];
@@ -38,47 +32,57 @@ router.post('/register', (req, res) => {
     errors.push({ msg: 'Password must be at least 6 characters' });
   }
 
-  if (errors.length > 0) {
-    res.render('register', {
-      errors,
-      email,
-      password,
-      confirmation
-    });
-    
-  // verify if email is of proper format
   // find if user exists already
-  // verify if passwords match
   if (password !== confirmation) {
     errors.push({ msg: 'Passwords do not match' });
   }
 
-  const user = await db.one(
-    'SELECT user_account_id, username ' +
-      'FROM User_account ' +
-      'WHERE username=$1;',
-    [email]
-  );
+  if (errors.length > 0) {
+    console.log('Rendering Errors');
+    res.render('pages/index', {
+      errors,
+      email,
+      password,
+      confirmation,
+      title: 'shibainu',
+      name: req.params.name,
+      category: req.params.cat_name
+    });
+  } else {
+    db.oneOrNone('SELECT * FROM User_account WHERE username=$1;', [email])
+      .then(user => {
+        if (user) {
+          req.flash('error', 'Email already exists');
+          res.redirect('/');
+        } else {
+          bcrypt.genSalt(10, function(err, salt) {
+            if (err) return next(err);
+            bcrypt.hash(req.body.password, salt, function(err, hash) {
+              if (err) return next(err);
 
-  if(user) {
-    
+              // Store the user to the database, then send the response
+              db.none(
+                'INSERT INTO User_account(username, hashed_password)' +
+                  'VALUES ($1, $2);',
+                [email, hash]
+              )
+                .then(() => {
+                  req.flash('success', 'Successfully created a new account!');
+                  res.redirect('/');
+                })
+                .catch(error => {
+                  req.flash('error', error.message);
+                  res.redirect('/');
+                });
+            });
+          });
+        }
+      })
+      .catch(error => {
+        req.flash('error', error.message);
+        res.redirect('/');
+      });
   }
-  else{
-    db.one(
-      'INSERT INTO User_account(username, hashed_password) VALUES ($1, $2) RETURNING username;',
-      [req.body.email, req.body.password]
-    );
-  }
-
-  // .then(user => {
-  //   console.log(user + ' has been registered!');
-  //   res.redirect('/');
-  // })
-  // .catch(err => {
-  //   // deal with this later
-  //   console.log(err);
-  //   res.redirect('/');
-  // });
 });
 
 module.exports = router;
