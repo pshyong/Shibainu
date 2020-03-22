@@ -55,6 +55,20 @@ function incrementPage(val) {
 	updatePage(page_num + val)
 }
 
+function deletethread() {
+	var r = confirm("Press le button");
+	if(r){
+		var sub_cat_id = thread_id;
+    	
+		console.log("yeet");
+	
+    	$.ajax({type:"DELETE", url: "http://localhost:3000/api/v1/pages/thread", data: "thread_id="+thread_id, success: window.location.href = "http://localhost:3000/p/Science"})
+			//window.location.href = "http://localhost:3000/p/Science";
+		
+	}
+	
+}
+
 function updatePage(new_page) {
   page_num = new_page
   
@@ -87,6 +101,12 @@ function genratePagination() {
   		$('#pages').append(`<button onclick="updatePage(${i})" class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">
                                     ${i}
                                 </button>`)
+	  }
+
+	  if (1){
+		  $('#full').append(`<button onclick="deletethread()" class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l float:left">
+		  DELETE
+	  </button>`)
 	  }
 }
 
