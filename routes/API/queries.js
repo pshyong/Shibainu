@@ -570,7 +570,7 @@ exports.getThread = [
 			return;
 		}
 		let getThreadQuery = "SELECT * FROM thread  WHERE thread_id = $1;";
-		let getPostsQuery = `SELECT * FROM post WHERE thread_id = $1 limit ${post_limit} offset $2;`;
+		let getPostsQuery = `SELECT * FROM post WHERE thread_id = $1 ORDER BY created limit ${post_limit} offset $2;`;
 
 		db.task(async t => {
 			let thread_id = req.params.thread_id;
@@ -823,7 +823,7 @@ exports.getPost = [
 ];
 
 const updatePostQuery =
-  'UPDATE post SET content=$1 WHERE post_id=$2 AND thread_id=$3 RETURNING thread_id, post_id;';
+  'UPDATE post SET content=$1, modified_date=CURRENT_TIMESTAMP WHERE post_id=$2 AND thread_id=$3 RETURNING thread_id, post_id;';
 exports.updatePost = [
   body('post_id')
     .exists()
