@@ -102,9 +102,10 @@ function genratePagination() {
                                     ${i}
                                 </button>`)
 	  }
-
+	  $("#delete").remove();
+	  //implement hiding delete button if user is not OP
 	  if (1){
-		  $('#full').append(`<button onclick="deletethread()" class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l float:left">
+		  $('#top').prepend(`<button onclick="deletethread()" id="delete" class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l float:left">
 		  DELETE
 	  </button>`)
 	  }
