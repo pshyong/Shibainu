@@ -19,10 +19,10 @@ exports.getUser = [
     .withMessage('Missing User Account ID Parameter')
     .bail(),
 
-  async function(req, res, next) {
+  async function(req, res) {
     const errors = validationResult(req);
-    const userId = req.param.user_account_id;
-    if (errors) {
+    const userId = req.params.user_account_id;
+    if (!errors) {
       res.status(400).json({ errors: errors.array() });
       return;
     }
@@ -33,7 +33,7 @@ exports.getUser = [
       );
 
       if (user) {
-        res.status(200).json(result);
+        res.status(200).json(user);
       } else {
         res.status(404).send('User does not exist');
       }
@@ -51,21 +51,21 @@ exports.deteleUser = [
     .withMessage('Missing User Account ID Parameter')
     .bail(),
 
-  async function(req, res, next) {
+  async function(req, res) {
     const errors = validationResult(req);
-    const userId = req.param.user_account_id;
-    if (errors) {
+    const userId = req.params.user_account_id;
+    if (!errors) {
       res.status(400).json({ errors: errors.array() });
       return;
     }
     try {
-      const user = await db.oneOrNone(
-        'DELETE FROM User_account WHERE user_account_id=$1;',
+      const result = await db.result(
+        'DELETE FROM User_account WHERE user_account_id=$1 RETURNING *;',
         [userId]
       );
 
-      if (user) {
-        res.status(200).json(result);
+      if (result.rowCount) {
+        res.status(200);
       } else {
         res.status(404).send('User does not exist');
       }
