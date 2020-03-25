@@ -1,10 +1,19 @@
 var page_num = 1
 var max_page = -1
 var thread_id = -1
+var user_id = -1
+
+function setUserId() {
+	var idDiv = document.getElementById("user_id")
+	if (idDiv) {
+		user_id = idDiv.getAttribute("value")
+	}
+}
 
 function loadThread(id) {
   thread_id = id
-		
+  setUserId()
+  
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
@@ -117,13 +126,15 @@ function createPostHTML(post) {
 		            <td></td>
 		        </tr>
 		    </tbody>
-		   </table>`
+		   </table>
+		   <div class="w-full shadow-lg bg-white text-right border-b-2">`
 		
-		//TODO: edit this so buttons only appear for correct users 
-		html += `<div class="w-full shadow-lg bg-white text-right border-b-2">
-					<button onclick="editPost(${post.post_id})" style="float: left; margin: 5px;">Edit</button>
-				   	<button onclick="deletePost(${post.post_id})" style="float: left; margin: 5px;">Delete</button>
-				   	<p class="pl-1 text-xs text-gray-500 font-medium p-2">Posted on: ${date.toDateString()} ${date.toLocaleTimeString()}</p>
+		if (user_id == post.user_account_id) {
+			html += `<button onclick="editPost(${post.post_id})" style="float: left; margin: 5px;">Edit</button>
+				   	<button onclick="deletePost(${post.post_id})" style="float: left; margin: 5px;">Delete</button>`
+		}
+		
+		html += `<p class="pl-1 text-xs text-gray-500 font-medium p-2">Posted on: ${date.toDateString()} ${date.toLocaleTimeString()}</p>
 				 </div>`
 			
 	return html
