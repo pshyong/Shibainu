@@ -580,7 +580,7 @@ router
    *     parameters:
    *       - name: user_account_id
    *         description: The id of the corresponding user
-   *         in: formData
+   *         in: path
    *         required: true
    *         type: integer
    *     responses:
@@ -605,9 +605,9 @@ router
    *     parameters:
    *       - name: user_account_id
    *         description: The id of the corresponding user
-   *         in: formData
+   *         in: path
    *         required: true
-   *         type: integer
+   *         type: string
    *     responses:
    *       200:
    *         description: Successfully deleted the user
