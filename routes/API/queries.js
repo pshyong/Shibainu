@@ -515,7 +515,8 @@ exports.addThread = [
 	
 	result = {}
 	let addThreadQuery = 'INSERT INTO thread(subject, sub_cat_id, session_id) VALUES ($1, $2, $3) RETURNING thread_id, subject';
-	const addPostQuery = 'INSERT INTO post(content, thread_id, session_id) VALUES ($1, $2, $3) RETURNING post_id, content;';
+	const addPostQuery = 'INSERT INTO post(content, thread_id, session_id, user_account_id) VALUES ($1, $2, $3, $4) RETURNING post_id, content;';
+	var user_account_id = req.user ? req.user.user_account_id : 0
 	
 	console.log(req.session)
 	db.task(async t => {
@@ -524,7 +525,7 @@ exports.addThread = [
 						   if ("thread_id" in thread) {
 							   thread_id = thread.thread_id;
 							   result.thread = thread;
-							   return t.one(addPostQuery, [req.body.content, thread_id, req.session.id])
+							   return t.one(addPostQuery, [req.body.content, thread_id, req.session.id, user_account_id])
 							    	   .then(post => {
 							    		   if ("post_id" in post) {
 							    			   result.post = post;
@@ -748,18 +749,21 @@ exports.addPost = [
       // if there are errors, we return 400
       res.status(400).json({ errors: errors.array() });
       return;
-    }
+    }  
     //here may be have to check if post is already in db?
     //  RETURNING content, post_id"
     const addPostQuery =
    	 "UPDATE thread SET number_of_posts=(number_of_posts + 1) WHERE thread_id = $2;" + 
-	 "INSERT INTO post(content, thread_id, session_id) VALUES ($1, $2, $3) RETURNING post_id;";
+	 "INSERT INTO post(content, thread_id, session_id, user_account_id) VALUES ($1, $2, $3, $4) RETURNING post_id;";
+   
+    var user_account_id = req.user ? req.user.user_account_id : 0
     db.task(async t => {
       //try to add to the db
       const result = await t.one(addPostQuery, [
         req.body.content,
         req.body.thread_id,
-        req.session.id
+        req.session.id,
+        user_account_id
       ]);
       return result;
     })
