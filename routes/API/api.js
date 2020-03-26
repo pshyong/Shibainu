@@ -566,6 +566,49 @@ router
   .delete(db.deletePost);
 
 router
+  .route('/v1/user/')
+  /**
+   * @swagger
+   *
+   * /user/:
+   *   post:
+   *     description: Create a user
+   *     tags:
+   *       - User
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - name: name
+   *         description: The name of the user
+   *         in: formData
+   *         required: true
+   *         type: string
+   *       - name: email
+   *         description: The email of the user
+   *         in: formData
+   *         required: true
+   *         type: string
+   *       - name: password
+   *         description: The password for this account
+   *         in: formData
+   *         required: true
+   *         type: string
+   *       - name: confirmation
+   *         description: The password confirmation for this account
+   *         in: formData
+   *         required: true
+   *         type: string
+   *     responses:
+   *       200:
+   *         description: Successfully created a user
+   *       500:
+   *         description: Internal server error
+   *       404:
+   *         description: Missing or wrong credentials
+   */
+  .post(user.createUser);
+
+router
   .route('/v1/user/:user_account_id')
   /**
    * @swagger
@@ -595,7 +638,7 @@ router
   /**
    * @swagger
    *
-   * /user/{user_account_id}:
+   * /user/:
    *   delete:
    *     description: Delete a user using their id
    *     tags:
