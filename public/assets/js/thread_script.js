@@ -105,7 +105,7 @@ function loadPosts(posts) {
 				date = new Date()
 				
 			}
-			this.console.log(post)
+	
 	      
 	      
 	      return `<table class="w-full shadow-lg rounded">
@@ -119,8 +119,8 @@ function loadPosts(posts) {
 			                        src="https://cdn0.iconfinder.com/data/icons/user-63/512/399_Personal_Personalization_Profile_User-512.png" alt="" />
 			                    </span>
 			                    <span class="w-full">
-			                    	<p class="md:hidden text-xs text-gray-600 font-medium">Anonymous</p>
-									<p class="hidden md:table-cell text-xs text-gray-500 font-medium"> Anonymous</p>
+			                    	<p class="md:hidden text-xs text-gray-600 font-medium">${post.username}</p>
+									<p class="hidden md:table-cell text-xs text-gray-500 font-medium"> ${post.username}</p>
 			                        <br>
 								</span>
 							</td>

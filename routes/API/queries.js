@@ -570,7 +570,8 @@ exports.getThread = [
 			return;
 		}
 		let getThreadQuery = "SELECT * FROM thread  WHERE thread_id = $1;";
-		let getPostsQuery = `SELECT * FROM post WHERE thread_id = $1 limit ${post_limit} offset $2;`;
+    let getPostsQuery = `SELECT * FROM post WHERE thread_id = $1 limit ${post_limit} offset $2;`;
+    let getPostAccName = `SELECT username from user_account WHERE user_account_id = $1;`;
 
 		db.task(async t => {
 			let thread_id = req.params.thread_id;
@@ -601,19 +602,29 @@ exports.getThread = [
 
       // Checking each post if it was made anonymously and time elapsed.
       for (i = 0; i < posts.length; i++) {
-        if (posts[i].user_account_id != 0) continue;
+        if (posts[i].user_account_id != 0) {
+          const name = await t.any(getPostAccName, [posts[i].user_account_id]);
+          // console.log(name);
+          username = name[0].username;
+          console.log(username);
+          posts[i].username = username;
+          continue;
+        }
+        posts[i].username = 'anonymous';
         diff = getTimeUntilVisible(posts[i].created);
         var temp = {};
         temp.post_id = posts[i].post_id;
         temp.delayed = "";
+        temp.username = 'anonymous';
         if (diff > 0) {
           temp["delayed"] = `${diff} minutes left until post is visible`  
           posts[i] = temp;
        }
       }
-
+      
 			result = thread[0]; 
-			result.posts = posts;
+      result.posts = posts;
+      console.log(result)
       return result;
       
 		}).then (result => {
@@ -749,17 +760,21 @@ exports.addPost = [
       res.status(400).json({ errors: errors.array() });
       return;
     }
+    console.log(req.user)
+    var user_id = 0;
+    if (req.user) user_id = req.user.user_account_id;
     //here may be have to check if post is already in db?
     //  RETURNING content, post_id"
     const addPostQuery =
    	 "UPDATE thread SET number_of_posts=(number_of_posts + 1) WHERE thread_id = $2;" + 
-	 "INSERT INTO post(content, thread_id, session_id) VALUES ($1, $2, $3) RETURNING post_id;";
+	 "INSERT INTO post(content, thread_id, session_id, user_account_id) VALUES ($1, $2, $3, $4) RETURNING post_id;";
     db.task(async t => {
       //try to add to the db
       const result = await t.one(addPostQuery, [
         req.body.content,
         req.body.thread_id,
-        req.session.id
+        req.session.id,
+        user_id
       ]);
       return result;
     })
