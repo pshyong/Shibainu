@@ -8,7 +8,7 @@
 <body>
 
     <div id="header">
-        <div class="flex bg-blue-900 top-0 inset-x-0 z-100 h-12 fixed items-center">
+        <div class="flex bg-blue-900 top-0 inset-x-0 z-50 h-12 fixed items-center">
             <!-- Fixed? -->
             <div class="w-full max-w-screen-xl relative mx-auto px-6">
                 <nav class="flex items-center">
@@ -150,9 +150,9 @@
             <% for (var key in locals.data) { %>
                 <% for (let i = 0; i < locals.data[key].length; i++) { %>
                 <!-- Carousel Body -->
-                <div class="relative rounded-lg block md:flex items-center shadow-xl my-6 bg-blue-900"
+                <div class="relative rounding-corner block md:flex items-center shadow-xl my-6 bg-blue-900"
                     style="min-height: 19rem;">
-                    <div class="w-full h-full flex items-center bg-blue-900 rounded-lg">
+                    <div class="w-full h-full flex items-center bg-blue-900 rounding-corner">
                         <svg class="hidden md:block absolute inset-y-0 h-full w-24 fill-current text-gray-100 -ml-12 "
                             viewBox="0 0 100 100" preserveAspectRatio="none">
                             <polygon style="fill:#2a4365" points="50,0 100,0 50,100 0,100" />
@@ -163,7 +163,7 @@
                             <div class="flex justify-between"><a href="/p/<%= locals.data[key][i].title %>" class="text-indigo-100 text-left align-left inline-block">/p/<%= locals.data[key][i].title %></a><span class="text-white inline-block align-right text-right">Posted: <%= new Date(locals.data[key][i].created).toLocaleDateString(options) %> <%= new Date(locals.data[key][i].created).toLocaleTimeString(options) %></span></div>
                             <div class="text-indigo-200 text-2xl font-bold"><a href="/p/<%= locals.data[key][i].title %>/c/<%= locals.data[key][i].subcat_name %>/threads/<%= locals.data[key][i].subject %>/<%= locals.data[key][i].thread_id %>"><%= locals.data[key][i].subject %></a></div>
                             
-                            <p class="text-purple-100 blurred"><%= data[key][i].content.substr(0, 1000) %></span></p>
+                            <p class="text-purple-100 blurred"><%= data[key][i].content.substr(0, 700) %></span></p>
                             
                             <a class="flex items-baseline mt-3 text-blue-600 hover:text-blue-100 focus:text-blue-100"
                                 href="/p/<%= locals.data[key][i].title %>/c/<%= locals.data[key][i].subcat_name %>/threads/<%= locals.data[key][i].subject %>/<%= locals.data[key][i].thread_id %>">

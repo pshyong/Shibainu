@@ -212,4 +212,9 @@
   -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
   mask-image: linear-gradient(to bottom, black 50%, transparent 100%); }
 
+.rounding-corner {
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  border-top-left-radius: 1rem; }
+
 /*# sourceMappingURL=style.css.map */
