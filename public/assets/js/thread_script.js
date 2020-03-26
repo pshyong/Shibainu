@@ -43,7 +43,7 @@ function loadThread(id) {
 function getUserName(id){
 
 	if (id ==0){
-		return "Anon"
+		return "Anonymous"
 	}
 
 	var xhttp = new XMLHttpRequest();

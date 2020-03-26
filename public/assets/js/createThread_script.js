@@ -4,9 +4,8 @@ function post_thread(page_name){
     var sub_cat_id = document.getElementById('category').value;
     var subject = document.getElementById('subject').value;
     var content = document.getElementById('content').value;
-
 	
-    $.post( "http://localhost:3000/api/v1/pages/thread", {sub_cat_id,subject,content } );
+    $.post( "http://localhost:3000/api/v1/pages/thread", {sub_cat_id,subject,content} );
     window.location.href = "http://localhost:3000/p/"+page_name;
 
 }
