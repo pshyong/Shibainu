@@ -1028,14 +1028,15 @@ exports.getAllNewThreads = [
 		// FROM first_post
 		// WHERE row_num = 1;`
 		let query = `WITH first_post AS (
-			SELECT DISTINCT subp.title, Sub.subject AS Subcat_Name, P.thread_id, P.content AS content, P.created, P.upvotes, P.downvotes, substring(T.subject for 100) AS subject, row_number() over (PARTITION BY P.thread_id ORDER BY P.created DESC) as row_num
+			SELECT DISTINCT subp.title, Sub.subject AS Subcat_Name, P.thread_id, P.content AS content, P.created, P.upvotes, P.downvotes, substring(T.subject for 100) AS subject, row_number() over (PARTITION BY P.thread_id ORDER BY P.created asc) as row_num
 			FROM Post P, Thread T, subcategory Sub, subpage subp, category C
 			WHERE T.sub_cat_id = Sub.sub_cat_id AND C.cat_id = Sub.main_cat_id AND subp.page_id = C.page_id AND T.thread_id = P.thread_id AND P.thread_id IN (SELECT thread.thread_id
 								FROM THREAD
-								ORDER BY created asc))
+								ORDER BY created DESC))
 			SELECT *
 			FROM first_post
-			WHERE row_num = 1;`
+			WHERE row_num = 1
+			ORDER BY created desc;`
 		db.task(async t => {
 				return await t.any(query);
 			})
