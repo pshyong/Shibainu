@@ -9,13 +9,11 @@ function loadThread(id) {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       result = JSON.parse(this.responseText);
-	  console.log(result);
 	  if (result.delayed) {
 		document.getElementById("thread_title").innerHTML = result.delayed
 	  } else{
 		document.getElementById("thread_title").innerHTML = result.subject
 	  }
-      
        	  
       <!-- TODO: change page limit to use .env -->
       max_page = Math.ceil(result.number_of_posts / 25)
@@ -102,11 +100,9 @@ function loadPosts(posts) {
 			if (post.delayed){
 				post.content = post.delayed;
 				// Need to update date
-				date = new Date()
 				
 			}
 	
-	      
 	      
 	      return `<table class="w-full shadow-lg rounded">
 			      	<tbody class="bg-white">

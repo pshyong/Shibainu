@@ -517,7 +517,7 @@ exports.addThread = [
 	let addThreadQuery = 'INSERT INTO thread(subject, sub_cat_id, session_id) VALUES ($1, $2, $3) RETURNING thread_id, subject';
 	const addPostQuery = 'INSERT INTO post(content, thread_id, session_id) VALUES ($1, $2, $3) RETURNING post_id, content;';
 	
-	console.log(req.session)
+	// console.log(req.session)
 	db.task(async t => {
 		return await t.one(addThreadQuery, [req.body.subject, req.body.sub_cat_id, req.session.id])
 					   .then(thread => {
@@ -606,17 +606,19 @@ exports.getThread = [
           const name = await t.any(getPostAccName, [posts[i].user_account_id]);
           // console.log(name);
           username = name[0].username;
-          console.log(username);
+          // console.log(username);
           posts[i].username = username;
           continue;
         }
         posts[i].username = 'anonymous';
         diff = getTimeUntilVisible(posts[i].created);
-        var temp = {};
-        temp.post_id = posts[i].post_id;
-        temp.delayed = "";
-        temp.username = 'anonymous';
+        
         if (diff > 0) {
+          var temp = {};
+          temp.post_id = posts[i].post_id;
+          temp.delayed = "";
+          temp.username = 'anonymous';
+          temp.created = posts[i].created;
           temp["delayed"] = `${diff} minutes left until post is visible`  
           posts[i] = temp;
        }
@@ -624,7 +626,7 @@ exports.getThread = [
       
 			result = thread[0]; 
       result.posts = posts;
-      console.log(result)
+      // console.log(result)
       return result;
       
 		}).then (result => {
@@ -760,7 +762,7 @@ exports.addPost = [
       res.status(400).json({ errors: errors.array() });
       return;
     }
-    console.log(req.user)
+    // console.log(req.user)
     var user_id = 0;
     if (req.user) user_id = req.user.user_account_id;
     //here may be have to check if post is already in db?
