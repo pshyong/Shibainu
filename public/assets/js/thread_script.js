@@ -103,7 +103,8 @@ function createPostHTML(post) {
     var date = new Date(post.created);
     
     var content = post.delayed ? post.delayed : post.content;
-    
+    var username = post.username ? post.username : "Anonymous"
+    	
 	var html = `<table class="w-full shadow-lg rounded">
 		      	<tbody class="bg-white">
 		  		<tr class="accordion border-b border-grey-light hover:bg-gray-100">
@@ -115,8 +116,8 @@ function createPostHTML(post) {
 		                    src="https://cdn0.iconfinder.com/data/icons/user-63/512/399_Personal_Personalization_Profile_User-512.png" alt="" />
 		                </span>
 		                <span class="w-full">
-		                	<p class="md:hidden text-xs text-gray-600 font-medium">Anonymous</p>
-							<p class="hidden md:table-cell text-xs text-gray-500 font-medium"> Anonymous</p>
+		                	<p class="md:hidden text-xs text-gray-600 font-medium">${username}</p>
+							<p class="hidden md:table-cell text-xs text-gray-500 font-medium"> ${username}</p>
 		                    <br>
 						</span>
 					</td>

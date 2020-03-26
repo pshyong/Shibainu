@@ -571,8 +571,8 @@ exports.getThread = [
 			return;
 		}
 		let getThreadQuery = "SELECT * FROM thread  WHERE thread_id = $1;";
-		let getPostsQuery = `SELECT * FROM post WHERE thread_id = $1 ORDER BY created limit ${post_limit} offset $2;`;
-
+		let getPostsQuery = `SELECT post_id, content, post.created, username, post.user_account_id FROM post LEFT JOIN user_account ON post.user_account_id = user_account.user_account_id WHERE post.thread_id = $1 ORDER BY created limit ${post_limit} offset $2;`
+	
 		db.task(async t => {
 			let thread_id = req.params.thread_id;
 			let offset = (req.params.page_num - 1) * post_limit
