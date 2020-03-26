@@ -515,7 +515,8 @@ exports.addThread = [
 	
 	result = {}
 	let addThreadQuery = 'INSERT INTO thread(subject, sub_cat_id, session_id) VALUES ($1, $2, $3) RETURNING thread_id, subject';
-	const addPostQuery = 'INSERT INTO post(content, thread_id, session_id) VALUES ($1, $2, $3) RETURNING post_id, content;';
+	const addPostQuery = 'INSERT INTO post(content, thread_id, session_id, user_account_id) VALUES ($1, $2, $3, $4) RETURNING post_id, content;';
+	var user_account_id = req.user ? req.user.user_account_id : 0
 	
 	// console.log(req.session)
 	db.task(async t => {
@@ -524,7 +525,7 @@ exports.addThread = [
 						   if ("thread_id" in thread) {
 							   thread_id = thread.thread_id;
 							   result.thread = thread;
-							   return t.one(addPostQuery, [req.body.content, thread_id, req.session.id])
+							   return t.one(addPostQuery, [req.body.content, thread_id, req.session.id, user_account_id])
 							    	   .then(post => {
 							    		   if ("post_id" in post) {
 							    			   result.post = post;
@@ -570,8 +571,13 @@ exports.getThread = [
 			return;
 		}
 		let getThreadQuery = "SELECT * FROM thread  WHERE thread_id = $1;";
+
     let getPostsQuery = `SELECT * FROM post WHERE thread_id = $1 limit ${post_limit} offset $2;`;
     let getPostAccName = `SELECT username from user_account WHERE user_account_id = $1;`;
+
+// Nice query but it might break the merge.
+// let getPostsQuery = `SELECT post_id, content, post.created, username, post.user_account_id FROM post LEFT JOIN user_account ON post.user_account_id = user_account.user_account_id WHERE post.thread_id = $1 ORDER BY created limit ${post_limit} offset $2;`
+	
 
 		db.task(async t => {
 			let thread_id = req.params.thread_id;
@@ -765,11 +771,16 @@ exports.addPost = [
     // console.log(req.user)
     var user_id = 0;
     if (req.user) user_id = req.user.user_account_id;
+
     //here may be have to check if post is already in db?
     //  RETURNING content, post_id"
     const addPostQuery =
    	 "UPDATE thread SET number_of_posts=(number_of_posts + 1) WHERE thread_id = $2;" + 
 	 "INSERT INTO post(content, thread_id, session_id, user_account_id) VALUES ($1, $2, $3, $4) RETURNING post_id;";
+
+//    Nice, I should've done this, I don't want to retest so I'll comment it out.
+//     var user_account_id = req.user ? req.user.user_account_id : 0
+
     db.task(async t => {
       //try to add to the db
       const result = await t.one(addPostQuery, [
@@ -777,6 +788,7 @@ exports.addPost = [
         req.body.thread_id,
         req.session.id,
         user_id
+
       ]);
       return result;
     })
@@ -840,7 +852,7 @@ exports.getPost = [
 ];
 
 const updatePostQuery =
-  'UPDATE post SET content=$1 WHERE post_id=$2 AND thread_id=$3 RETURNING thread_id, post_id;';
+  'UPDATE post SET content=$1, modified_date=CURRENT_TIMESTAMP WHERE post_id=$2 AND thread_id=$3 RETURNING thread_id, post_id;';
 exports.updatePost = [
   body('post_id')
     .exists()
