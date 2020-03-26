@@ -19,7 +19,9 @@ function loadThread(id) {
     if (this.readyState == 4 && this.status == 200) {
       result = JSON.parse(this.responseText);
       
-      document.getElementById("thread_title").innerHTML = result.subject
+	  document.getElementById("thread_title").innerHTML = result.subject
+
+	  document.getElementById("thread_poster").innerHTML = getUserName(result.user_account_id)
        	  
       <!-- TODO: change page limit to use .env -->
       max_page = Math.ceil(result.number_of_posts / 25)
@@ -36,6 +38,21 @@ function loadThread(id) {
   xhttp.open("GET", "http://localhost:3000/api/v1/pages/Thread/" + thread_id + "/1", false);
   xhttp.send();
 }
+
+
+function getUserName(id){
+
+	if (id ==0){
+		return "Anon"
+	}
+
+	var xhttp = new XMLHttpRequest();
+	xhttp.open( "GET", "http://localhost:3000/api/v1/user/" + id ,false); 
+	xhttp.send( null );
+	return JSON.parse(xhttp.responseText).username;
+	
+}
+
 
 function updatePosts() {
   var xhttp = new XMLHttpRequest();
