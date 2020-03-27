@@ -1018,15 +1018,7 @@ exports.deletePost = [
 
 exports.getAllNewThreads = [
 	async function (req, res, next) {
-		// let query = `WITH first_post AS (
-		// SELECT DISTINCT P.thread_id, P.content, P.created, P.upvotes, P.downvotes, T.subject, row_number() over (PARTITION BY P.thread_id ORDER BY P.created asc) as row_num
-		// FROM Post P, Thread T
-		// WHERE T.thread_id = P.thread_id AND P.thread_id IN (SELECT thread.thread_id
-		// 					FROM THREAD
-		// 					ORDER BY created ASC))
-		// SELECT *
-		// FROM first_post
-		// WHERE row_num = 1;`
+
 		let query = `WITH first_post AS (
 			SELECT DISTINCT subp.title, Sub.subject AS Subcat_Name, P.thread_id, P.content AS content, P.created, P.upvotes, P.downvotes, substring(T.subject for 100) AS subject, row_number() over (PARTITION BY P.thread_id ORDER BY P.created asc) as row_num
 			FROM Post P, Thread T, subcategory Sub, subpage subp, category C
