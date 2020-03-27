@@ -7,10 +7,17 @@ const logger = require('morgan');
 const sassMiddleware = require('node-sass-middleware');
 const session = require('express-session');
 const favicon = require('serve-favicon');
+const flash = require('connect-flash');
+
+const bcrypt = require('bcrypt');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const db = require('./config');
 require('dotenv').config();
 
 const indexRouter = require('./routes/index');
 const apiRouter = require('./routes/API/api');
+const userRouter = require('./routes/users');
 const app = express();
 
 const swaggerJSDoc = require('swagger-jsdoc');
@@ -68,6 +75,9 @@ app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Connect Flash
+app.use(flash());
+
 // Express Session
 app.use(
   session({
@@ -77,15 +87,70 @@ app.use(
   })
 );
 
+// Passport
+passport.use(
+  new LocalStrategy(
+    { usernameField: 'email' },
+    async (username, password, done) => {
+      // Find user first
+      try {
+        const user = await db.one(
+          'SELECT * FROM User_account WHERE username=$1;',
+          username
+        );
+
+        if (user) {
+          const match = await bcrypt.compare(password, user.hashed_password);
+          if (match)
+            return done(null, {
+              id: user.user_account_id,
+              username: user.username
+            });
+          else return done(null, false);
+        }
+        return done(null, false, {
+          message: 'Wrong username or password'
+        });
+      } catch (err) {
+        console.error('/login: ' + err);
+        return done(null, false, { message: 'Wrong username or password' });
+      }
+    }
+  )
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+  // Find user first
+  db.one('SELECT * FROM User_account WHERE user_account_id = $1;', id)
+    .then(user => {
+      done(null, user);
+    })
+    .catch(err => {
+      done(new Error(`User with the id ${id} does not exist`));
+    });
+});
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Global var for current user session id
 app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
   res.locals.sessionId = req.session.id;
+  res.locals.success_messages = req.flash('success');
+  res.locals.warning_messages = req.flash('warn');
+  res.locals.error_messages = req.flash('error');
   return next();
 });
 
 // Main paths
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
+app.use('/', userRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -100,7 +165,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('pages/error');
 });
 
 module.exports = app;
