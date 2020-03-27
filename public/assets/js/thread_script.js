@@ -125,7 +125,6 @@ function genratePagination() {
                                     ${i}
                                 </button>`)
 	  }
-<<<<<<< HEAD
 
 	  $("#edit").remove();
 	  //implement hiding delete button if user is not OP
@@ -134,7 +133,6 @@ function genratePagination() {
 		  EDIT
 	  </button>`)
 	  }
-=======
 	  $("#delete").remove();
 	  //implement hiding delete button if user is not OP
 	  if (1){
@@ -249,7 +247,6 @@ function restoreParagraph(post_id, content) {
 	var post_field = document.getElementById(post_id)
 	
 	post_field.innerHTML = `<p>${content}</p>`
->>>>>>> dab46e2b2ef4820f5ebdf64fc032abe3242a597e
 }
 
 function loadPosts(posts) {
