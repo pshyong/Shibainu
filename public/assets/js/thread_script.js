@@ -75,7 +75,7 @@ function editthread() {
 		
 	
     	$.ajax({type:"PUT", url: "http://localhost:3000/api/v1/pages/thread", data: "thread_id="+thread_id+"&subject="+r, success: window.location.href = "http://localhost:3000/p/Science"})
-			//window.location.href = "http://localhost:3000/p/Science";
+			
 	}
 }
 function deletethread() {
