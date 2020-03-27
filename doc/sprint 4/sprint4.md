@@ -12,10 +12,11 @@ Note: We have scrapped the limit on posting.
 
 **Spikes**: No spikes are explicitly identified for this sprint. All members were familiar with the technology that they were using.
 
-**Team Capacity**: Sprint 4 has a total capacity of 23 points, which is 1 point lower than the previous sprint. The team focused on key features to make our application viable for production, hence the lower capacity.
+**Team Capacity**: Sprint 4 has a total capacity of 23 points, which is 1 point lower than the previous sprint. The team focused on testing key features to make our application viable for production, hence the lower capacity.
 
-**User Stories and Tasks**: The user stories are decided based on our release goal, which is to be able to be able
+**User Stories and Tasks**: The user stories are decided to make sure we can meet our release goals:
 
 - Create and view threads and posts either as an anonymous user or account holder.
 - We will be working on stories that allow us to create and view posts and threads on the page, the delay system for posting anonymously, and account management stories.
 - Since most of the stories are straight-forward in ths sprint, tasks will not be necessary for all of them.
+- Members are encourages to use subtasks to help manage their own stories.
