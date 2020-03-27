@@ -68,24 +68,25 @@ function incrementPage(val) {
 }
 
 function editthread() {
-	var r = prompt("Press le button");
+	var r = prompt("Enter new thread title");
 	if(r){
-		var sub_cat_id = thread_id;
-    	
+		
+		
+		var subpage = window.location.pathname.split('/')[2]
 		
 	
-    	$.ajax({type:"PUT", url: "http://localhost:3000/api/v1/pages/thread", data: "thread_id="+thread_id+"&subject="+r, success: window.location.href = "http://localhost:3000/p/Science"})
+    	$.ajax({type:"PUT", url: "http://localhost:3000/api/v1/pages/thread", data: "thread_id="+thread_id+"&subject="+r, success: window.location.href = "http://localhost:3000/p/"+subpage})
 			
 	}
 }
 function deletethread() {
-	var r = confirm("Press le button");
+	var r = confirm("Please confirm you want to delete your thread");
 	if(r){
 		var sub_cat_id = thread_id;
     	
-		console.log("yeet");
+		var subpage = window.location.pathname.split('/')[2]
 	
-    		$.ajax({type:"DELETE", url: "http://localhost:3000/api/v1/pages/thread", data: "thread_id="+thread_id, success: window.location.href = "http://localhost:3000/p/Science"})
+    		$.ajax({type:"DELETE", url: "http://localhost:3000/api/v1/pages/thread", data: "thread_id="+thread_id, success: window.location.href = "http://localhost:3000/p/"+subpage})
 			
 		
 	}
