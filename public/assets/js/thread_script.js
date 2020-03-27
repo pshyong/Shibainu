@@ -18,8 +18,11 @@ function loadThread(id) {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       result = JSON.parse(this.responseText);
-      
-      document.getElementById("thread_title").innerHTML = result.subject
+	  if (result.delayed) {
+		document.getElementById("thread_title").innerHTML = result.delayed
+	  } else{
+		document.getElementById("thread_title").innerHTML = result.subject
+	  }
        	  
       <!-- TODO: change page limit to use .env -->
       max_page = Math.ceil(result.number_of_posts / 25)
@@ -229,8 +232,41 @@ function restoreParagraph(post_id, content) {
 
 function loadPosts(posts) {
   $('#posts').append(
-	      $.map(posts, function (post) {	      
-	    	  return createPostHTML(post)
+	      $.map(posts, function (post) {
+			var date = new Date(post.created);
+			if (post.delayed){
+				post.content = post.delayed;
+				// Need to update date
+				
+			}
+	
+	      
+	      return `<table class="w-full shadow-lg rounded">
+			      	<tbody class="bg-white">
+			      		<tr class="accordion border-b border-grey-light hover:bg-gray-100">
+			      			<td></td>
+			      			<!-- TODO: Update username and picture when feature is added -->
+			      			<td class="items-center px-12">
+			      				<span class="w-full">
+			      					<img class="hidden mr-1 md:mr-2 md:inline-block h-16 w-16 rounded-full object-cover "
+			                        src="https://cdn0.iconfinder.com/data/icons/user-63/512/399_Personal_Personalization_Profile_User-512.png" alt="" />
+			                    </span>
+			                    <span class="w-full">
+			                    	<p class="md:hidden text-xs text-gray-600 font-medium">${post.username}</p>
+									<p class="hidden md:table-cell text-xs text-gray-500 font-medium"> ${post.username}</p>
+			                        <br>
+								</span>
+							</td>
+							<td class="hidden md:table-cell w-full p-4">
+								<p>${post.content}</p>
+			                </td>
+			                <td></td>
+			            </tr>
+			        </tbody>
+			       </table>
+			       <div class="w-full shadow-lg bg-white text-right border-b-2">
+			       	<p class="pl-1 text-xs text-gray-500 font-medium p-2">Posted on: ${date.toDateString()} ${date.toLocaleTimeString()}</p>
+			       </div>`
 	}).join("\n"));
 }
 
