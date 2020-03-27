@@ -45,8 +45,6 @@ exports.main_page = [
                     ]
                 }
             });
-            console.log(JSON.stringify(response.body));
-            console.log(response.body)
             res.render('pages/index', { title: 'Shibainu', 'data': JSON.parse(response.body)});
         } catch (error) {
             console.log(error.response.body);
