@@ -51,4 +51,4 @@ exports.main_page = [
         }
 
     }
-]
+];
