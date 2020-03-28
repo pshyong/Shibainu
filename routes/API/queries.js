@@ -514,17 +514,18 @@ exports.addThread = [
 	}
 	
 	result = {}
-	let addThreadQuery = 'INSERT INTO thread(subject, sub_cat_id, session_id) VALUES ($1, $2, $3) RETURNING thread_id, subject';
-	const addPostQuery = 'INSERT INTO post(content, thread_id, session_id) VALUES ($1, $2, $3) RETURNING post_id, content;';
+	let addThreadQuery = 'INSERT INTO thread(subject, sub_cat_id, session_id,user_account_id) VALUES ($1, $2, $3, $4) RETURNING thread_id, subject';
+	const addPostQuery = 'INSERT INTO post(content, thread_id, session_id, user_account_id) VALUES ($1, $2, $3, $4) RETURNING post_id, content;';
+	var user_account_id = req.user ? req.user.user_account_id : 0
 	
-	console.log(req.session)
+	// console.log(req.session)
 	db.task(async t => {
-		return await t.one(addThreadQuery, [req.body.subject, req.body.sub_cat_id, req.session.id])
+		return await t.one(addThreadQuery, [req.body.subject, req.body.sub_cat_id, req.session.id, user_account_id])
 					   .then(thread => {
 						   if ("thread_id" in thread) {
 							   thread_id = thread.thread_id;
 							   result.thread = thread;
-							   return t.one(addPostQuery, [req.body.content, thread_id, req.session.id])
+							   return t.one(addPostQuery, [req.body.content, thread_id, req.session.id, user_account_id])
 							    	   .then(post => {
 							    		   if ("post_id" in post) {
 							    			   result.post = post;
@@ -570,7 +571,13 @@ exports.getThread = [
 			return;
 		}
 		let getThreadQuery = "SELECT * FROM thread  WHERE thread_id = $1;";
-		let getPostsQuery = `SELECT * FROM post WHERE thread_id = $1 limit ${post_limit} offset $2;`;
+
+    let getPostsQuery = `SELECT * FROM post WHERE thread_id = $1 limit ${post_limit} offset $2;`;
+    let getPostAccName = `SELECT username from user_account WHERE user_account_id = $1;`;
+
+// Nice query but it might break the merge.
+// let getPostsQuery = `SELECT post_id, content, post.created, username, post.user_account_id FROM post LEFT JOIN user_account ON post.user_account_id = user_account.user_account_id WHERE post.thread_id = $1 ORDER BY created limit ${post_limit} offset $2;`
+	
 
 		db.task(async t => {
 			let thread_id = req.params.thread_id;
@@ -601,19 +608,31 @@ exports.getThread = [
 
       // Checking each post if it was made anonymously and time elapsed.
       for (i = 0; i < posts.length; i++) {
-        if (posts[i].user_account_id != 0) continue;
+        if (posts[i].user_account_id != 0) {
+          const name = await t.any(getPostAccName, [posts[i].user_account_id]);
+          // console.log(name);
+          username = name[0].username;
+          // console.log(username);
+          posts[i].username = username;
+          continue;
+        }
+        posts[i].username = 'anonymous';
         diff = getTimeUntilVisible(posts[i].created);
-        var temp = {};
-        temp.post_id = posts[i].post_id;
-        temp.delayed = "";
+        
         if (diff > 0) {
+          var temp = {};
+          temp.post_id = posts[i].post_id;
+          temp.delayed = "";
+          temp.username = 'anonymous';
+          temp.created = posts[i].created;
           temp["delayed"] = `${diff} minutes left until post is visible`  
           posts[i] = temp;
        }
       }
-
+      
 			result = thread[0]; 
-			result.posts = posts;
+      result.posts = posts;
+      // console.log(result)
       return result;
       
 		}).then (result => {
@@ -749,17 +768,27 @@ exports.addPost = [
       res.status(400).json({ errors: errors.array() });
       return;
     }
+    // console.log(req.user)
+    var user_id = 0;
+    if (req.user) user_id = req.user.user_account_id;
+
     //here may be have to check if post is already in db?
     //  RETURNING content, post_id"
     const addPostQuery =
    	 "UPDATE thread SET number_of_posts=(number_of_posts + 1) WHERE thread_id = $2;" + 
-	 "INSERT INTO post(content, thread_id, session_id) VALUES ($1, $2, $3) RETURNING post_id;";
+	 "INSERT INTO post(content, thread_id, session_id, user_account_id) VALUES ($1, $2, $3, $4) RETURNING post_id;";
+
+//    Nice, I should've done this, I don't want to retest so I'll comment it out.
+//     var user_account_id = req.user ? req.user.user_account_id : 0
+
     db.task(async t => {
       //try to add to the db
       const result = await t.one(addPostQuery, [
         req.body.content,
         req.body.thread_id,
-        req.session.id
+        req.session.id,
+        user_id
+
       ]);
       return result;
     })
@@ -823,7 +852,7 @@ exports.getPost = [
 ];
 
 const updatePostQuery =
-  'UPDATE post SET content=$1 WHERE post_id=$2 AND thread_id=$3 RETURNING thread_id, post_id;';
+  'UPDATE post SET content=$1, modified_date=CURRENT_TIMESTAMP WHERE post_id=$2 AND thread_id=$3 RETURNING thread_id, post_id;';
 exports.updatePost = [
   body('post_id')
     .exists()
@@ -949,4 +978,36 @@ exports.deletePost = [
         res.send(sendError(500, '/api' + req.url + ' error ' + e));
       });
   }
+];
+
+exports.getAllNewThreads = [
+	async function (req, res, next) {
+
+		let query = `WITH first_post AS (
+			SELECT DISTINCT subp.title, Sub.subject AS Subcat_Name, P.thread_id, P.content AS content, P.created, P.upvotes, P.downvotes, substring(T.subject for 100) AS subject, row_number() over (PARTITION BY P.thread_id ORDER BY P.created asc) as row_num
+			FROM Post P, Thread T, subcategory Sub, subpage subp, category C
+			WHERE T.sub_cat_id = Sub.sub_cat_id AND C.cat_id = Sub.main_cat_id AND subp.page_id = C.page_id AND T.thread_id = P.thread_id AND P.thread_id IN (SELECT thread.thread_id
+								FROM THREAD
+								ORDER BY created DESC))
+			SELECT *
+			FROM first_post
+			WHERE row_num = 1
+			ORDER BY created desc;`
+		db.task(async t => {
+				return await t.any(query);
+			})
+			.then(result => {
+				for (let i = 0; i < result.length; i++) {
+					Object.keys(result[i]).forEach(function (key) {
+						delete result[i]['row_num'];
+					})
+				}
+				res.status(200).json({
+					data: result
+				});
+			})
+			.catch(e => {
+				throw e;
+			});
+	}
 ];

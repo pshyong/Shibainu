@@ -1,11 +1,9 @@
 var express = require('express');
 var router = express.Router({ mergeParams: true, strict: true});
+const page = require('./UI/page_func');
 
 /* Main pages router */
-router.get('/', function(req, res, next) {
-  res.render('pages/index', { title: 'shibainu', name: req.params.name, category: req.params.cat_name});
-
-});
+router.get('/', page.main_page); 
 
 // This page handler for subpage and category
 router.use('/p/:name/?', require('./UI/subpage'));
