@@ -10,8 +10,10 @@ const bodyParser = require('body-parser');
 // ! Try and group the api calls to ones that are similar
 // ! All api calls should be going through /api/whatever
 
-router
-  .route('/v1/pages/Page/:page_id')
+router.route('/v1/AllNewThreads')
+    .get(db.getAllNewThreads)
+
+router.route('/v1/pages/Page/:page_id')
   /**
      * @swagger
      *

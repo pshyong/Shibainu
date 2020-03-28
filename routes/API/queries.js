@@ -979,3 +979,35 @@ exports.deletePost = [
       });
   }
 ];
+
+exports.getAllNewThreads = [
+	async function (req, res, next) {
+
+		let query = `WITH first_post AS (
+			SELECT DISTINCT subp.title, Sub.subject AS Subcat_Name, P.thread_id, P.content AS content, P.created, P.upvotes, P.downvotes, substring(T.subject for 100) AS subject, row_number() over (PARTITION BY P.thread_id ORDER BY P.created asc) as row_num
+			FROM Post P, Thread T, subcategory Sub, subpage subp, category C
+			WHERE T.sub_cat_id = Sub.sub_cat_id AND C.cat_id = Sub.main_cat_id AND subp.page_id = C.page_id AND T.thread_id = P.thread_id AND P.thread_id IN (SELECT thread.thread_id
+								FROM THREAD
+								ORDER BY created DESC))
+			SELECT *
+			FROM first_post
+			WHERE row_num = 1
+			ORDER BY created desc;`
+		db.task(async t => {
+				return await t.any(query);
+			})
+			.then(result => {
+				for (let i = 0; i < result.length; i++) {
+					Object.keys(result[i]).forEach(function (key) {
+						delete result[i]['row_num'];
+					})
+				}
+				res.status(200).json({
+					data: result
+				});
+			})
+			.catch(e => {
+				throw e;
+			});
+	}
+];
