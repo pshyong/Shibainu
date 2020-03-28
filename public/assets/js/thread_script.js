@@ -1,10 +1,19 @@
 var page_num = 1
 var max_page = -1
 var thread_id = -1
+var user_id = -1
+
+function setUserId() {
+	var idDiv = document.getElementById("user_id")
+	if (idDiv) {
+		user_id = idDiv.getAttribute("value")
+	}
+}
 
 function loadThread(id) {
   thread_id = id
-		
+  setUserId()
+  
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
@@ -90,41 +99,120 @@ function genratePagination() {
 	  }
 }
 
+function createPostHTML(post) {
+    var date = new Date(post.created);
+    
+    var content = post.delayed ? post.delayed : post.content;
+    
+	var html = `<table class="w-full shadow-lg rounded">
+		      	<tbody class="bg-white">
+		  		<tr class="accordion border-b border-grey-light hover:bg-gray-100">
+		  			<td></td>
+		  			<!-- TODO: Update username and picture when feature is added -->
+		  			<td class="items-center px-12">
+		  				<span class="w-full">
+		  					<img class="hidden mr-1 md:mr-2 md:inline-block h-16 w-16 rounded-full object-cover "
+		                    src="https://cdn0.iconfinder.com/data/icons/user-63/512/399_Personal_Personalization_Profile_User-512.png" alt="" />
+		                </span>
+		                <span class="w-full">
+		                	<p class="md:hidden text-xs text-gray-600 font-medium">Anonymous</p>
+							<p class="hidden md:table-cell text-xs text-gray-500 font-medium"> Anonymous</p>
+		                    <br>
+						</span>
+					</td>
+					<td id=${post.post_id} class="hidden md:table-cell w-full p-4">
+						<p>${content}</p>
+		            </td>
+		            <td></td>
+		        </tr>
+		    </tbody>
+		   </table>
+		   <div class="w-full shadow-lg bg-white text-right border-b-2">`
+		
+		if (user_id == post.user_account_id) {
+			html += `<button onclick="editPost(${post.post_id})" style="float: left; margin: 5px;">Edit</button>
+				   	<button onclick="deletePost(${post.post_id})" style="float: left; margin: 5px;">Delete</button>`
+		}
+		
+		html += `<p class="pl-1 text-xs text-gray-500 font-medium p-2">Posted on: ${date.toDateString()} ${date.toLocaleTimeString()}</p>
+				 </div>`
+			
+	return html
+}
+
+function deletePost(post_id) {
+	var post = {
+			post_id: post_id,
+		    thread_id: thread_id
+		};
+		
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+		    	updatePosts();
+		    }
+		  };
+		<!-- TODO: change localhost to actual DB server -->
+		xhttp.open("DELETE", "http://localhost:3000/api/v1/pages/post", true);
+		xhttp.setRequestHeader("Content-Type", "application/json");
+		xhttp.send(JSON.stringify(post));
+}
+
+function editPost(post_id) {
+	var post_field = document.getElementById(post_id)
+	var original_content = post_field.getElementsByTagName('p')[0].innerHTML
+	
+	post_field.innerHTML = `<form>
+                            <div class="container w-full shadow-lg bg-white mt-3 p-4">
+                                <textarea id="${post_id}_content" class="form-textarea focus:bg-white focus:outline-none focus:shadow-outline border border-gray-300 py-2 px-4 block w-full appearance-none leading-normal" rows="7" type="text" >${original_content}</textarea>
+                                <div class="text-right pt-2">
+                                    <button onclick="updatePost(${post_id})" class="h-10 col-start-4 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" type="button">
+                                        Update
+                                    </button>
+                                    <button onclick="restoreParagraph(${post_id}, '${original_content}')" class="h-10 col-start-4 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" type="button">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </form>`
+	
+}
+
+function updatePost(post_id) {
+	var new_content = document.getElementById(post_id + "_content").value
+	
+	var new_post = {
+		content: new_content,
+	    thread_id: thread_id,
+	    post_id: post_id
+	};
+	
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+	    	restoreParagraph(post_id, new_content);
+	    }
+	  };
+	<!-- TODO: change localhost to actual DB server -->
+	xhttp.open("PUT", "http://localhost:3000/api/v1/pages/post", true);
+	xhttp.setRequestHeader("Content-Type", "application/json");
+	xhttp.send(JSON.stringify(new_post));
+}
+
+function restoreParagraph(post_id, content) {
+	var post_field = document.getElementById(post_id)
+	
+	post_field.innerHTML = `<p>${content}</p>`
+}
+
 function loadPosts(posts) {
   $('#posts').append(
-	      $.map(posts, function (post) {
-	      var date = new Date(post.created);
-	      
-	      return `<table class="w-full shadow-lg rounded">
-			      	<tbody class="bg-white">
-			      		<tr class="accordion border-b border-grey-light hover:bg-gray-100">
-			      			<td></td>
-			      			<!-- TODO: Update username and picture when feature is added -->
-			      			<td class="items-center px-12">
-			      				<span class="w-full">
-			      					<img class="hidden mr-1 md:mr-2 md:inline-block h-16 w-16 rounded-full object-cover "
-			                        src="https://cdn0.iconfinder.com/data/icons/user-63/512/399_Personal_Personalization_Profile_User-512.png" alt="" />
-			                    </span>
-			                    <span class="w-full">
-			                    	<p class="md:hidden text-xs text-gray-600 font-medium">Anonymous</p>
-									<p class="hidden md:table-cell text-xs text-gray-500 font-medium"> Anonymous</p>
-			                        <br>
-								</span>
-							</td>
-							<td class="hidden md:table-cell w-full p-4">
-								<p>${post.content}</p>
-			                </td>
-			                <td></td>
-			            </tr>
-			        </tbody>
-			       </table>
-			       <div class="w-full shadow-lg bg-white text-right border-b-2">
-			       	<p class="pl-1 text-xs text-gray-500 font-medium p-2">Posted on: ${date.toDateString()} ${date.toLocaleTimeString()}</p>
-			       </div>`
+	      $.map(posts, function (post) {	      
+	    	  return createPostHTML(post)
 	}).join("\n"));
 }
 
-function uploadPost(thread_id) {
+function uploadPost() {
 	var textField = document.getElementById("content")
 	var post = {
 		content: textField.value,
