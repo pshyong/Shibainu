@@ -116,15 +116,30 @@ function updatePage(new_page) {
 
 function genratePagination() {
 	document.getElementById("pages").innerHTML = ""
-
+	
 	let button_num = 0
 	for (let i = page_num; i <= max_page; i++) {
 		if (button_num > 4) {
 			break
 		}
 		$('#pages').append(`<button onclick="updatePage(${i})" class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">
-                                    ${i}
-                                </button>`)
+								  ${i}
+							  </button>`)
+	}
+
+	$("#edit").remove();
+	//implement hiding delete button if user is not OP
+	if (1){
+		$('#top').prepend(`<button onclick="editthread()" id="edit" class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l float:left">
+		EDIT
+	</button>`)
+	}
+	$("#delete").remove();
+	//implement hiding delete button if user is not OP
+	if (1){
+		$('#top').prepend(`<button onclick="deletethread()" id="delete" class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l float:left">
+		DELETE
+	</button>`)
 	}
 }
 

@@ -10,7 +10,7 @@
 <body>
  
     <div id="header">
-        <div class="flex bg-blue-900 top-0 inset-x-0 z-50 h-12 fixed items-center">
+        <div class="flex bg-blue-900 top-0 inset-x-0 z-100 h-12 fixed items-center">
             <!-- Fixed? -->
             <div class="w-full max-w-screen-xl relative mx-auto px-6">
                 <nav class="flex items-center">
@@ -18,7 +18,7 @@
                         <a class="text-white" href="/"><span class="font-semibold text-xl tracking-tight"
                                 style="text-transform: uppercase;">shibainu</span></a>
                     </div>
-
+    
                     <div class="block lg:hidden">
                         <button
                             class="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
@@ -28,14 +28,13 @@
                             </svg>
                         </button>
                     </div>
-
+    
                     <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto text-gray-600 md:pl-8 ">
-
+    
                         <div class="text-sm md:flex-grow ">
                             <div class="w-full lg:px-6 xl:w-3/4 xl:px-12">
                                 <div class="relative">
-                                    <span class="w-full"
-                                        style="position: relative; display: inline-block; direction: ltr;">
+                                    <span class="w-full" style="position: relative; display: inline-block; direction: ltr;">
                                         <input id="docsearch"
                                             class="transition-colors duration-100 ease-in-out focus:outline-0 border border-transparent focus:bg-white focus:border-gray-300 placeholder-gray-800 rounded-lg bg-gray-400 py-2 pr-4 pl-10 block w-full appearance-none leading-normal ds-input"
                                             type="text" placeholder="Search your way..." autocomplete="off"
@@ -59,7 +58,9 @@
                                 </div>
                             </div>
                         </div>
+    
                         <div class="md:pl-16">
+                            <% if (!currentUser) { %>
                             <a href="#" class="text-gray-300 text-sm font-semibold hover:text-blue-300 mr-4"
                                 id="login-form">Sign in</a>
                             <a href="#"
@@ -67,47 +68,47 @@
                                 id="register-form">Sign up</a>
                             <div id="loginform" class="hidden mt-3 pt-30 loginform bg-white block absolute">
                                 <div class="w-full max-w-xs">
-                                    <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                                    <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" action="/login"
+                                        method="POST">
                                         <div class="mb-4">
                                             <label class="block text-gray-700 text-sm font-bold mb-2 w-64" for="email">
                                                 Email Address
                                             </label>
                                             <input
                                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                                id="email" type="text" placeholder="Email Address">
+                                                id="email" type="text" placeholder="Email Address" name="email">
                                         </div>
                                         <div class="mb-6">
-                                            <label class="block text-gray-700 text-sm font-bold mb-2 w-64"
-                                                for="password">
+                                            <label class="block text-gray-700 text-sm font-bold mb-2 w-64" for="password">
                                                 Password
                                             </label>
                                             <input
                                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                                                id="password" type="password" placeholder="*************">
+                                                id="password" type="password" placeholder="*************" name="password">
                                         </div>
                                         <div class="flex items-center justify-between">
                                             <button
                                                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-32"
-                                                type="button">
+                                                type="submit">
                                                 Sign In
                                             </button>
                                         </div>
                                     </form>
-
+    
                                 </div>
                             </div>
-                            <div id="registerform"
-                                class="hidden mt-3 pt-30 loginform bg-white block absolute registerform">
+                            <div id="registerform" class="hidden mt-3 pt-30 loginform bg-white block absolute registerform">
                                 <div class="w-full max-w-xs">
-                                    <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                                    <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" action="/register"
+                                        method="POST">
                                         <div class="mb-4">
-                                            <label class="block text-gray-700 text-sm font-bold mb-2 w-64"
-                                                for="email_reg">
+                                            <label class="block text-gray-700 text-sm font-bold mb-2 w-64" for="email_reg">
                                                 Email Address
                                             </label>
                                             <input
                                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                                id="email_reg" type="text" placeholder="Email Address">
+                                                id="email_reg" type="text" placeholder="Email Address" name="email"
+                                                value="<%= typeof email !== 'undefined' ? email : ''%>">
                                         </div>
                                         <div class="mb-6">
                                             <label class="block text-gray-700 text-sm font-bold mb-2 w-64"
@@ -116,26 +117,37 @@
                                             </label>
                                             <input
                                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                                                id="password_reg" type="password" placeholder="*************">
+                                                id="password_reg" type="password" placeholder="*************"
+                                                name="password"
+                                                value="<%= typeof password !== 'undefined' ? password : ''%>">
                                             <label class="block text-gray-700 text-sm font-bold mb-2 w-64"
                                                 for="passwordconfirm">
                                                 Confirm Password
                                             </label>
                                             <input
                                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                                                id="passwordconfirm" type="password" placeholder="*************">
+                                                id="passwordconfirm" type="password" placeholder="*************"
+                                                name="confirmation"
+                                                value="<%= typeof confirmation !== 'undefined' ? confirmation : ''%>">
                                         </div>
                                         <div class="flex items-center justify-between">
                                             <button
                                                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-32"
-                                                type="button">
+                                                type="submit">
                                                 Sign up
                                             </button>
                                         </div>
                                     </form>
-
+    
                                 </div>
                             </div>
+                            <% } else { %>
+                            <a href="#" class="text-gray-300 text-sm font-semibold hover:text-blue-300 mr-4"
+                                id="username-form"><%= currentUser.username %></a>
+                            <a href="/logout" class="text-gray-300 text-sm font-semibold hover:text-blue-300 mr-4"
+                                id="logout-form">Logout</a>
+                            <% } %>
+    
                         </div>
                     </div>
                 </nav>
@@ -158,7 +170,7 @@
                             <polygon style="fill:#2a4365" points="50,0 100,0 50,100 0,100" />
                         </svg>
 
-                        <div class="p-12 md:pr-24 md:pl-16 md:py-12">
+                        <div class="p-12 md:pr-24 md:pl-16 md:py-12 w-full">
                             <% var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };%>
                             <div class="flex justify-between"><a href="/p/<%= locals.data[key][i].title %>" class="text-indigo-100 text-left align-left inline-block">/p/<%= locals.data[key][i].title %></a><span class="text-white inline-block align-right text-right">Posted: <%= new Date(locals.data[key][i].created).toLocaleDateString(options) %> <%= new Date(locals.data[key][i].created).toLocaleTimeString(options) %></span></div>
                             <div class="text-indigo-200 text-2xl font-bold"><a href="/p/<%= locals.data[key][i].title %>/c/<%= locals.data[key][i].subcat_name %>/threads/<%= locals.data[key][i].subject %>/<%= locals.data[key][i].thread_id %>"><%= locals.data[key][i].subject %></a></div>
