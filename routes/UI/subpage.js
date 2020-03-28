@@ -6,14 +6,14 @@ const page = require('./page_func');
 
 router.get('/', page.main_subpage);
 
-router.route('/c/:cat_name/:sub_cat_id/?')
-    .get(function(req, res) {
-      res.render('pages/category', { title: 'shibainu | subpage', sub_cat_id: req.params.sub_cat_id, name: req.params.name, category: req.params.cat_name, moment: moment});
-});
-
 router.route('/c/:cat_name/post-thread')
     .get(function(req, res) {
         res.render('pages/newthread', { title: 'shibainu | subpage', name: req.params.name, category: req.params.cat_name, moment: moment});
+});
+
+router.route('/c/:cat_name/:sub_cat_id/?')
+    .get(function(req, res) {
+      res.render('pages/category', { title: 'shibainu | subpage', sub_cat_id: req.params.sub_cat_id, name: req.params.name, category: req.params.cat_name, moment: moment});
 });
 
 router.route('/c/:cat_name/threads/:thread_name/:thread_id/?')

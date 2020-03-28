@@ -18,8 +18,14 @@ function loadThread(id) {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       result = JSON.parse(this.responseText);
+
+	  document.getElementById("thread_poster").innerHTML = getUserName(result.user_account_id)
       
-      document.getElementById("thread_title").innerHTML = result.subject
+	  if (result.delayed) {
+		document.getElementById("thread_title").innerHTML = result.delayed
+	  } else{
+		document.getElementById("thread_title").innerHTML = result.subject
+	  }
        	  
       <!-- TODO: change page limit to use .env -->
       max_page = Math.ceil(result.number_of_posts / 25)
@@ -36,6 +42,21 @@ function loadThread(id) {
   xhttp.open("GET", "http://localhost:3000/api/v1/pages/Thread/" + thread_id + "/1", false);
   xhttp.send();
 }
+
+
+function getUserName(id){
+
+	if (id ==0){
+		return "Anonymous"
+	}
+
+	var xhttp = new XMLHttpRequest();
+	xhttp.open( "GET", "http://localhost:3000/api/v1/user/" + id ,false); 
+	xhttp.send( null );
+	return JSON.parse(xhttp.responseText).username;
+	
+}
+
 
 function updatePosts() {
   var xhttp = new XMLHttpRequest();
@@ -62,6 +83,31 @@ function updatePosts() {
 
 function incrementPage(val) {
 	updatePage(page_num + val)
+}
+
+function editthread() {
+	var r = prompt("Press le button");
+	if(r){
+		var sub_cat_id = thread_id;
+    	
+		
+	
+    	$.ajax({type:"PUT", url: "http://localhost:3000/api/v1/pages/thread", data: "thread_id="+thread_id+"&subject="+r, success: window.location.href = "http://localhost:3000/p/Science"})
+			
+	}
+}
+function deletethread() {
+	var r = confirm("Press le button");
+	if(r){
+		var sub_cat_id = thread_id;
+    	
+		console.log("yeet");
+	
+    		$.ajax({type:"DELETE", url: "http://localhost:3000/api/v1/pages/thread", data: "thread_id="+thread_id, success: window.location.href = "http://localhost:3000/p/Science"})
+			
+		
+	}
+	
 }
 
 function updatePage(new_page) {
@@ -97,13 +143,29 @@ function genratePagination() {
                                     ${i}
                                 </button>`)
 	  }
+
+	  $("#edit").remove();
+	  //implement hiding delete button if user is not OP
+	  if (1){
+		  $('#top').prepend(`<button onclick="editthread()" id="edit" class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l float:left">
+		  EDIT
+	  </button>`)
+	  }
+	  $("#delete").remove();
+	  //implement hiding delete button if user is not OP
+	  if (1){
+		  $('#top').prepend(`<button onclick="deletethread()" id="delete" class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l float:left">
+		  DELETE
+	  </button>`)
+	  }
 }
 
 function createPostHTML(post) {
     var date = new Date(post.created);
     
     var content = post.delayed ? post.delayed : post.content;
-    
+    var username = post.username ? post.username : "Anonymous"
+    	
 	var html = `<table class="w-full shadow-lg rounded">
 		      	<tbody class="bg-white">
 		  		<tr class="accordion border-b border-grey-light hover:bg-gray-100">
@@ -115,8 +177,8 @@ function createPostHTML(post) {
 		                    src="https://cdn0.iconfinder.com/data/icons/user-63/512/399_Personal_Personalization_Profile_User-512.png" alt="" />
 		                </span>
 		                <span class="w-full">
-		                	<p class="md:hidden text-xs text-gray-600 font-medium">Anonymous</p>
-							<p class="hidden md:table-cell text-xs text-gray-500 font-medium"> Anonymous</p>
+		                	<p class="md:hidden text-xs text-gray-600 font-medium">${username}</p>
+							<p class="hidden md:table-cell text-xs text-gray-500 font-medium"> ${username}</p>
 		                    <br>
 						</span>
 					</td>
@@ -207,8 +269,41 @@ function restoreParagraph(post_id, content) {
 
 function loadPosts(posts) {
   $('#posts').append(
-	      $.map(posts, function (post) {	      
-	    	  return createPostHTML(post)
+	      $.map(posts, function (post) {
+			var date = new Date(post.created);
+			if (post.delayed){
+				post.content = post.delayed;
+				// Need to update date
+				
+			}
+	
+	      
+	      return `<table class="w-full shadow-lg rounded">
+			      	<tbody class="bg-white">
+			      		<tr class="accordion border-b border-grey-light hover:bg-gray-100">
+			      			<td></td>
+			      			<!-- TODO: Update username and picture when feature is added -->
+			      			<td class="items-center px-12">
+			      				<span class="w-full">
+			      					<img class="hidden mr-1 md:mr-2 md:inline-block h-16 w-16 rounded-full object-cover "
+			                        src="https://cdn0.iconfinder.com/data/icons/user-63/512/399_Personal_Personalization_Profile_User-512.png" alt="" />
+			                    </span>
+			                    <span class="w-full">
+			                    	<p class="md:hidden text-xs text-gray-600 font-medium">${post.username}</p>
+									<p class="hidden md:table-cell text-xs text-gray-500 font-medium"> ${post.username}</p>
+			                        <br>
+								</span>
+							</td>
+							<td class="hidden md:table-cell w-full p-4">
+								<p>${post.content}</p>
+			                </td>
+			                <td></td>
+			            </tr>
+			        </tbody>
+			       </table>
+			       <div class="w-full shadow-lg bg-white text-right border-b-2">
+			       	<p class="pl-1 text-xs text-gray-500 font-medium p-2">Posted on: ${date.toDateString()} ${date.toLocaleTimeString()}</p>
+			       </div>`
 	}).join("\n"));
 }
 
