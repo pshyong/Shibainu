@@ -15,7 +15,7 @@
     <div class="flex text-gray-900 w-full h-full py-12 mx-auto">
         <div class="container mx-auto w-full">
             <!-- Defining the grid for the cateogies -->
-            <div class="grid grid-cols-3 gap-4 row-auto " id="top">
+            <div class="grid grid-cols-3 gap-4 row-auto ">
                 <div class="col-span-3 h-12 items-center justify-center">
                     <div>
                         <div class="container w-full">
@@ -23,8 +23,8 @@
                                 <div 
                                     class="px-4 py-2 border-b border-gray uppercase text-left bg-gray-300 text-gray-700 text-xl">
                                     <div id="thread_title"> </div>
-                                    <span class="font-normal text-gray-600 text-xs">
-                                        <div id="thread_poster"></span></div>
+                                    <span class="font-normal text-gray-600 text-xs">by
+                                        Anonymous</span></div>
                             </table>
                          </div>
                             <!-- Start of post -->
@@ -37,7 +37,6 @@
                         <!-- TODO: aka, some kind of loop-->
                         <div class="container w-full text-right">
                             <div class="inline-flex mt-2 xs:mt-0 ">
-                            
                             	<button onclick="updatePage(1)"
                                     class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">
                                     First
@@ -64,15 +63,11 @@
                         <form>
                             <div class="container w-full shadow-lg bg-white mt-3 p-4">
                                 <div class="px-4 py-2 border-b border-gray uppercase text-left bg-gray-200 text-gray-700 font-bold">
-                                    Leave your reply
+                                    Leave your reply as an anonymous
                                 </div>
-                                <textarea id="content" class="form-textarea focus:bg-white focus:outline-none focus:shadow-outline 
-                                border border-gray-300 py-2 px-4 block w-full appearance-none leading-normal" rows="7" type="text" 
-                                placeholder="Make sure to post thing that is legal... :)"></textarea>
+                                <textarea id="content" class="form-textarea focus:bg-white focus:outline-none focus:shadow-outline border border-gray-300 py-2 px-4 block w-full appearance-none leading-normal" rows="7" type="text" placeholder="Make sure to post thing that is legal... :)"></textarea>
                                 <div class="text-right pt-2">
-                                    <button onclick="uploadPost(<%= thread_id %>)" class="h-10 col-start-4 bg-blue-500 hover:bg-blue-400 
-                                        text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" type="button">
-
+                                    <button onclick="uploadPost()" class="h-10 col-start-4 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" type="button">
                                         Comment
                                     </button>
                                 </div>
